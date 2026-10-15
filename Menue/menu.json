@@ -1,0 +1,253 @@
+{
+  "_quelle": "Gedruckte Karten Odi's Bowl (Bowl-Faltkarte, Wrap- und Açaí-Flyer), Foto-PDFs vom 13.10.2026; Aufschläge von Abed am 13.10.2026 bestätigt",
+  "_hinweis": "Bowl-Karte: handschriftlich '1 €' an Schritt 2 = jede Zutat über 5 hinaus, '1,50' an Fleisch = Fleischaufschlag, gilt auch beim Wrap. Wrap Schritt 2 'aus unserer Frische-Theke' = dieselbe Liste wie die Bowl, ab der 4. Zutat +1 €. Saucen: Bowl- und Wrap-Karte weichen ab (Sriracha Mayo / Sriracha Hemp, Cinnamon Plum nur auf dem Wrap-Flyer); laut Abed dieselben Saucen, hier vereinigt, 'Sriracha Hemp' als Sriracha Mayo gelesen. Bowl und Wrap: eine Sauce inklusive, jede weitere +1 €; drei Toppings inklusive, jedes weitere +1 € (Abed, 14.10.2026). Druckfehler korrigiert: 'White Choclate', 'Chia-Puddig'. Getränke fehlen noch - solange die Liste leer ist, bietet der Baukasten kein Menü an.",
+  "_pos_start": "zusammenstellen",
+  "_listen": {
+    "frische": [
+      "Avocado-Hummus",
+      "Brokkoli",
+      "Bulgur",
+      "Champignons",
+      "Cherry-Tomaten",
+      "Cole Slaw Salat",
+      "Edamame",
+      "Edamame Spicy",
+      "Geb. Blumenkohl",
+      "Gurken",
+      "Hirtenkäse-Würfel",
+      "Jalapeños",
+      "Karottensalat",
+      "Kichererbsen",
+      "Kimchi",
+      "Mais",
+      "Mango-Würfel",
+      "Paprika",
+      "Rote Bete",
+      "Rotkohl",
+      "Süßkartoffeln",
+      "Tomatensalat",
+      "Wakame",
+      "Zwiebelsalat"
+    ],
+    "saucen": [
+      "Avocado Sesam",
+      "Cinnamon Plum",
+      "Curry Mango",
+      "Erdnuss",
+      "Honig Senf",
+      "Hot Sriracha",
+      "Sriracha Mayo",
+      "Süß-Sauer",
+      "Roasted Sesam"
+    ],
+    "toppings": [
+      "Erdnüsse",
+      "Röstzwiebeln",
+      "Sesam",
+      "Granatapfel"
+    ],
+    "getraenke": []
+  },
+  "kategorien": [
+    {
+      "id": "zusammenstellen",
+      "titel": "Stell dir dein Essen zusammen",
+      "typ": "baukasten",
+      "note": "Bowl, Wrap oder Açaí wählen – dann Schritt für Schritt nach deinem Geschmack.",
+      "nummer_zeigen": false,
+      "items": [
+        {
+          "num": "B1",
+          "name": "Bowl",
+          "desc": "Basic, bis zu 5 Zutaten aus der Frische-Theke, Hot Special, Sauce und Topping",
+          "preis": 11.9,
+          "menue": 2.0,
+          "schritte": [
+            {
+              "titel": "Basic",
+              "min": 1,
+              "max": 1,
+              "optionen": [
+                "Basmati-Reis",
+                "Frischer Blattsalatmix",
+                "Mixed-Bowl (halb/halb)"
+              ]
+            },
+            {
+              "titel": "Gemüse & Obst",
+              "hinweis": "bis zu 5 inklusive, jede weitere +1,00 €",
+              "min": 0,
+              "inklusive": 5,
+              "aufpreis": 1.0,
+              "liste": "frische"
+            },
+            {
+              "titel": "Hot Special",
+              "min": 1,
+              "max": 1,
+              "gruppen": [
+                {
+                  "titel": "Vegan",
+                  "optionen": [
+                    "Beef Bites",
+                    "Teriyaki Tofu",
+                    "Peanuts Chicken"
+                  ]
+                },
+                {
+                  "titel": "Fleisch",
+                  "zuschlag": 1.5,
+                  "optionen": [
+                    "Creamie Chicken",
+                    "Curry Chicken",
+                    "Teriyaki Chicken",
+                    "Crispy Chicken",
+                    "Chicken Bites"
+                  ]
+                }
+              ]
+            },
+            {
+              "titel": "Sauce",
+              "hinweis": "eine inklusive, jede weitere +1,00 €",
+              "min": 0,
+              "inklusive": 1,
+              "aufpreis": 1.0,
+              "liste": "saucen"
+            },
+            {
+              "titel": "Topping",
+              "hinweis": "drei inklusive, jedes weitere +1,00 €",
+              "min": 0,
+              "inklusive": 3,
+              "aufpreis": 1.0,
+              "liste": "toppings"
+            }
+          ]
+        },
+        {
+          "num": "W1",
+          "name": "Wrap",
+          "desc": "Basic, bis zu 3 Zutaten aus der Frische-Theke, Hot Special, Sauce und Topping",
+          "preis": 7.9,
+          "menue": 2.0,
+          "schritte": [
+            {
+              "titel": "Basic",
+              "min": 1,
+              "max": 1,
+              "optionen": [
+                "Frischer Blattsalatmix",
+                "Krautsalat",
+                "Mixed-Wrap (halb/halb)"
+              ]
+            },
+            {
+              "titel": "Gemüse & Obst",
+              "hinweis": "bis zu 3 inklusive, jede weitere +1,00 €",
+              "min": 0,
+              "inklusive": 3,
+              "aufpreis": 1.0,
+              "liste": "frische"
+            },
+            {
+              "titel": "Hot Special",
+              "min": 1,
+              "max": 1,
+              "gruppen": [
+                {
+                  "titel": "Vegan",
+                  "optionen": [
+                    "Beef Bites",
+                    "Peanuts Chicken"
+                  ]
+                },
+                {
+                  "titel": "Fleisch",
+                  "zuschlag": 1.5,
+                  "optionen": [
+                    "Crispy Chicken",
+                    "Chicken Stripes"
+                  ]
+                }
+              ]
+            },
+            {
+              "titel": "Sauce",
+              "hinweis": "eine inklusive, jede weitere +1,00 €",
+              "min": 0,
+              "inklusive": 1,
+              "aufpreis": 1.0,
+              "liste": "saucen"
+            },
+            {
+              "titel": "Topping",
+              "hinweis": "drei inklusive, jedes weitere +1,00 €",
+              "min": 0,
+              "inklusive": 3,
+              "aufpreis": 1.0,
+              "liste": "toppings"
+            }
+          ]
+        },
+        {
+          "num": "A1",
+          "name": "Açaí-Bowl",
+          "desc": "Eine Sauce, zwei Layer, drei Toppings",
+          "groessen": {
+            "Classic": 7.9,
+            "Large": 8.9
+          },
+          "farbe": "#6b2c74",
+          "schritte": [
+            {
+              "titel": "Sauce",
+              "hinweis": "eine inklusive, jede weitere +1,00 €",
+              "min": 1,
+              "inklusive": 1,
+              "aufpreis": 1.0,
+              "optionen": [
+                "Choco",
+                "Haselnuss",
+                "Pistazie",
+                "White Chocolate"
+              ]
+            },
+            {
+              "titel": "Layer",
+              "hinweis": "zwei inklusive, jeder weitere +1,00 €",
+              "min": 2,
+              "inklusive": 2,
+              "aufpreis": 1.0,
+              "optionen": [
+                "Granola",
+                "Granola Choco",
+                "Peanut Butter",
+                "Chia-Pudding",
+                "Smashed Mango",
+                "Lotus Crumbles",
+                "Oreo Crumbles"
+              ]
+            },
+            {
+              "titel": "Toppings",
+              "hinweis": "drei inklusive, jedes weitere +1,00 €",
+              "min": 3,
+              "inklusive": 3,
+              "aufpreis": 1.0,
+              "optionen": [
+                "Banane",
+                "Blaubeere",
+                "Erdbeere",
+                "Kiwi",
+                "Erdnüsse",
+                "Kakaonibs",
+                "Kokoschips"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

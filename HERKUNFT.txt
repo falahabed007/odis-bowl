@@ -1,0 +1,2 @@
+Abstammung: 592551d 2026-10-08 Automatische Öffnungszeiten an die gedruckte Speisekarte angleichen
+Vorlage:    /Users/abedfalah/dev/gastronomie/PinocchioNordkirchen

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cloud.ccm19.de/app.js?apiKey=d91f8fe22b121050ed740d5fcca83e9251ce35e32ff75726&amp;domain=6ac135ae55d92e25ee0afce4" referrerpolicy="origin"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mein Konto – Pizzeria Pinocchio</title>
+  <link href="fonts/fonts-account.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #8b1d1d;
+      --red2:   #6b1515;
+      --gold:   #d4a76a;
+      --cream:  #fdf6ee;
+      --text:   #2a2017;
+      --muted:  #7a6a55;
+      --border: #e8ddd0;
+      --white:  #ffffff;
+      --green:  #2d7a3a;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--red);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header a { text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .header-logo { font-family: 'Playfair Display', serif; color: #fff; font-size: 22px; }
+    .header-logo span { color: var(--gold); }
+    .header-back { color: rgba(255,255,255,0.8); font-size: 14px; display: flex; align-items: center; gap: 6px; }
+    .header-back:hover { color: #fff; }
+
+    /* ── Container ── */
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 16px 60px; }
+
+    /* ── Auth Section ── */
+    #auth-section { display: block; }
+    #dashboard-section { display: none; }
+
+    .auth-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      color: var(--muted);
+      border: none;
+      background: transparent;
+      transition: color 0.2s;
+    }
+    .auth-tab.active {
+      color: var(--red);
+      border-bottom: 2px solid var(--red);
+      margin-bottom: -2px;
+    }
+
+    .auth-form { padding: 28px 28px 32px; display: none; }
+    .auth-form.active { display: block; }
+
+    .auth-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    .auth-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--text); }
+    .field input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      background: #fafaf8;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .field input:focus { border-color: var(--red); background: #fff; }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 6px;
+    }
+    .btn:hover { background: var(--red2); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--red);
+      border: 1.5px solid var(--red);
+    }
+    .btn-secondary:hover { background: var(--red); color: #fff; }
+    .btn-sm {
+      width: auto;
+      padding: 8px 16px;
+      font-size: 13px;
+      margin-top: 0;
+    }
+
+    .error-msg {
+      background: #fdf0f0;
+      border: 1px solid #f0b0b0;
+      color: #8b1d1d;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+    .success-msg {
+      background: #f0faf2;
+      border: 1px solid #a0d0aa;
+      color: var(--green);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .success-msg.show { display: block; }
+
+    /* ── Dashboard ── */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .dashboard-title { font-family: 'Playfair Display', serif; font-size: 26px; }
+    .dashboard-user { font-size: 14px; color: var(--muted); margin-top: 2px; }
+    .logout-btn {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+    .dash-tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .dash-tab {
+      padding: 11px 18px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s;
+    }
+    .dash-tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+    .dash-panel { display: none; }
+    .dash-panel.active { display: block; }
+
+    /* ── Order Cards ── */
+    .orders-list { display: flex; flex-direction: column; gap: 12px; }
+    .order-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .order-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: #fafaf8;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .order-num { font-weight: 700; font-size: 15px; }
+    .order-date { font-size: 12px; color: var(--muted); }
+    .order-mode { font-size: 12px; color: var(--muted); background: var(--border); border-radius: 20px; padding: 3px 10px; }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .status-pending    { background: #fff3cd; color: #856404; }
+    .status-confirmed  { background: #d1ecf1; color: #0c5460; }
+    .status-preparing  { background: #ffe5b4; color: #7a4f00; }
+    .status-ready      { background: #d4edda; color: #155724; }
+    .status-delivered  { background: #e8f5e9; color: var(--green); }
+    .status-cancelled  { background: #f8d7da; color: #721c24; }
+    .status-awaiting_payment { background: #e2d9f3; color: #432874; }
+
+    .order-card-body { padding: 14px 18px; }
+    .order-items { list-style: none; margin-bottom: 12px; }
+    .order-items li { font-size: 14px; padding: 3px 0; color: var(--text); }
+    .order-items li::before { content: '•'; margin-right: 8px; color: var(--gold); }
+
+    .order-card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+      background: #fafaf8;
+    }
+    .order-total { font-weight: 700; font-size: 17px; }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+    }
+    .empty-state p { margin-top: 8px; font-size: 14px; }
+
+    /* ── Profil ── */
+    .profile-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-state { text-align: center; padding: 32px; color: var(--muted); font-size: 14px; }
+  </style>
+  <!-- Zentrale Backend-Adresse, muss vor allen anderen Skripten stehen -->
+  <script src="config.js"></script>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html">
+    <span class="header-logo">Pizzeria <span>Pinocchio</span></span>
+  </a>
+  <a href="index.html" class="header-back">← Zurück zur Speisekarte</a>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════ AUTH SECTION ═══════════════ -->
+  <div id="auth-section">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Anmelden</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')">Registrieren</button>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form active" id="login-form" onsubmit="handleLogin(event)">
+        <h1 class="auth-title">Willkommen zurück</h1>
+        <p class="auth-subtitle">Melde dich an und verwalte deine Bestellungen.</p>
+        <div class="error-msg" id="login-error"></div>
+        <div class="field">
+          <label>E-Mail-Adresse</label>
+          <input type="email" id="login-email" placeholder="deine@email.de" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label>Passwort</label>
+          <input type="password" id="login-password" placeholder="Passwort" required autocomplete="current-password">
+        </div>
+        <button class="btn" type="submit" id="login-btn">Anmelden</button>
+      </form>
+
+      <!-- Register Form -->
+      <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+        <h1 class="auth-title">Konto erstellen</h1>
+        <p class="auth-subtitle">Registriere dich für schnelleres Bestellen und Bestellhistorie.</p>
+        <div class="error-msg" id="register-error"></div>
+        <div class="field-row">
+          <div class="field">
+            <label>Vorname</label>
+            <input type="text" id="reg-first" placeholder="Max" required autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label>Nachname</label>
+            <input type="text" id="reg-last" placeholder="Mustermann" required autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field">
+          <label>E-Mail-Adresse</label>
+          <input type="email" id="reg-email" placeholder="deine@email.de" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label>Passwort <span style="color:var(--muted);font-weight:400;">(mindestens 6 Zeichen)</span></label>
+          <input type="password" id="reg-password" placeholder="Passwort" required autocomplete="new-password" minlength="6">
+        </div>
+        <div class="field">
+          <label>Telefon</label>
+          <input type="tel" id="reg-phone" placeholder="+49 152 123456" required autocomplete="tel">
+        </div>
+        <div class="field" style="margin-bottom:18px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:400;">
+            <input type="checkbox" id="reg-datenschutz" required style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--red);">
+            <span style="font-size:13px;color:var(--muted);line-height:1.5;">
+              Ich habe die <button type="button" onclick="openDatenschutz()" style="background:none;border:none;color:var(--red);font-weight:600;cursor:pointer;font-size:13px;padding:0;text-decoration:underline;">Datenschutzerklärung</button> gelesen und stimme der Verarbeitung meiner Daten zur Kontoerstellung und Bestellabwicklung zu (DSGVO Art. 6 Abs. 1 lit. b).
+            </span>
+          </label>
+        </div>
+        <button class="btn" type="submit" id="register-btn">Konto erstellen</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════ DASHBOARD SECTION ═══════════════ -->
+  <div id="dashboard-section">
+    <div class="dashboard-header">
+      <div>
+        <h1 class="dashboard-title">Mein Konto</h1>
+        <p class="dashboard-user" id="dash-user-name"></p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Abmelden</button>
+    </div>
+
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchDashTab('orders')">Bestellungen</button>
+      <button class="dash-tab" onclick="switchDashTab('profile')">Profil</button>
+      <button class="dash-tab" onclick="switchDashTab('password')">Passwort</button>
+    </div>
+
+    <!-- Panel: Bestellhistorie -->
+    <div class="dash-panel active" id="panel-orders">
+      <div id="orders-container">
+        <div class="loading-state">Bestellungen werden geladen…</div>
+      </div>
+    </div>
+
+    <!-- Panel: Profil -->
+    <div class="dash-panel" id="panel-profile">
+      <div class="profile-card">
+        <h2 class="section-title">Persönliche Daten</h2>
+        <div class="error-msg" id="profile-error"></div>
+        <div class="success-msg" id="profile-success"></div>
+        <form onsubmit="handleProfileSave(event)">
+          <div class="field-row">
+            <div class="field">
+              <label>Vorname</label>
+              <input type="text" id="prof-first" required>
+            </div>
+            <div class="field">
+              <label>Nachname</label>
+              <input type="text" id="prof-last" required>
+            </div>
+          </div>
+          <div class="field">
+            <label>E-Mail</label>
+            <input type="email" id="prof-email" disabled style="opacity:0.6;cursor:not-allowed;">
+          </div>
+          <div class="field">
+            <label>Telefon</label>
+            <input type="tel" id="prof-phone" placeholder="+49 152 123456">
+          </div>
+          <button class="btn" type="submit" id="profile-btn">Änderungen speichern</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Panel: Passwort -->
+    <div class="dash-panel" id="panel-password">
+      <div class="profile-card">
+        <h2 class="section-title">Passwort ändern</h2>
+        <div class="error-msg" id="pw-error"></div>
+        <div class="success-msg" id="pw-success"></div>
+        <form onsubmit="handlePasswordChange(event)">
+          <div class="field">
+            <label>Aktuelles Passwort</label>
+            <input type="password" id="pw-current" required autocomplete="current-password">
+          </div>
+          <div class="field">
+            <label>Neues Passwort</label>
+            <input type="password" id="pw-new" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="field">
+            <label>Neues Passwort bestätigen</label>
+            <input type="password" id="pw-confirm" required autocomplete="new-password">
+          </div>
+          <button class="btn" type="submit" id="pw-btn">Passwort ändern</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── API-URL ───────────────────────────────────────────────────
+  // Das Frontend läuft auf GitHub Pages (pinnochionordkirchen.de), das Backend
+  // getrennt auf Render. Deshalb absolute Backend-URL (wie in dashboard.html).
+  const API = window.FLUEVATE_BACKEND;   // siehe config.js
+// Faellt config.js aus (nicht mitdeployt, lokal per file:// geblockt), waere
+// die Backend-Adresse undefined und jeder Aufruf ginge ins Leere – mit einer
+// Fehlermeldung, die niemand deuten kann. Lieber sofort deutlich sagen.
+if (!window.FLUEVATE_BACKEND) {
+  console.error('config.js wurde nicht geladen – window.FLUEVATE_BACKEND fehlt.');
+  document.addEventListener('DOMContentLoaded', function() {
+    var b = document.createElement('div');
+    b.textContent = 'Konfigurationsfehler: config.js konnte nicht geladen werden. '
+                  + 'Bestellungen und Anmeldung funktionieren gerade nicht.';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#b00020;'
+                    + 'color:#fff;padding:10px 14px;font:600 14px/1.4 sans-serif;text-align:center;';
+    document.body.appendChild(b);
+  });
+}
+
+  // ── Token-Management ─────────────────────────────────────────
+  const getToken  = () => localStorage.getItem('customerToken');
+  const setToken  = t  => localStorage.setItem('customerToken', t);
+  const clearToken = () => localStorage.removeItem('customerToken');
+  const authHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${getToken()}`
+  });
+
+  // ── Fehlertext ───────────────────────────────────────────────
+  // Erreicht fetch den Server nicht, wirft es einen TypeError – Safari nennt
+  // ihn "Load failed", Chrome "Failed to fetch". Für einen Gast ist das
+  // bedeutungslos. Fachliche Meldungen vom Server sind bereits auf Deutsch
+  // und werden unverändert durchgereicht.
+  function fehlerText(err) {
+    if (err instanceof TypeError || !err.message) {
+      return 'Verbindung zum Server fehlgeschlagen. Bitte Internetverbindung '
+           + 'prüfen und die Seite neu laden (Cache leeren).';
+    }
+    return err.message;
+  }
+
+  // Antwort einlesen und dabei den Fall abfangen, dass gar kein JSON kommt.
+  // Das passiert, wenn nicht der Server antwortet, sondern etwas dazwischen:
+  // eine HTML-Fehlerseite, die Sperrseite eines Werbe-/Netzfilters oder eine
+  // Wartungsseite. Safari meldet das sonst nur als
+  // "The string did not match the expected pattern." – ohne jeden Hinweis.
+  async function antwortLesen(res) {
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      const artUndWeise = (res.headers.get('content-type') || 'unbekannt').split(';')[0];
+      throw new Error('Unerwartete Antwort vom Server (HTTP ' + res.status
+        + ', ' + artUndWeise + '). Nicht der Server hat geantwortet, sondern '
+        + 'etwas dazwischen – z.B. ein Netzfilter oder eine Fehlerseite.');
+    }
+  }
+
+  init();   // erst hier – getToken/authHeaders sind oben als const deklariert
+
+  // ── Init ─────────────────────────────────────────────────────
+  async function init() {
+    const token = getToken();
+    if (!token) return showAuth();
+    try {
+      const res = await fetch(`${API}/api/auth/me`, { headers: authHeaders() });
+      if (!res.ok) throw new Error();
+      const user = await antwortLesen(res);
+      showDashboard(user);
+    } catch {
+      clearToken();
+      showAuth();
+    }
+  }
+
+  function showAuth() {
+    document.getElementById('auth-section').style.display = 'block';
+    document.getElementById('dashboard-section').style.display = 'none';
+  }
+
+  function showDashboard(user) {
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('dashboard-section').style.display = 'block';
+    document.getElementById('dash-user-name').textContent = `${user.first} ${user.last} · ${user.email}`;
+    // Profil-Felder befüllen
+    document.getElementById('prof-first').value = user.first || '';
+    document.getElementById('prof-last').value  = user.last  || '';
+    document.getElementById('prof-email').value = user.email || '';
+    document.getElementById('prof-phone').value = user.phone || '';
+    // Bestellungen laden
+    loadOrders();
+  }
+
+  // ── Auth Tabs ────────────────────────────────────────────────
+  function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t, i) => {
+      t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+    });
+    document.getElementById('login-form').classList.toggle('active', tab === 'login');
+    document.getElementById('register-form').classList.toggle('active', tab === 'register');
+  }
+
+  // ── Login ────────────────────────────────────────────────────
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const errEl = document.getElementById('login-error');
+    errEl.classList.remove('show');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Anmelden…';
+    try {
+      const res = await fetch(`${API}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:    document.getElementById('login-email').value.trim(),
+          password: document.getElementById('login-password').value
+        })
+      });
+      const data = await antwortLesen(res);
+      if (!res.ok) throw new Error(data.message || 'Fehler');
+      setToken(data.token);
+      showDashboard(data.user);
+    } catch (err) {
+      errEl.textContent = fehlerText(err);
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Anmelden';
+    }
+  }
+
+  // ── Register ─────────────────────────────────────────────────
+  async function handleRegister(e) {
+    e.preventDefault();
+    const btn = document.getElementById('register-btn');
+    const errEl = document.getElementById('register-error');
+    errEl.classList.remove('show');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Konto erstellen…';
+    try {
+      const res = await fetch(`${API}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:    document.getElementById('reg-email').value.trim(),
+          password: document.getElementById('reg-password').value,
+          first:    document.getElementById('reg-first').value.trim(),
+          last:     document.getElementById('reg-last').value.trim(),
+          phone:    document.getElementById('reg-phone').value.trim()
+        })
+      });
+      const data = await antwortLesen(res);
+      if (!res.ok) throw new Error(data.message || 'Fehler');
+      setToken(data.token);
+      showDashboard(data.user);
+    } catch (err) {
+      errEl.textContent = fehlerText(err);
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Konto erstellen';
+    }
+  }
+
+  // ── Dashboard Tabs ───────────────────────────────────────────
+  function switchDashTab(tab) {
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`.dash-tab[onclick*="${tab}"]`).classList.add('active');
+    document.getElementById(`panel-${tab}`).classList.add('active');
+  }
+
+  // ── Bestellhistorie ──────────────────────────────────────────
+  async function loadOrders() {
+    const container = document.getElementById('orders-container');
+    try {
+      const res = await fetch(`${API}/api/account/orders`, { headers: authHeaders() });
+      if (!res.ok) throw new Error();
+      const orders = await antwortLesen(res);
+      container.innerHTML = renderOrders(orders);
+    } catch {
+      container.innerHTML = '<div class="loading-state">Bestellungen konnten nicht geladen werden.</div>';
+    }
+  }
+
+  function renderOrders(orders) {
+    if (!orders.length) {
+      return `<div class="empty-state">
+        <div style="font-size:48px;">🍕</div>
+        <p>Du hast noch keine Bestellungen.</p>
+        <p style="margin-top:16px;"><a href="index.html" style="color:var(--red);font-weight:600;">Jetzt bestellen →</a></p>
+      </div>`;
+    }
+    return `<div class="orders-list">${orders.map(o => `
+      <div class="order-card">
+        <div class="order-card-head">
+          <span class="order-num">Bestellung #${o.orderNum}</span>
+          <span class="order-mode">${o.mode === 'lieferung' ? '🛵 Lieferung' : '🏪 Abholung'}</span>
+          <span class="status-badge status-${o.status}">${statusLabel(o.status)}</span>
+          <span class="order-date">${new Date(o.createdAt).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' })}</span>
+        </div>
+        <div class="order-card-body">
+          <ul class="order-items">
+            ${o.items.map(i => `<li>${i.qty}× ${i.name}${i.note ? ' <span style="color:var(--muted);font-size:12px;">(${i.note})</span>' : ''}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="order-card-foot">
+          <span class="order-total">${(o.total || 0).toFixed(2)} €</span>
+          <button class="btn btn-sm btn-secondary" onclick="reorder('${o._id}')">↺ Erneut bestellen</button>
+        </div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  function statusLabel(s) {
+    const map = {
+      pending:          'Ausstehend',
+      confirmed:        'Bestätigt',
+      preparing:        'In Zubereitung',
+      ready:            'Fertig',
+      delivered:        'Geliefert',
+      cancelled:        'Storniert',
+      awaiting_payment: 'Zahlung ausstehend'
+    };
+    return map[s] || s;
+  }
+
+  // ── Re-Order ─────────────────────────────────────────────────
+  async function reorder(orderId) {
+    try {
+      const res = await fetch(`${API}/api/account/reorder/${orderId}`, {
+        method: 'POST',
+        headers: authHeaders()
+      });
+      const data = await antwortLesen(res);
+      if (!res.ok) throw new Error(data.message);
+      localStorage.setItem('reorderItems', JSON.stringify(data.items));
+      localStorage.setItem('reorderMode', data.mode);
+      window.location.href = 'index.html#warenkorb';
+    } catch (err) {
+      alert('Re-Order fehlgeschlagen: ' + fehlerText(err));
+    }
+  }
+
+  // ── Profil speichern ─────────────────────────────────────────
+  async function handleProfileSave(e) {
+    e.preventDefault();
+    const btn     = document.getElementById('profile-btn');
+    const errEl   = document.getElementById('profile-error');
+    const succEl  = document.getElementById('profile-success');
+    errEl.classList.remove('show');
+    succEl.classList.remove('show');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Speichern…';
+    try {
+      const res = await fetch(`${API}/api/auth/profile`, {
+        method: 'PATCH',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          first: document.getElementById('prof-first').value.trim(),
+          last:  document.getElementById('prof-last').value.trim(),
+          phone: document.getElementById('prof-phone').value.trim()
+        })
+      });
+      const data = await antwortLesen(res);
+      if (!res.ok) throw new Error(data.message);
+      document.getElementById('dash-user-name').textContent = `${data.first} ${data.last} · ${data.email}`;
+      succEl.textContent = 'Profil erfolgreich gespeichert.';
+      succEl.classList.add('show');
+    } catch (err) {
+      errEl.textContent = fehlerText(err);
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Änderungen speichern';
+    }
+  }
+
+  // ── Passwort ändern ──────────────────────────────────────────
+  async function handlePasswordChange(e) {
+    e.preventDefault();
+    const btn    = document.getElementById('pw-btn');
+    const errEl  = document.getElementById('pw-error');
+    const succEl = document.getElementById('pw-success');
+    errEl.classList.remove('show');
+    succEl.classList.remove('show');
+
+    const newPw     = document.getElementById('pw-new').value;
+    const confirmPw = document.getElementById('pw-confirm').value;
+    if (newPw !== confirmPw) {
+      errEl.textContent = 'Neue Passwörter stimmen nicht überein.';
+      errEl.classList.add('show');
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Ändern…';
+    try {
+      const res = await fetch(`${API}/api/auth/password`, {
+        method: 'PATCH',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          currentPassword: document.getElementById('pw-current').value,
+          newPassword: newPw
+        })
+      });
+      const data = await antwortLesen(res);
+      if (!res.ok) throw new Error(data.message);
+      succEl.textContent = 'Passwort erfolgreich geändert.';
+      succEl.classList.add('show');
+      e.target.reset();
+    } catch (err) {
+      errEl.textContent = fehlerText(err);
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Passwort ändern';
+    }
+  }
+
+  // ── Datenschutz Modal ────────────────────────────────────────
+  function openDatenschutz() {
+    document.getElementById('datenschutzModal').style.display = 'flex';
+  }
+  function closeDatenschutz() {
+    document.getElementById('datenschutzModal').style.display = 'none';
+  }
+
+  // ── Logout ───────────────────────────────────────────────────
+  function logout() {
+    clearToken();
+    showAuth();
+    // Formulare leeren
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+    switchAuthTab('login');
+  }
+</script>
+
+<!-- Datenschutz Modal -->
+<div id="datenschutzModal" onclick="if(event.target===this)closeDatenschutz()"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:600px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="background:var(--red);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <span style="color:#fff;font-weight:700;font-size:1rem;">Datenschutzerklärung</span>
+      <button type="button" onclick="closeDatenschutz()" style="background:rgba(255,255,255,.2);border:none;border-radius:8px;width:32px;height:32px;color:#fff;font-size:1rem;cursor:pointer;">✕</button>
+    </div>
+    <div style="overflow-y:auto;padding:24px;font-size:14px;line-height:1.7;color:#333;">
+      <h3 style="color:var(--red);margin:0 0 10px;overflow-wrap:anywhere">1. Datenschutz auf einen Blick</h3><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Allgemeine Hinweise</h4><p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Datenerfassung auf dieser Website</h4><p style="margin:14px 0 4px"><strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong></p><p>Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Abschnitt „Hinweis zur verantwortlichen Stelle“ in dieser Datenschutzerklärung entnehmen.</p><p style="margin:14px 0 4px"><strong>Wie erfassen wir Ihre Daten?</strong></p><p>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.</p><p>Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p><p style="margin:14px 0 4px"><strong>Wofür nutzen wir Ihre Daten?</strong></p><p>Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden. Sofern über die Website Verträge geschlossen oder angebahnt werden können, werden die übermittelten Daten auch für Vertragsangebote, Bestellungen oder sonstige Auftragsanfragen verarbeitet.</p><p style="margin:14px 0 4px"><strong>Welche Rechte haben Sie bezüglich Ihrer Daten?</strong></p><p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.</p><p>Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.</p><h3 style="color:var(--red);margin:22px 0 10px;overflow-wrap:anywhere">2. Hosting</h3><p>Wir hosten die Inhalte unserer Website bei folgendem Anbieter:</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Externes Hosting</h4><p>Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters / der Hoster gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.</p><p>Das externe Hosting erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO). Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG, soweit die Einwilligung die Speicherung von Cookies oder den Zugriff auf Informationen im Endgerät des Nutzers (z. B. Device-Fingerprinting) im Sinne des TDDDG umfasst. Die Einwilligung ist jederzeit widerrufbar.</p><p>Unser(e) Hoster wird bzw. werden Ihre Daten nur insoweit verarbeiten, wie dies zur Erfüllung seiner Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.</p><p>Wir setzen folgende(n) Hoster ein:</p><p>Abed Rachman Falah/ Fluevate<br>Zur Goldbrede 30<br>59269 Beckum<br>Deutschland</p><h3 style="color:var(--red);margin:22px 0 10px;overflow-wrap:anywhere">3. Allgemeine Hinweise und Pflichtinformationen</h3><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Datenschutz</h4><p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p><p>Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.</p><p>Wir weisen darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Hinweis zur verantwortlichen Stelle</h4><p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p><p>Pizzeria Pinocchio<br>Inhaber: Raid Ammorah<br>Bergstraße 19<br>59394 Nordkirchen<br>Deutschland</p><p>Telefon: 0 25 96 / 93 91 91<br>E-Mail: <a style="color:var(--red);word-break:break-word" href="mailto:raidammorah@yahoo.com">raidammorah@yahoo.com</a></p><p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Speicherdauer</h4><p>Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Allgemeine Hinweise zu den Rechtsgrundlagen der Datenverarbeitung auf dieser Website</h4><p>Sofern Sie in die Datenverarbeitung eingewilligt haben, verarbeiten wir Ihre personenbezogenen Daten auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO bzw. Art. 9 Abs. 2 lit. a DSGVO, sofern besondere Datenkategorien nach Art. 9 Abs. 1 DSGVO verarbeitet werden. Im Falle einer ausdrücklichen Einwilligung in die Übertragung personenbezogener Daten in Drittstaaten erfolgt die Datenverarbeitung außerdem auf Grundlage von Art. 49 Abs. 1 lit. a DSGVO. Sofern Sie in die Speicherung von Cookies oder in den Zugriff auf Informationen in Ihr Endgerät (z. B. via Device-Fingerprinting) eingewilligt haben, erfolgt die Datenverarbeitung zusätzlich auf Grundlage von § 25 Abs. 1 TDDDG. Die Einwilligung ist jederzeit widerrufbar. Sind Ihre Daten zur Vertragserfüllung oder zur Durchführung vorvertraglicher Maßnahmen erforderlich, verarbeiten wir Ihre Daten auf Grundlage des Art. 6 Abs. 1 lit. b DSGVO. Des Weiteren verarbeiten wir Ihre Daten, sofern diese zur Erfüllung einer rechtlichen Verpflichtung erforderlich sind, auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO. Die Datenverarbeitung kann ferner auf Grundlage unseres berechtigten Interesses nach Art. 6 Abs. 1 lit. f DSGVO erfolgen. Über die jeweils im Einzelfall einschlägigen Rechtsgrundlagen wird in den folgenden Absätzen dieser Datenschutzerklärung informiert.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Empfänger von personenbezogenen Daten</h4><p>Im Rahmen unserer Geschäftstätigkeit arbeiten wir mit verschiedenen externen Stellen zusammen. Dabei ist teilweise auch eine Übermittlung von personenbezogenen Daten an diese externen Stellen erforderlich. Wir geben personenbezogene Daten nur dann an externe Stellen weiter, wenn dies im Rahmen einer Vertragserfüllung erforderlich ist, wenn wir gesetzlich hierzu verpflichtet sind (z. B. Weitergabe von Daten an Steuerbehörden), wenn wir ein berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO an der Weitergabe haben oder wenn eine sonstige Rechtsgrundlage die Datenweitergabe erlaubt. Beim Einsatz von Auftragsverarbeitern geben wir personenbezogene Daten unserer Kunden nur auf Grundlage eines gültigen Vertrags über Auftragsverarbeitung weiter. Im Falle einer gemeinsamen Verarbeitung wird ein Vertrag über gemeinsame Verarbeitung geschlossen.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Widerruf Ihrer Einwilligung zur Datenverarbeitung</h4><p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)</h4><p>WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRÜNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FÜR EIN AUF DIESE BESTIMMUNGEN GESTÜTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLÄRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KÖNNEN ZWINGENDE SCHUTZWÜRDIGE GRÜNDE FÜR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN ÜBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSÜBUNG ODER VERTEIDIGUNG VON RECHTSANSPRÜCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).</p><p>WERDEN IHRE PERSONENBEZOGENEN DATEN VERARBEITET, UM DIREKTWERBUNG ZU BETREIBEN, SO HABEN SIE DAS RECHT, JEDERZEIT WIDERSPRUCH GEGEN DIE VERARBEITUNG SIE BETREFFENDER PERSONENBEZOGENER DATEN ZUM ZWECKE DERARTIGER WERBUNG EINZULEGEN; DIES GILT AUCH FÜR DAS PROFILING, SOWEIT ES MIT SOLCHER DIREKTWERBUNG IN VERBINDUNG STEHT. WENN SIE WIDERSPRECHEN, WERDEN IHRE PERSONENBEZOGENEN DATEN ANSCHLIESSEND NICHT MEHR ZUM ZWECKE DER DIREKTWERBUNG VERWENDET (WIDERSPRUCH NACH ART. 21 ABS. 2 DSGVO).</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Beschwerderecht bei der zuständigen Aufsichtsbehörde</h4><p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Recht auf Datenübertragbarkeit</h4><p>Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Auskunft, Berichtigung und Löschung</h4><p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Recht auf Einschränkung der Verarbeitung</h4><p>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:</p><ul style="margin:6px 0 8px 18px;line-height:1.85"><li>Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li><li>Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie statt der Löschung die Einschränkung der Datenverarbeitung verlangen.</li><li>Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li><li>Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li></ul><p>Wenn Sie die Verarbeitung Ihrer personenbezogenen Daten eingeschränkt haben, dürfen diese Daten – von ihrer Speicherung abgesehen – nur mit Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats verarbeitet werden.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">SSL- bzw. TLS-Verschlüsselung</h4><p>Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p><p>Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Verschlüsselter Zahlungsverkehr auf dieser Website</h4><p>Besteht nach dem Abschluss eines kostenpflichtigen Vertrags eine Verpflichtung, uns Ihre Zahlungsdaten (z. B. Kontonummer bei Einzugsermächtigung) zu übermitteln, werden diese Daten zur Zahlungsabwicklung benötigt.</p><p>Der Zahlungsverkehr über die gängigen Zahlungsmittel (Visa/MasterCard, Lastschriftverfahren) erfolgt ausschließlich über eine verschlüsselte SSL- bzw. TLS-Verbindung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p><p>Bei verschlüsselter Kommunikation können Ihre Zahlungsdaten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Widerspruch gegen Werbe-E-Mails</h4><p>Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-E-Mails, vor.</p><h3 style="color:var(--red);margin:22px 0 10px;overflow-wrap:anywhere">4. Datenerfassung auf dieser Website</h3><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Cookies</h4><p>Unsere Internetseiten verwenden so genannte „Cookies“. Cookies sind kleine Datenpakete und richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät gespeichert. Session-Cookies werden nach Ende Ihres Besuchs automatisch gelöscht. Permanente Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese selbst löschen oder eine automatische Löschung durch Ihren Webbrowser erfolgt.</p><p>Cookies können von uns (First-Party-Cookies) oder von Drittunternehmen stammen (sog. Third-Party-Cookies). Third-Party-Cookies ermöglichen die Einbindung bestimmter Dienstleistungen von Drittunternehmen innerhalb von Webseiten (z. B. Cookies zur Abwicklung von Zahlungsdienstleistungen).</p><p>Cookies haben verschiedene Funktionen. Zahlreiche Cookies sind technisch notwendig, da bestimmte Webseitenfunktionen ohne diese nicht funktionieren würden (z. B. die Warenkorbfunktion oder die Anzeige von Videos). Andere Cookies können zur Auswertung des Nutzerverhaltens oder zu Werbezwecken verwendet werden.</p><p>Cookies, die zur Durchführung des elektronischen Kommunikationsvorgangs, zur Bereitstellung bestimmter, von Ihnen erwünschter Funktionen (z. B. für die Warenkorbfunktion) oder zur Optimierung der Website (z. B. Cookies zur Messung des Webpublikums) erforderlich sind (notwendige Cookies), werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO gespeichert, sofern keine andere Rechtsgrundlage angegeben wird. Der Websitebetreiber hat ein berechtigtes Interesse an der Speicherung von notwendigen Cookies zur technisch fehlerfreien und optimierten Bereitstellung seiner Dienste. Sofern eine Einwilligung zur Speicherung von Cookies und vergleichbaren Wiedererkennungstechnologien abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage dieser Einwilligung (Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG); die Einwilligung ist jederzeit widerrufbar.</p><p>Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser Website eingeschränkt sein.</p><p>Sofern weitere Cookies und Dienste auf dieser Website eingesetzt werden, können Sie dies dieser Datenschutzerklärung entnehmen.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">CCM19</h4><p>Unsere Website nutzt CCM19, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät oder zum Einsatz bestimmter Technologien einzuholen und diese datenschutzkonform zu dokumentieren. Anbieter dieser Technologie ist Papoo Software &amp; Media GmbH, Auguststr. 4, 53229 Bonn (im Folgenden „CCM19“).</p><p>Wenn Sie unsere Website betreten, wird eine Verbindung zu den Servern von CCM19 hergestellt, um Ihre Einwilligungen und sonstigen Erklärungen zur Cookie-Nutzung einzuholen. Anschließend speichert CCM19 einen Cookie in Ihrem Browser, um Ihnen die erteilten Einwilligungen bzw. deren Widerruf zuordnen zu können. Die so erfassten Daten werden gespeichert, bis Sie uns zur Löschung auffordern, den CCM19-Cookie selbst löschen oder der Zweck für die Datenspeicherung entfällt. Zwingende gesetzliche Aufbewahrungspflichten bleiben unberührt.</p><p>Der Einsatz von CCM19 erfolgt, um die gesetzlich vorgeschriebenen Einwilligungen für den Einsatz von Cookies einzuholen. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 S. 1 lit. c DSGVO.</p><p style="margin:14px 0 4px"><strong>Auftragsverarbeitung</strong></p><p>Wir haben einen Vertrag über Auftragsverarbeitung (AVV) zur Nutzung des oben genannten Dienstes geschlossen. Hierbei handelt es sich um einen datenschutzrechtlich vorgeschriebenen Vertrag, der gewährleistet, dass dieser die personenbezogenen Daten unserer Websitebesucher nur nach unseren Weisungen und unter Einhaltung der DSGVO verarbeitet.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Server-Log-Dateien</h4><p>Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind:</p><ul style="margin:6px 0 8px 18px;line-height:1.85"><li>Browsertyp und Browserversion</li><li>verwendetes Betriebssystem</li><li>Referrer URL</li><li>Hostname des zugreifenden Rechners</li><li>Uhrzeit der Serveranfrage</li><li>IP-Adresse</li></ul><p>Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.</p><p>Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website – hierzu müssen die Server-Log-Files erfasst werden.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">WhatsApp</h4><p>Sie können Bestellungen auch per WhatsApp an uns senden. Anbieter ist die WhatsApp Ireland Limited, 4 Grand Canal Square, Grand Canal Harbour, Dublin 2, Irland.</p><p>Wenn Sie uns per WhatsApp kontaktieren, verarbeiten wir Ihre Telefonnummer, Ihren WhatsApp-Profilnamen, den Inhalt Ihrer Nachrichten sowie die für die Bestellung erforderlichen Angaben (z. B. Name, Lieferadresse, bestellte Speisen). Die Verarbeitung erfolgt zur Abwicklung Ihrer Bestellung auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO.</p><p>Die Kommunikation über WhatsApp ist Ende-zu-Ende-verschlüsselt. WhatsApp erhält dennoch Metadaten (z. B. Absender, Empfänger, Zeitpunkt) und kann Daten an die Muttergesellschaft Meta Platforms, Inc. in die USA übermitteln. Die Datenübertragung in die USA wird auf das EU-US Data Privacy Framework (DPF) gestützt, nach dem Meta zertifiziert ist. Wir nutzen die WhatsApp-Nachrichten nur zur Bestellabwicklung, nicht zu Werbezwecken.</p><p>Die Nachrichten werden auf unserem Gerät gelöscht, sobald sie für die Abwicklung der Bestellung nicht mehr erforderlich sind; gesetzliche Aufbewahrungspflichten bleiben unberührt. Wenn Sie WhatsApp nicht nutzen möchten, können Sie telefonisch oder über das Online-Bestellformular auf dieser Website bestellen.</p><p>Weitere Informationen finden Sie in der Datenschutzrichtlinie von WhatsApp: <a style="color:var(--red);word-break:break-word" href="https://www.whatsapp.com/legal/privacy-policy-eea" target="_blank" rel="noopener noreferrer">https://www.whatsapp.com/legal/privacy-policy-eea</a>.</p><h3 style="color:var(--red);margin:22px 0 10px;overflow-wrap:anywhere">5. eCommerce und Zahlungsanbieter</h3><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Verarbeiten von Kunden- und Vertragsdaten</h4><p>Wir erheben, verarbeiten und nutzen personenbezogene Kunden- und Vertragsdaten zur Begründung, inhaltlichen Ausgestaltung und Änderung unserer Vertragsbeziehungen. Personenbezogene Daten über die Inanspruchnahme dieser Website (Nutzungsdaten) erheben, verarbeiten und nutzen wir nur, soweit dies erforderlich ist, um dem Nutzer die Inanspruchnahme des Dienstes zu ermöglichen oder abzurechnen. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. b DSGVO.</p><p>Die erhobenen Kundendaten werden nach Abschluss des Auftrags oder Beendigung der Geschäftsbeziehung und Ablauf der ggf. bestehenden gesetzlichen Aufbewahrungsfristen gelöscht. Gesetzliche Aufbewahrungsfristen bleiben unberührt.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Datenübermittlung bei Vertragsschluss für Online-Shops, Händler und Warenversand</h4><p>Wenn Sie Waren bei uns bestellen, geben wir Ihre personenbezogenen Daten an das zur Lieferung betraute Transportunternehmen sowie an den mit der Zahlungsabwicklung beauftragten Zahlungsdienstleister weiter. Es werden nur solche Daten herausgegeben, die der jeweilige Dienstleister zur Erfüllung seiner Aufgabe benötigt. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet. Sofern Sie eine entsprechende Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO erteilt haben, werden wir Ihre E-Mail-Adresse an das mit der Lieferung betraute Transportunternehmen übergeben, damit dieses Sie per E-Mail über den Versandstatus Ihrer Bestellung informieren kann; Sie können die Einwilligung jederzeit widerrufen.</p><h4 style="color:var(--red);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere">Zahlungsdienste</h4><p>Wir binden Zahlungsdienste von Drittunternehmen auf unserer Website ein. Wenn Sie einen Kauf bei uns tätigen, werden Ihre Zahlungsdaten (z. B. Name, Zahlungssumme, Kontoverbindung, Kreditkartennummer) vom Zahlungsdienstleister zum Zwecke der Zahlungsabwicklung verarbeitet. Für diese Transaktionen gelten die jeweiligen Vertrags- und Datenschutzbestimmungen der jeweiligen Anbieter. Der Einsatz der Zahlungsdienstleister erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragsabwicklung) sowie im Interesse eines möglichst reibungslosen, komfortablen und sicheren Zahlungsvorgangs (Art. 6 Abs. 1 lit. f DSGVO). Soweit für bestimmte Handlungen Ihre Einwilligung abgefragt wird, ist Art. 6 Abs. 1 lit. a DSGVO Rechtsgrundlage der Datenverarbeitung; Einwilligungen sind jederzeit für die Zukunft widerrufbar.</p><p>Folgende Zahlungsdienste / Zahlungsdienstleister setzen wir im Rahmen dieser Website ein:</p><p style="margin:14px 0 4px"><strong>Stripe</strong></p><p>Anbieter für Kunden innerhalb der EU ist die Stripe Payments Europe, Ltd.,1 Grand Canal Street Lower, Grand Canal Dock, Dublin, Irland (im Folgenden „Stripe“).</p><p>Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Details finden Sie hier:<br><a style="color:var(--red);word-break:break-word" href="https://stripe.com/de/privacy" target="_blank" rel="noopener noreferrer">https://stripe.com/de/privacy</a> und<br><a style="color:var(--red);word-break:break-word" href="https://stripe.com/de/guides/general-data-protection-regulation" target="_blank" rel="noopener noreferrer">https://stripe.com/de/guides/general-data-protection-regulation</a>.</p><p>Details hierzu können Sie in der Datenschutzerklärung von Stripe unter folgendem Link nachlesen: <a style="color:var(--red);word-break:break-word" href="https://stripe.com/de/privacy" target="_blank" rel="noopener noreferrer">https://stripe.com/de/privacy</a>.</p>
+    </div>
+    <div style="padding:16px 20px;border-top:1px solid var(--border);flex-shrink:0;">
+      <button type="button" onclick="closeDatenschutz()" class="btn">Verstanden &amp; schließen</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
