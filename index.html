@@ -8,13 +8,13 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Pizzeria Pinocchio Nordkirchen – Bestellen</title>
+    <title>Odi’s Bowl – Bestellen</title>
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
     <link href="fonts/fonts-index.css" rel="stylesheet">
     <script src="https://js.stripe.com/v3/"></script>
 
     <style>
-    :root { --pino-blue: #1d5a9e; --text-dark: #333; --bg-light: #f8f9fa; --pino-gold: #d4a76a; --pino-red: #c62828; }
+    :root { --odis-blue: #0a1e47; --text-dark: #333; --bg-light: #f8f9fa; --odis-gold: #d4a76a; --odis-red: #c62828; }
     html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; font-family: 'Arial', sans-serif; background-color: #eef4f9; color: var(--text-dark); line-height: 1.6; }
 
     /* Header Bereich mit Banner-Bild */
@@ -39,21 +39,21 @@
     }
     .divider-container { display: flex; align-items: center; justify-content: center; margin-bottom: 25px; }
     .divider-line { width: 60px; height: 1px; background-color: #ddd; }
-    .divider-icon { margin: 0 12px; color: var(--pino-red); font-size: 16px; }
+    .divider-icon { margin: 0 12px; color: var(--odis-red); font-size: 16px; }
     .info-columns {
         display: flex; justify-content: center; gap: 30px; max-width: 1100px; margin: 0 auto 25px auto; padding: 0 15px;
     }
     .info-item { display: flex; text-align: left; flex: 1; gap: 12px; max-width: 320px; }
-    .info-icon-box { font-size: 24px; color: var(--pino-red); }
+    .info-icon-box { font-size: 24px; color: var(--odis-red); }
     .info-content h3 { margin: 0 0 4px 0; font-size: 1rem; text-transform: lowercase; color: #333; font-weight: bold; }
     .info-content p { margin: 0; font-size: 0.85rem; color: #666; line-height: 1.4; }
-    .ruhetag { color: var(--pino-red); font-weight: bold; }
+    .ruhetag { color: var(--odis-red); font-weight: bold; }
     .action-buttons { display: flex; justify-content: center; gap: 10px; padding-bottom: 10px; }
-    .pinocchio-btn {
+    .odisbowl-btn {
         padding: 10px 22px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 13px; color: white; text-transform: uppercase;
     }
-    .btn-red { background-color: var(--pino-red); }
-    .btn-gold { background-color: var(--pino-gold); }
+    .btn-red { background-color: var(--odis-red); }
+    .btn-gold { background-color: var(--odis-gold); }
 
     /* Layout Container */
     .main-container {
@@ -105,7 +105,7 @@
         font-size: 0.72rem;
         font-weight: 700;
         color: #fff;
-        background: var(--pino-blue);
+        background: var(--odis-blue);
         border-radius: 4px;
         padding: 1px 6px;
         margin-bottom: 6px;
@@ -147,7 +147,7 @@
         white-space: nowrap;
     }
     .card-add-btn {
-        background: var(--pino-blue);
+        background: var(--odis-blue);
         color: white;
         border: none;
         border-radius: 50%;
@@ -163,7 +163,7 @@
         line-height: 1;
     }
     .product-item:hover .card-add-btn {
-        background: var(--pino-red);
+        background: var(--odis-red);
         transform: scale(1.12);
     }
 
@@ -214,9 +214,9 @@
     }
     .btn-toggle { display: flex; background: #eee; padding: 4px; border-radius: 8px; margin-bottom: 20px; }
     .btn-toggle button { flex: 1; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; background: transparent; }
-    .btn-toggle button.active { background: white; color: var(--pino-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .btn-toggle button.active { background: white; color: var(--odis-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-    .alert-status { background: #fff5f5; color: #1d5a9e; padding: 15px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; border-left: 4px solid var(--pino-blue); }
+    .alert-status { background: #fff5f5; color: #0a1e47; padding: 15px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; border-left: 4px solid var(--odis-blue); }
     .cart-btn { width: 100%; padding: 15px; background: #e0e0e0; border: none; border-radius: 8px; font-weight: bold; color: #888; cursor: not-allowed; }
 
     /* Floating Buttons Rechts */
@@ -274,7 +274,7 @@
         top: 15px;
         left: 15px;
         z-index: 100001;
-        background-color: var(--pino-blue);
+        background-color: var(--odis-blue);
         color: white;
         border: none;
         border-radius: 12px;
@@ -325,7 +325,7 @@
     .mobile-menu-panel.open { transform: translateX(0); }
 
     .mobile-menu-panel h2 {
-        color: var(--pino-blue);
+        color: var(--odis-blue);
         font-size: 1.2rem;
         margin-bottom: 20px;
         text-transform: uppercase;
@@ -351,7 +351,7 @@
         font-size: 15px;
         transition: color 0.2s;
     }
-    .mobile-menu-panel ul li a:hover { color: var(--pino-blue); }
+    .mobile-menu-panel ul li a:hover { color: var(--odis-blue); }
 
     .mobile-menu-close {
         position: absolute;
@@ -424,7 +424,7 @@
         top: 15px;
         left: 15px;
         z-index: 100001;
-        background-color: var(--pino-blue);
+        background-color: var(--odis-blue);
         color: white;
         border: none;
         border-radius: 12px;
@@ -479,23 +479,23 @@
     }
     .cat-nav-link:hover {
         background: #fdeee8;
-        color: var(--pino-blue);
+        color: var(--odis-blue);
     }
     .cat-nav-link.active {
-        background: var(--pino-blue);
+        background: var(--odis-blue);
         color: white;
-        border-color: var(--pino-blue);
+        border-color: var(--odis-blue);
     }
 
-    /* ===== PINOCCHIO HEADER ===== */
-    .pinocchio-header {
+    /* ===== ODIS BOWL HEADER ===== */
+    .odisbowl-header {
         background: #12314f;
         position: fixed;
         top: 0; left: 0; right: 0;
         z-index: 600;
         box-shadow: 0 3px 20px rgba(0,0,0,0.35);
     }
-    .pinocchio-account-btn {
+    .odisbowl-account-btn {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -512,7 +512,7 @@
       cursor: pointer;
       border: none;
     }
-    .pinocchio-account-btn:hover { background: rgba(255,255,255,0.3); }
+    .odisbowl-account-btn:hover { background: rgba(255,255,255,0.3); }
     .account-logged-dot {
       position: absolute;
       bottom: 2px; right: 2px;
@@ -583,8 +583,8 @@
       flex-direction: column;
     }
     .stamp-icon.filled {
-      border-color: #1d5a9e;
-      background: #1d5a9e;
+      border-color: #0a1e47;
+      background: #0a1e47;
       font-size: 24px;
     }
     .stamp-icon.reward {
@@ -595,7 +595,7 @@
     .stamp-redeem-btn {
       width: 100%;
       padding: 11px;
-      background: #1d5a9e;
+      background: #0a1e47;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -610,7 +610,7 @@
       display: block;
       text-align: center;
       font-size: 12px;
-      color: #1d5a9e;
+      color: #0a1e47;
       text-decoration: none;
       padding: 6px 0;
     }
@@ -626,7 +626,7 @@
       flex-shrink: 0;
     }
 
-    .pinocchio-header-inner {
+    .odisbowl-header-inner {
         max-width: 1100px;
         margin: 0 auto;
         display: flex;
@@ -634,7 +634,7 @@
         justify-content: space-between;
         padding: 13px 20px;
     }
-    .pinocchio-logo {
+    .odisbowl-logo {
         font-family: Georgia, 'Times New Roman', serif;
         font-size: 1.45rem;
         font-weight: 900;
@@ -644,12 +644,12 @@
         gap: 8px;
         letter-spacing: 0.3px;
     }
-    .pinocchio-logo em {
+    .odisbowl-logo em {
         color: #d4a76a;
         font-style: normal;
     }
-    .pinocchio-cart-btn {
-        background: var(--pino-blue);
+    .odisbowl-cart-btn {
+        background: var(--odis-blue);
         color: white;
         border: none;
         border-radius: 50px;
@@ -663,8 +663,8 @@
         transition: all 0.2s;
         font-family: inherit;
     }
-    .pinocchio-cart-btn:hover { background: var(--pino-red); transform: scale(1.03); }
-    .pinocchio-cart-count {
+    .odisbowl-cart-btn:hover { background: var(--odis-red); transform: scale(1.03); }
+    .odisbowl-cart-count {
         background: #d4a76a;
         color: white;
         border-radius: 50%;
@@ -672,7 +672,7 @@
         display: flex; align-items: center; justify-content: center;
         font-size: 0.76rem; font-weight: 700;
     }
-    .pinocchio-cart-total { font-weight: 700; }
+    .odisbowl-cart-total { font-weight: 700; }
 
     /* Alte mobile Buttons ausblenden – Header ersetzt sie */
     .mobile-menu-btn,
@@ -685,7 +685,7 @@
         right: 20px !important;
         top: auto !important;
         z-index: 100001;
-        background: var(--pino-blue);
+        background: var(--odis-blue);
         color: white;
         border-radius: 50px;
         padding: 14px 20px;
@@ -792,7 +792,7 @@
 @keyframes warteSpin { to { transform: rotate(360deg); } }
 .warte-spinner {
     display: inline-block; width: 16px; height: 16px; flex: none;
-    border: 2px solid rgba(0,0,0,.15); border-top-color: #1d5a9e;
+    border: 2px solid rgba(0,0,0,.15); border-top-color: #0a1e47;
     border-radius: 50%; animation: warteSpin .7s linear infinite;
 }
 
@@ -857,10 +857,10 @@
 }
 
 /* Kopfzeile: Dunkelblau der Schale, Pink als Wortmarke (7:1) */
-.pinocchio-header { background: #0a1e47; }
-.pinocchio-logo { font-family: 'Oswald', 'Arial Narrow', Arial, sans-serif; font-weight: 700;
+.odisbowl-header { background: #0a1e47; }
+.odisbowl-logo { font-family: 'Oswald', 'Arial Narrow', Arial, sans-serif; font-weight: 700;
     text-transform: uppercase; letter-spacing: .04em; }
-.pinocchio-logo em { color: #f07e99; }
+.odisbowl-logo em { color: #f07e99; }
 
 /* Baukasten-Artikel als Karten */
 .product-item[data-bk] {
@@ -905,10 +905,10 @@
 </head>
 <body>
 
-<!-- ═══ PINOCCHIO HEADER ═══ -->
-<header class="pinocchio-header" id="pinocchioHeader">
-  <div class="pinocchio-header-inner">
-    <div class="pinocchio-logo">
+<!-- ═══ ODIS BOWL HEADER ═══ -->
+<header class="odisbowl-header" id="odisbowlHeader">
+  <div class="odisbowl-header-inner">
+    <div class="odisbowl-logo">
       Odi's <em>Bowl</em>
     </div>
     <!-- Suchleiste -->
@@ -918,7 +918,7 @@
     </div>
     <button class="search-btn" id="searchToggleBtn" onclick="toggleSearch()" title="Suchen"><i class="fas fa-search"></i></button>
     <div id="stamp-popup-wrap">
-      <button class="pinocchio-account-btn" id="accountHeaderBtn" onclick="toggleStampPopup(event)" title="Mein Konto">
+      <button class="odisbowl-account-btn" id="accountHeaderBtn" onclick="toggleStampPopup(event)" title="Mein Konto">
         <i class="fas fa-user" id="accountBtnIcon"></i>
         <span class="account-logged-dot" id="accountLoggedDot"></span>
         <span class="account-reward-dot" id="accountRewardDot"></span>
@@ -928,10 +928,10 @@
       </div>
     </div>
     <!-- Aktion Banner -->
-    <div id="promotionBanner" style="position: fixed; right: 15px; top: 60px; z-index: 9999; background: linear-gradient(135deg,#1d5a9e,#c62828); color: #fff; padding: 11px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; text-align: center; max-width: 165px; line-height: 1.6; display: none; box-shadow: 0 4px 16px rgba(139,29,29,0.45);">
+    <div id="promotionBanner" style="position: fixed; right: 15px; top: 60px; z-index: 9999; background: linear-gradient(135deg,#0a1e47,#c62828); color: #fff; padding: 11px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; text-align: center; max-width: 165px; line-height: 1.6; display: none; box-shadow: 0 4px 16px rgba(139,29,29,0.45);">
       <div style="font-size: 10px; opacity: 0.85; margin-bottom: 3px;">🗓 01.08 – 31.08.2026</div>
       <div style="font-size: 13px;">🍕 Kleine Margherita</div>
-      <div style="margin-top:5px; background:#fff; color:#1d5a9e; border-radius:5px; padding:3px 6px; font-size:12px;">GRATIS ab 20€!</div>
+      <div style="margin-top:5px; background:#fff; color:#0a1e47; border-radius:5px; padding:3px 6px; font-size:12px;">GRATIS ab 20€!</div>
     </div>
   </div>
 </header>
@@ -966,7 +966,7 @@
         overflow:hidden;
     ">
         <!-- Header -->
-        <div style="background:#1d5a9e; color:white; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+        <div style="background:#0a1e47; color:white; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
             <div style="display:flex; align-items:center; gap:10px;">
                 <i class="fas fa-shopping-basket" style="font-size:18px;"></i>
                 <span style="font-size:18px; font-weight:bold;">Warenkorb</span>
@@ -979,13 +979,13 @@
 
         <!-- Lieferung / Abholung Toggle -->
         <div style="padding:0 16px 12px 16px; flex-shrink:0;">
-            <div style="display:flex; border-radius:10px; overflow:hidden; border:2px solid #1d5a9e;">
+            <div style="display:flex; border-radius:10px; overflow:hidden; border:2px solid #0a1e47;">
                 <button id="cart-btn-delivery" onclick="setCartOption('delivery')"
-                    style="flex:1; padding:10px; font-weight:bold; font-size:13px; border:none; cursor:pointer; background:#1d5a9e; color:white;">
+                    style="flex:1; padding:10px; font-weight:bold; font-size:13px; border:none; cursor:pointer; background:#0a1e47; color:white;">
                     🚴 Lieferung
                 </button>
                 <button id="cart-btn-pickup" onclick="setCartOption('pickup')"
-                    style="flex:1; padding:10px; font-weight:bold; font-size:13px; border:none; cursor:pointer; background:white; color:#1d5a9e;">
+                    style="flex:1; padding:10px; font-weight:bold; font-size:13px; border:none; cursor:pointer; background:white; color:#0a1e47;">
                     🏠 Abholung
                 </button>
             </div>
@@ -994,7 +994,7 @@
             <div id="cart-delivery-info" style="margin-top:10px;">
                 <select id="cart-stadt" onchange="updateCartSummary()"
                     style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; background:white; font-size:13px; cursor:pointer;">
-                    <option value="nordkirchen">Nordkirchen (MBW: 10,00€ | +2,00€ Gebühr)</option>
+                    <option value="oelde">Oelde (MBW: 10,00€ | +2,00€ Gebühr)</option>
                     <option value="suedkirchen">Südkirchen / Capelle (MBW: 15,00€ | +2,50€ Gebühr)</option>
                     <option value="andere">Andere Orte (MBW: 20,00€ | +4,00€ Gebühr)</option>
                 </select>
@@ -1007,7 +1007,7 @@
         <!-- Footer mit Bestellen-Button -->
         <div style="padding:12px 16px 16px 16px; flex-shrink:0;">
             <button onclick="goToCheckoutFromCart();" id="mobileCartCheckoutBtn"
-                style="width:100%; padding:14px; background:#1d5a9e; color:white; border:none; border-radius:8px; font-size:15px; font-weight:bold; cursor:pointer;">
+                style="width:100%; padding:14px; background:#0a1e47; color:white; border:none; border-radius:8px; font-size:15px; font-weight:bold; cursor:pointer;">
                 Jetzt bestellen
             </button>
         </div>
@@ -1033,7 +1033,7 @@
             <li><a href="#pizzabroetchen" onclick="toggleMobileMenu()">Pizzabroetchen</a></li>
             <li><a href="#getraenke" onclick="toggleMobileMenu()">Getraenke</a></li>
         </ul>
-        <a href="account.html" style="display:block;margin-top:16px;padding:12px 16px;background:var(--pino-blue);color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-weight:600;font-size:14px;">
+        <a href="account.html" style="display:block;margin-top:16px;padding:12px 16px;background:var(--odis-blue);color:#fff;border-radius:8px;text-align:center;text-decoration:none;font-weight:600;font-size:14px;">
           👤 Mein Konto
         </a>
     </div>
@@ -1064,9 +1064,9 @@
     </section>
 
     <!-- ═══ AKTIONS-BANNER ═══ -->
-    <div id="aktionsBanner" style="display:none; background: linear-gradient(135deg, #1d5a9e 0%, #c62828 60%, #d4793a 100%); color: white; text-align: center; padding: 18px 20px; border-bottom: 3px solid #a02222;">
+    <div id="aktionsBanner" style="display:none; background: linear-gradient(135deg, #0a1e47 0%, #c62828 60%, #d4793a 100%); color: white; text-align: center; padding: 18px 20px; border-bottom: 3px solid #a02222;">
       <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.85; margin-bottom: 6px;">🗓 Aktion · 1. – 31. August 2026</div>
-      <div style="font-size: 20px; font-weight: 900; line-height: 1.3;">🍕 Kleine Pizza Margherita <span style="background:#fff; color:#1d5a9e; border-radius:6px; padding:2px 10px; margin-left:4px;">GRATIS</span></div>
+      <div style="font-size: 20px; font-weight: 900; line-height: 1.3;">🍕 Kleine Pizza Margherita <span style="background:#fff; color:#0a1e47; border-radius:6px; padding:2px 10px; margin-left:4px;">GRATIS</span></div>
       <div style="font-size: 13px; margin-top: 7px; opacity: 0.9;">Bei jeder Bestellung ab <strong>20 €</strong> · kleine Margherita (22 cm) · automatisch im Warenkorb</div>
     </div>
     <script>
@@ -1177,7 +1177,7 @@
   
   .piz-price-tag {
     font-weight: bold; 
-    color: #1d5a9e;                
+    color: #0a1e47;                
   }
   
   .piz-price-tag.included {
@@ -1230,7 +1230,7 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #1d5a9e;
+    background: #0a1e47;
     color: white;
     padding: 15px 25px;
     border-radius: 50px;
@@ -1273,12 +1273,12 @@
         
         <span class="mobile-only-close" onclick="toggleMobileCart()" style="display:none; position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#ccc;">&times;</span>
 
-        <h3 class="mobile-only-title" style="display:none; color:#1d5a9e; margin-top:0;">Mein Warenkorb</h3>
+        <h3 class="mobile-only-title" style="display:none; color:#0a1e47; margin-top:0;">Mein Warenkorb</h3>
 
         <div class="btn-toggle" style="display: flex; gap: 8px; margin-bottom: 15px;">
             <div id="option-delivery" 
                  onclick="selectOption('delivery')"
-                 style="flex: 1; padding: 10px; font-size: 13px; border-radius: 8px; cursor: pointer; border: 1px solid #1d5a9e; background: #1d5a9e; color: white; text-align: center; font-weight: bold; transition: all 0.3s;">
+                 style="flex: 1; padding: 10px; font-size: 13px; border-radius: 8px; cursor: pointer; border: 1px solid #0a1e47; background: #0a1e47; color: white; text-align: center; font-weight: bold; transition: all 0.3s;">
                 Lieferung
             </div>
             <div id="option-pickup" 
@@ -1322,12 +1322,12 @@ function setCartOption(option, silent) {
     const btnPick = document.getElementById('cart-btn-pickup');
     const delInfo = document.getElementById('cart-delivery-info');
     if (option === 'delivery') {
-        btnDel.style.background = '#1d5a9e'; btnDel.style.color = 'white';
-        btnPick.style.background = 'white'; btnPick.style.color = '#1d5a9e';
+        btnDel.style.background = '#0a1e47'; btnDel.style.color = 'white';
+        btnPick.style.background = 'white'; btnPick.style.color = '#0a1e47';
         delInfo.style.display = 'block';
     } else {
-        btnPick.style.background = '#1d5a9e'; btnPick.style.color = 'white';
-        btnDel.style.background = 'white'; btnDel.style.color = '#1d5a9e';
+        btnPick.style.background = '#0a1e47'; btnPick.style.color = 'white';
+        btnDel.style.background = 'white'; btnDel.style.color = '#0a1e47';
         delInfo.style.display = 'none';
     }
     if (!silent) updateCartSummary();
@@ -1346,14 +1346,14 @@ function updateCartSummary() {
         let html = `Warenwert: <b>${summeWaren.toFixed(2).replace('.', ',')} €</b><br>`;
         if (rabatt > 0) html += `Finanzschüler-Rabatt (10 %): <b style="color:#2e7d32;">− ${rabatt.toFixed(2).replace('.', ',')} €</b><br>`;
         html += `Liefergebühr: <b>${config.fee.toFixed(2).replace('.', ',')} €</b><br>`;
-        html += `<span style="color:#1d5a9e; font-weight:bold; font-size:14px;">Gesamt: ${gesamt.toFixed(2).replace('.', ',')} €</span>`;
+        html += `<span style="color:#0a1e47; font-weight:bold; font-size:14px;">Gesamt: ${gesamt.toFixed(2).replace('.', ',')} €</span>`;
         if (summeWaren < config.min) {
             const rest = (config.min - summeWaren).toFixed(2).replace('.', ',');
             html += `<br><span style="color:red; font-size:12px; font-weight:bold;">⚠️ Noch ${rest} € bis zum Mindestbestellwert (${config.min.toFixed(2).replace('.', ',')} €)</span>`;
         }
         box.innerHTML = html;
     } else {
-        box.innerHTML = `Warenwert: <b>${summeWaren.toFixed(2).replace('.', ',')} €</b><br><span style="color:#1d5a9e; font-weight:bold; font-size:14px;">Gesamt: ${summeWaren.toFixed(2).replace('.', ',')} €</span>`;
+        box.innerHTML = `Warenwert: <b>${summeWaren.toFixed(2).replace('.', ',')} €</b><br><span style="color:#0a1e47; font-weight:bold; font-size:14px;">Gesamt: ${summeWaren.toFixed(2).replace('.', ',')} €</span>`;
     }
 }
 
@@ -1389,15 +1389,15 @@ function renderMobileCartOverlay() {
         const priceDisplay = item.isFree ? '<span style="color:#2e7d32; font-weight:bold;">GRATIS 🎉</span>' : item.preis.toFixed(2).replace('.', ',') + ' €';
         const qtyBtns = item.isFree ? '' : `
             <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <span onclick="artikelQtyChangeMobile(${index},-1)" style="cursor:pointer;width:26px;height:26px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;color:#1d5a9e;">−</span>
+              <span onclick="artikelQtyChangeMobile(${index},-1)" style="cursor:pointer;width:26px;height:26px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;color:#0a1e47;">−</span>
               <span style="font-size:14px;font-weight:bold;min-width:18px;text-align:center;">${qty}</span>
-              <span onclick="artikelQtyChangeMobile(${index},1)" style="cursor:pointer;width:26px;height:26px;border-radius:50%;background:#1d5a9e;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;color:#fff;">+</span>
+              <span onclick="artikelQtyChangeMobile(${index},1)" style="cursor:pointer;width:26px;height:26px;border-radius:50%;background:#0a1e47;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;color:#fff;">+</span>
             </div>`;
         html += `
             <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f0f0f0; gap:8px;">
                 <div style="flex:1;">
                     <div style="font-size:14px; font-weight:600; color:#333; line-height:1.3;">${item.name}</div>
-                    <div style="font-size:13px; color:#1d5a9e; font-weight:bold; margin-top:3px;">${priceDisplay}</div>
+                    <div style="font-size:13px; color:#0a1e47; font-weight:bold; margin-top:3px;">${priceDisplay}</div>
                     ${item.note ? `<div style="font-size:11px;color:#999;font-style:italic;margin-top:2px;">📝 ${item.note}</div>` : ''}
                 </div>
                 ${qtyBtns}
@@ -1450,11 +1450,11 @@ function renderWarenkorb() {
         const priceDisplay = item.isFree ? '<span style="color:#2e7d32;">GRATIS 🎉</span>' : item.preis.toFixed(2).replace('.', ',') + ' €';
         const qtyBtns = item.isFree ? '' : `
             <div style="display:flex;align-items:center;gap:5px;margin-right:8px;">
-              <span onclick="artikelQtyChange(${index},-1)" style="cursor:pointer;width:22px;height:22px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#1d5a9e;">−</span>
+              <span onclick="artikelQtyChange(${index},-1)" style="cursor:pointer;width:22px;height:22px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#0a1e47;">−</span>
               <span style="font-size:14px;font-weight:bold;min-width:16px;text-align:center;">${qty}</span>
-              <span onclick="artikelQtyChange(${index},1)" style="cursor:pointer;width:22px;height:22px;border-radius:50%;background:#1d5a9e;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#fff;">+</span>
+              <span onclick="artikelQtyChange(${index},1)" style="cursor:pointer;width:22px;height:22px;border-radius:50%;background:#0a1e47;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#fff;">+</span>
             </div>`;
-        const deleteBtn = item.isFree ? '' : `<span onclick="artikelLoeschen(${index})" style="color:#1d5a9e; cursor:pointer; font-weight:bold; font-size:16px;">✕</span>`;
+        const deleteBtn = item.isFree ? '' : `<span onclick="artikelLoeschen(${index})" style="color:#0a1e47; cursor:pointer; font-weight:bold; font-size:16px;">✕</span>`;
         const extrasHtml = (item.extraDetails||[]).filter(e=>e.name).map(e =>
             `<div style="font-size:12px;color:#888;padding-left:8px;">+ ${e.name}${e.price>0?' ('+e.price.toFixed(2).replace('.',',')+'€)':''}</div>`
         ).join('');
@@ -1500,16 +1500,16 @@ function selectOption(option) {
     const pickupBtn = document.getElementById('option-pickup');
     
     if (option === 'delivery') {
-        deliveryBtn.style.background = '#1d5a9e';
+        deliveryBtn.style.background = '#0a1e47';
         deliveryBtn.style.color = 'white';
-        deliveryBtn.style.borderColor = '#1d5a9e';
+        deliveryBtn.style.borderColor = '#0a1e47';
         pickupBtn.style.background = '#f9f9f9';
         pickupBtn.style.color = '#333';
         pickupBtn.style.borderColor = '#ddd';
     } else {
-        pickupBtn.style.background = '#1d5a9e';
+        pickupBtn.style.background = '#0a1e47';
         pickupBtn.style.color = 'white';
-        pickupBtn.style.borderColor = '#1d5a9e';
+        pickupBtn.style.borderColor = '#0a1e47';
         deliveryBtn.style.background = '#f9f9f9';
         deliveryBtn.style.color = '#333';
         deliveryBtn.style.borderColor = '#ddd';
@@ -1531,7 +1531,7 @@ function isPromotionActive() {
 function showPromotionBanner() {
   const banner = document.getElementById('promotionBanner');
   if (banner && isPromotionActive()) {
-    const header = document.getElementById('pinocchioHeader');
+    const header = document.getElementById('odisbowlHeader');
     if (header) banner.style.top = (header.offsetHeight + 5) + 'px';
     banner.style.display = 'block';
   }
@@ -1674,7 +1674,7 @@ function updateCheckoutButton(isActive, total) {
 
     if (isActive) {
         checkoutBtn.innerText = `JETZT BESTELLEN (${total.toFixed(2).replace('.', ',')} €)`;
-        checkoutBtn.style.background = "#1d5a9e";
+        checkoutBtn.style.background = "#0a1e47";
         checkoutBtn.style.color = "white";
         checkoutBtn.style.cursor = "pointer";
         checkoutBtn.style.pointerEvents = "auto";
@@ -1712,7 +1712,7 @@ function toggleMobileMenu() {
 <div id="stampPromoModal" onclick="if(event.target===this)closeStampPromo()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99998;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
   <div style="background:#fff;border-radius:20px;max-width:380px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);position:relative;">
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1d5a9e,#c0392b);padding:28px 24px 20px;text-align:center;color:#fff;">
+    <div style="background:linear-gradient(135deg,#0a1e47,#c0392b);padding:28px 24px 20px;text-align:center;color:#fff;">
       <button onclick="closeStampPromo()" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;line-height:1;">✕</button>
       <div style="font-size:52px;margin-bottom:8px;">🍕</div>
       <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Gratis-Pizza sichern!</div>
@@ -1722,15 +1722,15 @@ function toggleMobileMenu() {
     <div style="padding:22px 24px;">
       <!-- Stempel-Vorschau -->
       <div style="display:flex;justify-content:center;gap:12px;margin-bottom:18px;">
-        <div style="width:56px;height:56px;border-radius:50%;background:#1d5a9e;display:flex;align-items:center;justify-content:center;font-size:22px;">🍕</div>
-        <div style="width:56px;height:56px;border-radius:50%;background:#1d5a9e;display:flex;align-items:center;justify-content:center;font-size:22px;">🍕</div>
+        <div style="width:56px;height:56px;border-radius:50%;background:#0a1e47;display:flex;align-items:center;justify-content:center;font-size:22px;">🍕</div>
+        <div style="width:56px;height:56px;border-radius:50%;background:#0a1e47;display:flex;align-items:center;justify-content:center;font-size:22px;">🍕</div>
         <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#d4a76a,#c4923a);display:flex;align-items:center;justify-content:center;font-size:22px;">🎁</div>
       </div>
       <div style="text-align:center;font-size:13px;color:#666;margin-bottom:18px;line-height:1.6;">
         Bei jeder Bestellung einen Stempel sammeln.<br>
-        <strong style="color:#1d5a9e;">Nach 3 Bestellungen: Gratis-Margherita (groß)!</strong>
+        <strong style="color:#0a1e47;">Nach 3 Bestellungen: Gratis-Margherita (groß)!</strong>
       </div>
-      <a href="account.html" style="display:block;background:#1d5a9e;color:#fff;text-align:center;padding:13px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;margin-bottom:10px;">
+      <a href="account.html" style="display:block;background:#0a1e47;color:#fff;text-align:center;padding:13px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;margin-bottom:10px;">
         Jetzt kostenlos anmelden →
       </a>
       <button onclick="closeStampPromo()" style="width:100%;background:transparent;border:none;color:#aaa;font-size:13px;cursor:pointer;padding:6px;">Nein danke</button>
@@ -1741,13 +1741,13 @@ function toggleMobileMenu() {
 <div id="dankeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999999; justify-content:center; align-items:center; padding:20px; box-sizing:border-box;">
     <div style="background:white; border-radius:20px; padding:35px 30px; max-width:400px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
         <div id="dankeIcon" style="font-size:64px; margin-bottom:10px;">⏳</div>
-        <h2 id="dankeTitel" style="color:#1d5a9e; font-size:24px; margin:0 0 10px 0;">Bestellung eingegangen!</h2>
-        <div style="background:#fff5f5; border:2px dashed #1d5a9e; border-radius:10px; padding:12px; margin:15px 0;">
+        <h2 id="dankeTitel" style="color:#0a1e47; font-size:24px; margin:0 0 10px 0;">Bestellung eingegangen!</h2>
+        <div style="background:#fff5f5; border:2px dashed #0a1e47; border-radius:10px; padding:12px; margin:15px 0;">
             <div style="font-size:12px; color:#888;">Bestellnummer</div>
-            <div id="dankeOrderId" style="font-size:22px; font-weight:bold; color:#1d5a9e;"></div>
+            <div id="dankeOrderId" style="font-size:22px; font-weight:bold; color:#0a1e47;"></div>
         </div>
         <div id="dankeText" style="background:#f0f9f0; border-radius:10px; padding:14px; margin-bottom:20px; color:#555; font-size:13.5px; line-height:1.6; text-align:left;"></div>
-        <button id="dankeCloseBtn" onclick="dankeSchliessen()" style="display:none; background:#1d5a9e; color:white; border:none; border-radius:10px; padding:14px 30px; font-size:15px; font-weight:bold; cursor:pointer; width:100%;">
+        <button id="dankeCloseBtn" onclick="dankeSchliessen()" style="display:none; background:#0a1e47; color:white; border:none; border-radius:10px; padding:14px 30px; font-size:15px; font-weight:bold; cursor:pointer; width:100%;">
             Alles klar, danke! 👍
         </button>
     </div>
@@ -1756,7 +1756,7 @@ function toggleMobileMenu() {
 <!-- Upsell Modal -->
 <div id="upsellModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999998; justify-content:center; align-items:center; padding:15px; box-sizing:border-box;">
     <div style="background:white; padding:25px; border-radius:20px; width:100%; max-width:450px; position:relative; box-sizing:border-box; font-family:Arial,sans-serif;">
-        <h2 style="color:#1d5a9e; margin-top:0; border-bottom:2px solid #eee; padding-bottom:10px; text-align:center; font-size:20px;">Dazu noch etwas? 🍕</h2>
+        <h2 style="color:#0a1e47; margin-top:0; border-bottom:2px solid #eee; padding-bottom:10px; text-align:center; font-size:20px;">Dazu noch etwas? 🍕</h2>
         <p style="color:#666; font-size:13px; text-align:center; margin-top:0; margin-bottom:16px;">Viele bestellen das auch dazu:</p>
         <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
             <div style="display:flex; align-items:center; justify-content:space-between; background:#f9f9f9; border:1px solid #eee; border-radius:12px; padding:12px 15px;">
@@ -1764,33 +1764,33 @@ function toggleMobileMenu() {
                     <span style="font-size:26px;">🥤</span>
                     <div>
                         <div style="font-weight:bold; font-size:14px; color:#333;">Coca Cola 0,33 L</div>
-                        <div style="color:#1d5a9e; font-weight:bold; font-size:14px;">2,50 €</div>
+                        <div style="color:#0a1e47; font-weight:bold; font-size:14px;">2,50 €</div>
                     </div>
                 </div>
-                <button id="upsell-btn-cola" onclick="addUpsellItem('Coca Cola 0,33 L', 2.50, 'upsell-btn-cola')" style="background:#1d5a9e; color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; line-height:1;">+</button>
+                <button id="upsell-btn-cola" onclick="addUpsellItem('Coca Cola 0,33 L', 2.50, 'upsell-btn-cola')" style="background:#0a1e47; color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; line-height:1;">+</button>
             </div>
             <div style="display:flex; align-items:center; justify-content:space-between; background:#f9f9f9; border:1px solid #eee; border-radius:12px; padding:12px 15px;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <span style="font-size:26px;">🍞</span>
                     <div>
                         <div style="font-weight:bold; font-size:14px; color:#333;">201 Pizzabrötchen</div>
-                        <div style="color:#1d5a9e; font-weight:bold; font-size:14px;">3,50 €</div>
+                        <div style="color:#0a1e47; font-weight:bold; font-size:14px;">3,50 €</div>
                     </div>
                 </div>
-                <button id="upsell-btn-broetchen" onclick="addUpsellItem('201 Pizzabrötchen', 3.50, 'upsell-btn-broetchen')" style="background:#1d5a9e; color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; line-height:1;">+</button>
+                <button id="upsell-btn-broetchen" onclick="addUpsellItem('201 Pizzabrötchen', 3.50, 'upsell-btn-broetchen')" style="background:#0a1e47; color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; line-height:1;">+</button>
             </div>
             <div style="display:flex; align-items:center; justify-content:space-between; background:#f9f9f9; border:1px solid #eee; border-radius:12px; padding:12px 15px;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <span style="font-size:26px;">🧀</span>
                     <div>
                         <div style="font-weight:bold; font-size:14px; color:#333;">202 Pizzabrötchen mit Käse</div>
-                        <div style="color:#1d5a9e; font-weight:bold; font-size:14px;">6,50 €</div>
+                        <div style="color:#0a1e47; font-weight:bold; font-size:14px;">6,50 €</div>
                     </div>
                 </div>
-                <button id="upsell-btn-kaese" onclick="addUpsellItem('202 Pizzabrötchen mit Käse', 6.50, 'upsell-btn-kaese')" style="background:#1d5a9e; color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; line-height:1;">+</button>
+                <button id="upsell-btn-kaese" onclick="addUpsellItem('202 Pizzabrötchen mit Käse', 6.50, 'upsell-btn-kaese')" style="background:#0a1e47; color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; line-height:1;">+</button>
             </div>
         </div>
-        <button onclick="proceedFromUpsell()" style="width:100%; padding:15px; background:#1d5a9e; color:white; border:none; border-radius:10px; font-weight:bold; font-size:15px; cursor:pointer;">
+        <button onclick="proceedFromUpsell()" style="width:100%; padding:15px; background:#0a1e47; color:white; border:none; border-radius:10px; font-weight:bold; font-size:15px; cursor:pointer;">
             Weiter zur Bestellung →
         </button>
     </div>
@@ -1800,7 +1800,7 @@ function toggleMobileMenu() {
     <div style="background:white; padding:25px; border-radius:20px; width:100%; max-width:450px; position:relative; box-sizing: border-box; font-family: Arial, sans-serif;">
         <span onclick="closeCheckoutModal()" style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:28px; color:#888;">&times;</span>
         
-        <h2 id="modal-title" style="color:#1d5a9e; margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Kasse</h2>
+        <h2 id="modal-title" style="color:#0a1e47; margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Kasse</h2>
 
         <div id="checkout-customer-banner" style="display:none; background:#fff8e1; border:1px solid #f9a825; border-radius:8px; padding:8px 12px; margin-bottom:12px; font-size:13px; color:#5d4037;"></div>
 
@@ -1817,7 +1817,7 @@ function toggleMobileMenu() {
             
             <div style="margin-bottom:5px; font-size:12px; color:#666;">Liefergebiet wählen:</div>
             <select id="c-stadt" onchange="updateSummary()" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ddd; border-radius:8px; background:white; cursor:pointer;">
-                <option value="nordkirchen">Nordkirchen (MBW: 10,00€ | Gebühr: 2,00€)</option>
+                <option value="oelde">Oelde (MBW: 10,00€ | Gebühr: 2,00€)</option>
                 <option value="suedkirchen">Südkirchen / Capelle (MBW: 15,00€ | Gebühr: 2,50€)</option>
                 <option value="andere">Andere Orte (MBW: 20,00€ | Gebühr: 4,00€)</option>
             </select>
@@ -1859,8 +1859,8 @@ function toggleMobileMenu() {
               autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
               style="flex:1;padding:12px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;font-family:inherit;font-size:14px;text-transform:uppercase;letter-spacing:1px;">
             <button type="button" onclick="validateCoupon()"
-              style="padding:12px 16px;background:#1d5a9e;color:white;border:none;border-radius:8px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background .2s;"
-              onmouseover="this.style.background='#17497f'" onmouseout="this.style.background='#1d5a9e'"
+              style="padding:12px 16px;background:#0a1e47;color:white;border:none;border-radius:8px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background .2s;"
+              onmouseover="this.style.background='#17497f'" onmouseout="this.style.background='#0a1e47'"
               title="Rabattcode einlösen">✓</button>
           </div>
           <div id="coupon-msg" style="display:none;margin-top:8px;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:600;"></div>
@@ -1874,11 +1874,11 @@ function toggleMobileMenu() {
         <div style="background:#f8f8f8;border-radius:9px;padding:13px 14px;margin-bottom:13px;">
           <label style="display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;cursor:pointer;line-height:1.5;">
             <input type="checkbox" id="cb-agb" onchange="updateBestellBtn()"
-                   style="width:17px;height:17px;margin-top:2px;flex-shrink:0;accent-color:#1d5a9e;cursor:pointer;">
+                   style="width:17px;height:17px;margin-top:2px;flex-shrink:0;accent-color:#0a1e47;cursor:pointer;">
             <span style="font-size:13px;color:#333;">
               Ich habe die
               <button type="button" onclick="openLegal('agb');event.stopPropagation();"
-                      style="background:none;border:none;color:#1d5a9e;font-weight:bold;cursor:pointer;font-size:13px;text-decoration:underline;padding:0;font-family:inherit;">
+                      style="background:none;border:none;color:#0a1e47;font-weight:bold;cursor:pointer;font-size:13px;text-decoration:underline;padding:0;font-family:inherit;">
                 AGB &amp; Widerrufsbelehrung
               </button>
               gelesen und akzeptiere diese. Die Servicegebühr von 0,99&nbsp;€ gem. §&nbsp;312a BGB habe ich zur Kenntnis genommen. *
@@ -1886,11 +1886,11 @@ function toggleMobileMenu() {
           </label>
           <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer;line-height:1.5;">
             <input type="checkbox" id="cb-dsgvo" onchange="updateBestellBtn()"
-                   style="width:17px;height:17px;margin-top:2px;flex-shrink:0;accent-color:#1d5a9e;cursor:pointer;">
+                   style="width:17px;height:17px;margin-top:2px;flex-shrink:0;accent-color:#0a1e47;cursor:pointer;">
             <span style="font-size:13px;color:#333;">
               Ich habe die
               <button type="button" onclick="openLegal('datenschutz');event.stopPropagation();"
-                      style="background:none;border:none;color:#1d5a9e;font-weight:bold;cursor:pointer;font-size:13px;text-decoration:underline;padding:0;font-family:inherit;">
+                      style="background:none;border:none;color:#0a1e47;font-weight:bold;cursor:pointer;font-size:13px;text-decoration:underline;padding:0;font-family:inherit;">
                 Datenschutzerklärung
               </button>
               gelesen und stimme der Datenverarbeitung zur Bestellabwicklung zu. *
@@ -1916,7 +1916,7 @@ function togglePaymentLogos() {
   if (ppLogo) ppLogo.style.display = zahlung.value === 'paypal' ? 'flex' : 'none';
 }
 
-// ── Online-Zahlung abgeschaltet (Pinocchio Nordkirchen) ───────────
+// ── Online-Zahlung abgeschaltet (Odi’s Bowl) ───────────
 // Auf true setzen, um Stripe und PayPal wieder anzubieten. Die Backend-
 // Endpunkte /api/create-stripe-checkout, /api/create-paypal-order und die
 // beiden Webhooks bleiben bestehen, ebenso die ENV-Variablen in render.yaml.
@@ -1950,15 +1950,15 @@ function updateBestellBtn() {
   if (!btn) return;
   var ok = agb && dsgvo && agb.checked && dsgvo.checked;
   btn.disabled        = !ok;
-  btn.style.background = ok ? '#1d5a9e' : '#ccc';
+  btn.style.background = ok ? '#0a1e47' : '#ccc';
   btn.style.color      = ok ? '#fff'    : '#888';
   btn.style.cursor     = ok ? 'pointer' : 'not-allowed';
   btn.textContent      = ok ? '✅ Kostenpflichtig bestellen' : '🔒 Bitte AGB & Datenschutz bestätigen';
 }
 
-// ── FINANZSCHÜLER-RABATT ──
+// ── FEHLT_RABATTSCHÜLER-RABATT ──
 // Flyer: "Bei Lieferung erhalten Finanzschüler ab 70 Euro 10 Prozent Rabatt."
-const RABATT_CODE       = 'FINANZ';
+const RABATT_CODE       = 'FEHLT_RABATT';
 const RABATT_PROZENT    = 0.10;
 const RABATT_MINDESTWERT = 70.00;
 var couponValid = false;
@@ -2007,7 +2007,7 @@ function showCouponMsg(text, success) {
 
 <script>
 const AREA_CONFIG = {
-    "nordkirchen": { min: 10.00, fee: 2.00, label: "Nordkirchen" },
+    "oelde": { min: 10.00, fee: 2.00, label: "Oelde" },
     "suedkirchen": { min: 15.00, fee: 2.50, label: "Südkirchen / Capelle" },
     "andere":      { min: 20.00, fee: 4.00, label: "Andere Orte" }
 };
@@ -2057,7 +2057,7 @@ function updateSummary() {
     let html = '';
 
     if (currentSelection === 'delivery') {
-        const stadtKey = document.getElementById('c-stadt')?.value || 'nordkirchen';
+        const stadtKey = document.getElementById('c-stadt')?.value || 'oelde';
         const config = AREA_CONFIG[stadtKey];
         const rabatt = berechneRabatt(summeWaren);
         const gesamt = summeWaren - rabatt + config.fee + SERVICE_FEE;
@@ -2067,7 +2067,7 @@ function updateSummary() {
         html += row('Liefergebühr (' + config.label + ')', config.fee.toFixed(2).replace('.', ',') + ' €', true);
         html += row('Servicegebühr', '0,99 €', true);
         html += '<div style="border-top:1px solid #ddd;margin:6px 0;"></div>';
-        html += `<div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;color:#1d5a9e;">
+        html += `<div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;color:#0a1e47;">
             <span>Gesamt</span><span>${gesamt.toFixed(2).replace('.', ',')} €</span></div>`;
 
         if (summeWaren < config.min) {
@@ -2080,14 +2080,14 @@ function updateSummary() {
         html += row('Speisen', summeWaren.toFixed(2).replace('.', ',') + ' €', true);
         html += row('Servicegebühr', '0,99 €', true);
         html += '<div style="border-top:1px solid #ddd;margin:6px 0;"></div>';
-        html += `<div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;color:#1d5a9e;">
+        html += `<div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;color:#0a1e47;">
             <span>Gesamt</span><span>${gesamt.toFixed(2).replace('.', ',')} €</span></div>`;
     }
 
     summary.innerHTML = html;
 }
 
-// Frueher stand hier PinocchioDB.addOrder(): ein zweiter POST auf /api/orders
+// Frueher stand hier Odi’s BowlDB.addOrder(): ein zweiter POST auf /api/orders
 // mit einem Legacy-Objekt (status:'neu', ohne mode). Der scheiterte serverseitig
 // an der Preispruefung, der Fehler verschwand in einem catch -- und es war
 // unklar, welche Bestellung der Wartebildschirm meint. Entfernt.
@@ -2116,7 +2116,7 @@ if (!window.FLUEVATE_BACKEND) {
 function getPageUrl() {
     const loc = window.location;
     if (loc.protocol === 'file:') {
-        return 'https://pinnochionordkirchen.de';
+        return 'https://odis-oelde.com';
     }
     return loc.origin + loc.pathname;
 }
@@ -2124,7 +2124,7 @@ function getPageUrl() {
 function openUpsellModal() {
     ['upsell-btn-cola','upsell-btn-broetchen','upsell-btn-kaese'].forEach(id => {
         const btn = document.getElementById(id);
-        if (btn) { btn.textContent = '+'; btn.style.background = '#1d5a9e'; btn.disabled = false; btn.dataset.added = '0'; }
+        if (btn) { btn.textContent = '+'; btn.style.background = '#0a1e47'; btn.disabled = false; btn.dataset.added = '0'; }
     });
     document.getElementById('upsellModal').style.display = 'flex';
 }
@@ -2144,7 +2144,7 @@ function addUpsellItem(name, price, btnId) {
         warenkorb = warenkorb.filter(i => !(i.name === name && i.upsell));
         renderWarenkorb();
         btn.textContent = '+';
-        btn.style.background = '#1d5a9e';
+        btn.style.background = '#0a1e47';
         btn.dataset.added = '0';
     } else {
         warenkorb.push({ id: Date.now(), name: name, preis: price, upsell: true });
@@ -2329,11 +2329,11 @@ async function processOrder() {
 // ─── KUNDE: WARTEN AUF DIE ANNAHME DURCH DAS RESTAURANT ──────────
 // Nach dem Absenden sieht der Kunde einen Wartebildschirm. Das "Okay" gibt es
 // erst, wenn das Restaurant die Bestellung im Dashboard angenommen hat.
-const KONTAKT_TEL_HREF = 'tel:+492596939191';
-const KONTAKT_TEL_TEXT = '0 25 96 / 93 91 91';
+const KONTAKT_TEL_HREF = 'tel:+4925229373711';
+const KONTAKT_TEL_TEXT = '0 2522 9373711';
 const WARTE_INTERVALL  = 3000;           // Abstand zweier Statusabfragen
 const WARTE_TIMEOUT    = 5 * 60 * 1000;  // danach Telefonnummer anbieten
-const WARTE_SPEICHER   = 'pinocchioWartendeBestellung';
+const WARTE_SPEICHER   = 'odisbowlWartendeBestellung';
 
 let warteTimer = null;   // laufendes Intervall
 let warteStart = 0;      // Beginn der Wartezeit (fuer den Timeout)
@@ -2423,7 +2423,7 @@ async function warteTick() {
         const grund = d.cancelReason ? '<br><br>Grund: <em>' + d.cancelReason + '</em>' : '';
         zeigeBestellZustand('❌', 'Bestellung abgelehnt',
             'Leider konnte deine Bestellung nicht angenommen werden.' + grund
-            + '<br><br>Bitte ruf uns an: <strong><a href="' + KONTAKT_TEL_HREF + '" style="color:#1d5a9e">' + KONTAKT_TEL_TEXT + '</a></strong>'
+            + '<br><br>Bitte ruf uns an: <strong><a href="' + KONTAKT_TEL_HREF + '" style="color:#0a1e47">' + KONTAKT_TEL_TEXT + '</a></strong>'
             + '<br>Eine bereits geleistete Zahlung wird vollständig zurückerstattet.',
             '', 'OK');
     } else if (d.status && d.status !== 'pending') {
@@ -2437,7 +2437,7 @@ async function warteTick() {
         const mail = warteDaten.email
             ? '<br><br>📧 Eine Bestätigung wurde an <strong>' + warteDaten.email + '</strong> gesendet.' : '';
         zeigeBestellZustand('✅', 'Bestellung bestätigt!',
-            'Deine Bestellung wurde von <strong>Pizzeria Pinocchio</strong> bestätigt!<br><br>' + zeit + mail,
+            'Deine Bestellung wurde von <strong>Odi’s Bowl</strong> bestätigt!<br><br>' + zeit + mail,
             '', 'Super, danke! 🎉');
     } else {
         zeigeWarten();
@@ -2461,7 +2461,7 @@ function zeigeKeineRueckmeldung() {
     zeigeBestellZustand('📞', 'Wir haben deine Bestellung',
         'Deine Bestellung' + num + ' liegt beim Restaurant vor, ist aber noch nicht bestätigt. '
         + 'Bei viel Betrieb kann das etwas dauern – sobald sie angenommen ist, bekommst du eine E-Mail.'
-        + '<br><br>Du willst sichergehen? Ruf uns an: <strong><a href="' + KONTAKT_TEL_HREF + '" style="color:#1d5a9e">' + KONTAKT_TEL_TEXT + '</a></strong>',
+        + '<br><br>Du willst sichergehen? Ruf uns an: <strong><a href="' + KONTAKT_TEL_HREF + '" style="color:#0a1e47">' + KONTAKT_TEL_TEXT + '</a></strong>',
         '', 'Schließen');
 }
 
@@ -2617,7 +2617,7 @@ function showStripeCancelBanner() {
     cursor: pointer; font-weight: bold; transition: 0.2s;
   }
   .size-btn.active {
-    border-color: #1d5a9e; background: #fff5f5; color: #1d5a9e;
+    border-color: #0a1e47; background: #fff5f5; color: #0a1e47;
   }
   #pizzaExtrasBox {
     overflow-y: auto; margin: 10px 0; padding-right: 8px; flex-grow: 1; max-height: 260px; border-top: 1px solid #eee;
@@ -2640,7 +2640,7 @@ function showStripeCancelBanner() {
   <div class="pizza-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:32px; color:#bbb;" onclick="closePizzaPopup()">&times;</span>
     
-    <h2 id="modalPizzaName" style="color:#1d5a9e; margin:0;">Pizza wählen</h2>
+    <h2 id="modalPizzaName" style="color:#0a1e47; margin:0;">Pizza wählen</h2>
     
     <p style="margin: 15px 0 5px 0; font-weight: bold; font-size: 0.9rem;">Größe wählen:</p>
     <div class="size-selector">
@@ -2729,7 +2729,7 @@ function openPizza(element) {
                 <input type="checkbox" id="px-${index}" data-idx="${index}" class="px-check" onchange="calculatePizzaTotal()" onclick="event.stopPropagation()" style="width:18px; height:18px; margin-right:12px;">
                 <span>${extra}</span>
             </label>
-            <span class="px-tag" style="font-weight: bold; color: #1d5a9e;"></span>
+            <span class="px-tag" style="font-weight: bold; color: #0a1e47;"></span>
         </div>`;
     });
     document.getElementById('pizzaExtrasBox').innerHTML = html;
@@ -2819,7 +2819,7 @@ function closePizzaPopup() {
   <div class="pasta-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:32px; color:#bbb;" onclick="closePastaPopup()">&times;</span>
     
-    <h2 id="pastaName" style="color:#1d5a9e; margin:0;">Pasta wählen</h2>
+    <h2 id="pastaName" style="color:#0a1e47; margin:0;">Pasta wählen</h2>
     <p id="pastaDesc" style="color:#666; font-size:0.85rem; margin: 10px 0 15px 0;">Beschreibung</p>
 
     <p style="margin: 15px 0 5px 0; font-weight: bold; font-size: 0.9rem;">Extras:</p>
@@ -2829,7 +2829,7 @@ function closePizzaPopup() {
                 <input type="checkbox" id="kaeseExtra" onchange="updatePastaTotal()" onclick="event.stopPropagation()" style="width:18px; height:18px; margin-right:12px;">
                 <span>Mit Käse überbacken</span>
             </label>
-            <span style="font-weight: bold; color: #1d5a9e;">+ 1,00 €</span>
+            <span style="font-weight: bold; color: #0a1e47;">+ 1,00 €</span>
         </div>
     </div>
     <textarea id="note-pastaPopup" placeholder="Anmerkung (z. B. ohne Käse, extra Sauce…)" maxlength="150" rows="3" style="width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:10px 12px;font-size:0.9rem;font-family:inherit;resize:none;margin-top:14px;margin-bottom:10px;color:#333;display:block;min-height:70px;"></textarea>
@@ -2939,7 +2939,7 @@ function closePastaPopup() {
   <div class="salad-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:32px; color:#bbb;" onclick="closeSaladPopup()">&times;</span>
     
-    <h2 id="saladName" style="color:#1d5a9e; margin:0 0 5px 0; font-size: 1.5rem;">Salat wählen</h2>
+    <h2 id="saladName" style="color:#0a1e47; margin:0 0 5px 0; font-size: 1.5rem;">Salat wählen</h2>
     <p id="saladDesc" style="color:#666; font-size:0.9rem; margin-bottom:10px;">Zutaten...</p>
 
     <div id="saladExtrasBox"></div>
@@ -2993,7 +2993,7 @@ function openSalad(element) {
                 <input type="checkbox" id="sal-ex-${index}" class="sal-check" value="${ex.p}" onchange="updateSaladTotal()" onclick="event.stopPropagation()" style="width:18px; height:18px; margin-right:12px;">
                 <span>${ex.n}</span>
             </label>
-            <span style="font-weight: bold; color: #1d5a9e;">+ ${ex.p.toFixed(2).replace('.', ',')} €</span>
+            <span style="font-weight: bold; color: #0a1e47;">+ ${ex.p.toFixed(2).replace('.', ',')} €</span>
         </div>`;
     });
     
@@ -3049,7 +3049,7 @@ function closeSaladPopup() {
   <div class="quick-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:28px; color:#ccc;" onclick="closeQuickPopup()">&times;</span>
     
-    <h2 id="quickName" style="color:#1d5a9e; margin:0 0 10px 0;">Produkt Name</h2>
+    <h2 id="quickName" style="color:#0a1e47; margin:0 0 10px 0;">Produkt Name</h2>
     <p id="quickDesc" style="color:#666; font-size:0.9rem; margin-bottom:20px;">Beschreibung</p>
 
     <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;" id="quickPriceDisplay">0,00 €</div>
@@ -3131,7 +3131,7 @@ function closeQuickPopup() {
   <div class="pb-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:28px; color:#ccc;" onclick="closePbPopup()">&times;</span>
     
-    <h2 id="pbName" style="color:#1d5a9e; margin:0 0 8px 0;">Pizzabrötchen</h2>
+    <h2 id="pbName" style="color:#0a1e47; margin:0 0 8px 0;">Pizzabrötchen</h2>
     <div class="pb-info-text">Wähle max. 2 Zutaten (inkl.) & Dips (je 0,50 €).</div>
 
     <div id="pbExtrasBox" style="max-height: 150px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #f0f0f0; padding: 5px;"></div>
@@ -3221,7 +3221,7 @@ function closePbPopup() {
   <div class="pb-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:28px; color:#ccc;" onclick="closeDipPopup()">&times;</span>
     
-    <h2 id="dipName" style="color:#1d5a9e; margin:0 0 5px 0;">Pizzabrötchen</h2>
+    <h2 id="dipName" style="color:#0a1e47; margin:0 0 5px 0;">Pizzabrötchen</h2>
     <p id="dipDesc" style="color:#666; font-size:0.95rem; margin-bottom:20px;">Möchtest du Dips dazu? (je 0,50 €)</p>
 
     <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-top: 1px solid #eee;">
@@ -3351,7 +3351,7 @@ function closeDipPopup() {
   
   .piz-price-tag {
     font-weight: bold; 
-    color: #1d5a9e;                
+    color: #0a1e47;                
     font-size: 0.95rem;
     white-space: nowrap;
   }
@@ -3383,9 +3383,9 @@ function closeDipPopup() {
   <div class="fam-modal-card" onclick="event.stopPropagation()">
     <span style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:25px; color:#ccc;" onclick="closeFamPopup()">&times;</span>
     
-    <h2 id="famPizzaName" style="color:#1d5a9e; margin:0 0 5px 0; font-size: 1.5rem;">Pizza wählen</h2>
+    <h2 id="famPizzaName" style="color:#0a1e47; margin:0 0 5px 0; font-size: 1.5rem;">Pizza wählen</h2>
     <p id="famPizzaDesc" style="color:#666; font-size:0.9rem; margin-bottom:10px;">Bitte Zutaten wählen.</p>
-    <p style="color:#1d5a9e; font-size:0.85rem; font-weight:bold; margin:0 0 10px 0;">3 Zutaten inklusive | Jede weitere +3,00 €</p>
+    <p style="color:#0a1e47; font-size:0.85rem; font-weight:bold; margin:0 0 10px 0;">3 Zutaten inklusive | Jede weitere +3,00 €</p>
 
     <div id="famExtrasBox"></div>
 
@@ -3543,7 +3543,7 @@ function confirmFamSelection() {
 
 
 <!-- ═══════════════════════════════════════════════════════
-     PINOCCHIO LEGAL SYSTEM – Modal für Impressum/AGB/DS/Allergene
+     ODIS BOWL LEGAL SYSTEM – Modal für Impressum/AGB/DS/Allergene
      Eingebaut direkt in index.html, kein Seitenwechsel
 ═══════════════════════════════════════════════════════ -->
 
@@ -3556,7 +3556,7 @@ function confirmFamSelection() {
               margin:16px auto;box-shadow:0 20px 60px rgba(0,0,0,.4);
               font-family:Arial,sans-serif;">
     <!-- Header -->
-    <div style="background:#1d5a9e;padding:15px 20px;border-radius:16px 16px 0 0;
+    <div style="background:#0a1e47;padding:15px 20px;border-radius:16px 16px 0 0;
                 display:flex;align-items:center;justify-content:space-between;
                 position:sticky;top:0;">
       <span id="legalTitle" style="font-size:1rem;font-weight:bold;color:#fff;"></span>
@@ -3573,33 +3573,33 @@ function confirmFamSelection() {
 
 <!-- Footer mit den vier Buttons -->
 
-<div style="background:#fff;border-top:3px solid #1d5a9e;padding:18px 16px;text-align:center;">
+<div style="background:#fff;border-top:3px solid #0a1e47;padding:18px 16px;text-align:center;">
   <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin-bottom:10px;">
     <button onclick="openLegal('impressum')"
-            style="background:none;border:none;color:#1d5a9e;cursor:pointer;
+            style="background:none;border:none;color:#0a1e47;cursor:pointer;
                    font-size:.82rem;text-decoration:underline;font-family:Arial,sans-serif;">
       Impressum
     </button>
     <button onclick="openLegal('agb')"
-            style="background:none;border:none;color:#1d5a9e;cursor:pointer;
+            style="background:none;border:none;color:#0a1e47;cursor:pointer;
                    font-size:.82rem;text-decoration:underline;font-family:Arial,sans-serif;">
       AGB &amp; Widerrufsbelehrung
     </button>
     <button onclick="openLegal('datenschutz')"
-            style="background:none;border:none;color:#1d5a9e;cursor:pointer;
+            style="background:none;border:none;color:#0a1e47;cursor:pointer;
                    font-size:.82rem;text-decoration:underline;font-family:Arial,sans-serif;">
       Datenschutz
     </button>
     <button onclick="openLegal('allergene')"
-            style="background:none;border:none;color:#1d5a9e;cursor:pointer;
+            style="background:none;border:none;color:#0a1e47;cursor:pointer;
                    font-size:.82rem;text-decoration:underline;font-family:Arial,sans-serif;">
       Allergene &amp; Zusatzstoffe
     </button>
   </div>
   <p style="font-size:.75rem;color:#aaa;margin:0;">
-    Pizzeria Pinocchio &middot; Bergstr.&nbsp;19 &middot; 59394 Nordkirchen &middot;
-    Tel.&nbsp;0&nbsp;25&nbsp;96&nbsp;/&nbsp;93&nbsp;91&nbsp;91 &middot;
-    <a href="https://pinnochionordkirchen.de" style="color:#1d5a9e;">pinnochionordkirchen.de</a>
+    Odi’s Bowl &middot; Bahnhofstr.&nbsp;11 &middot; 59302 Oelde &middot;
+    Tel.&nbsp;0&nbsp;2522&nbsp;9373711 &middot;
+    <a href="https://odis-oelde.com" style="color:#0a1e47;">odis-oelde.com</a>
   </p>
   <p style="font-size:.72rem;color:#bbb;margin:10px 0 0;">
     Made by <a href="https://www.fluevate.de" target="_blank" rel="noopener"
@@ -3612,45 +3612,45 @@ var LEGAL = {};
 
 LEGAL.impressum = {
   title: "Impressum",
-  text:  "<h3 style='color:#1d5a9e;margin:0 0 10px;overflow-wrap:anywhere'>Impressum</h3><p>Raid Ammorah<br>Bergstraße 19<br>59394 Nordkirchen</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Kontakt</h4><p>Telefon: 02596 939191<br>E-Mail: <a style='color:#1d5a9e;word-break:break-word' href='mailto:Raidammorah@yahoo.com'>Raidammorah@yahoo.com</a></p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Umsatzsteuer-ID</h4><p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: 83172435904</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Verbraucherstreitbeilegung/Universalschlichtungsstelle</h4><p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><p style='margin-top:20px'><a href='https://www.e-recht24.de/' target='_blank' rel='noopener'><img src='img/erecht24-siegel-impressum.png' width='140' height='218' alt='eRecht24 Siegel: Impressum für rechtssichere Webseiten' style='border:0;max-width:100%;height:auto'></a></p>"
+  text:  "<h3 style='color:#0a1e47;margin:0 0 10px;overflow-wrap:anywhere'>Impressum</h3><p>Ramazan Özalp<br>Bahnhofstr. 11<br>59302 Oelde</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Kontakt</h4><p>Telefon: 02596 939191<br>E-Mail: <a style='color:#0a1e47;word-break:break-word' href='mailto:Raidammorah@yahoo.com'>Raidammorah@yahoo.com</a></p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Umsatzsteuer-ID</h4><p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: 83172435904</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Verbraucherstreitbeilegung/Universalschlichtungsstelle</h4><p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><p style='margin-top:20px'><a href='https://www.e-recht24.de/' target='_blank' rel='noopener'><img src='img/erecht24-siegel-impressum.png' width='140' height='218' alt='eRecht24 Siegel: Impressum für rechtssichere Webseiten' style='border:0;max-width:100%;height:auto'></a></p>"
 };
 
 LEGAL.datenschutz = {
   title: "Datenschutzerkl&auml;rung",
-  text:  "<h3 style='color:#1d5a9e;margin:0 0 10px;overflow-wrap:anywhere'>1. Datenschutz auf einen Blick</h3><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Allgemeine Hinweise</h4><p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Datenerfassung auf dieser Website</h4><p style='margin:14px 0 4px'><strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong></p><p>Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Abschnitt „Hinweis zur verantwortlichen Stelle“ in dieser Datenschutzerklärung entnehmen.</p><p style='margin:14px 0 4px'><strong>Wie erfassen wir Ihre Daten?</strong></p><p>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.</p><p>Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p><p style='margin:14px 0 4px'><strong>Wofür nutzen wir Ihre Daten?</strong></p><p>Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden. Sofern über die Website Verträge geschlossen oder angebahnt werden können, werden die übermittelten Daten auch für Vertragsangebote, Bestellungen oder sonstige Auftragsanfragen verarbeitet.</p><p style='margin:14px 0 4px'><strong>Welche Rechte haben Sie bezüglich Ihrer Daten?</strong></p><p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.</p><p>Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>2. Hosting</h3><p>Wir hosten die Inhalte unserer Website bei folgendem Anbieter:</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Externes Hosting</h4><p>Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters / der Hoster gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.</p><p>Das externe Hosting erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO). Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG, soweit die Einwilligung die Speicherung von Cookies oder den Zugriff auf Informationen im Endgerät des Nutzers (z. B. Device-Fingerprinting) im Sinne des TDDDG umfasst. Die Einwilligung ist jederzeit widerrufbar.</p><p>Unser(e) Hoster wird bzw. werden Ihre Daten nur insoweit verarbeiten, wie dies zur Erfüllung seiner Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.</p><p>Wir setzen folgende(n) Hoster ein:</p><p>Abed Rachman Falah/ Fluevate<br>Zur Goldbrede 30<br>59269 Beckum<br>Deutschland</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>3. Allgemeine Hinweise und Pflichtinformationen</h3><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Datenschutz</h4><p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p><p>Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.</p><p>Wir weisen darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Hinweis zur verantwortlichen Stelle</h4><p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p><p>Pizzeria Pinocchio<br>Inhaber: Raid Ammorah<br>Bergstraße 19<br>59394 Nordkirchen<br>Deutschland</p><p>Telefon: 0 25 96 / 93 91 91<br>E-Mail: <a style='color:#1d5a9e;word-break:break-word' href='mailto:raidammorah@yahoo.com'>raidammorah@yahoo.com</a></p><p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Speicherdauer</h4><p>Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Allgemeine Hinweise zu den Rechtsgrundlagen der Datenverarbeitung auf dieser Website</h4><p>Sofern Sie in die Datenverarbeitung eingewilligt haben, verarbeiten wir Ihre personenbezogenen Daten auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO bzw. Art. 9 Abs. 2 lit. a DSGVO, sofern besondere Datenkategorien nach Art. 9 Abs. 1 DSGVO verarbeitet werden. Im Falle einer ausdrücklichen Einwilligung in die Übertragung personenbezogener Daten in Drittstaaten erfolgt die Datenverarbeitung außerdem auf Grundlage von Art. 49 Abs. 1 lit. a DSGVO. Sofern Sie in die Speicherung von Cookies oder in den Zugriff auf Informationen in Ihr Endgerät (z. B. via Device-Fingerprinting) eingewilligt haben, erfolgt die Datenverarbeitung zusätzlich auf Grundlage von § 25 Abs. 1 TDDDG. Die Einwilligung ist jederzeit widerrufbar. Sind Ihre Daten zur Vertragserfüllung oder zur Durchführung vorvertraglicher Maßnahmen erforderlich, verarbeiten wir Ihre Daten auf Grundlage des Art. 6 Abs. 1 lit. b DSGVO. Des Weiteren verarbeiten wir Ihre Daten, sofern diese zur Erfüllung einer rechtlichen Verpflichtung erforderlich sind, auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO. Die Datenverarbeitung kann ferner auf Grundlage unseres berechtigten Interesses nach Art. 6 Abs. 1 lit. f DSGVO erfolgen. Über die jeweils im Einzelfall einschlägigen Rechtsgrundlagen wird in den folgenden Absätzen dieser Datenschutzerklärung informiert.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Empfänger von personenbezogenen Daten</h4><p>Im Rahmen unserer Geschäftstätigkeit arbeiten wir mit verschiedenen externen Stellen zusammen. Dabei ist teilweise auch eine Übermittlung von personenbezogenen Daten an diese externen Stellen erforderlich. Wir geben personenbezogene Daten nur dann an externe Stellen weiter, wenn dies im Rahmen einer Vertragserfüllung erforderlich ist, wenn wir gesetzlich hierzu verpflichtet sind (z. B. Weitergabe von Daten an Steuerbehörden), wenn wir ein berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO an der Weitergabe haben oder wenn eine sonstige Rechtsgrundlage die Datenweitergabe erlaubt. Beim Einsatz von Auftragsverarbeitern geben wir personenbezogene Daten unserer Kunden nur auf Grundlage eines gültigen Vertrags über Auftragsverarbeitung weiter. Im Falle einer gemeinsamen Verarbeitung wird ein Vertrag über gemeinsame Verarbeitung geschlossen.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h4><p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)</h4><p>WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRÜNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FÜR EIN AUF DIESE BESTIMMUNGEN GESTÜTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLÄRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KÖNNEN ZWINGENDE SCHUTZWÜRDIGE GRÜNDE FÜR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN ÜBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSÜBUNG ODER VERTEIDIGUNG VON RECHTSANSPRÜCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).</p><p>WERDEN IHRE PERSONENBEZOGENEN DATEN VERARBEITET, UM DIREKTWERBUNG ZU BETREIBEN, SO HABEN SIE DAS RECHT, JEDERZEIT WIDERSPRUCH GEGEN DIE VERARBEITUNG SIE BETREFFENDER PERSONENBEZOGENER DATEN ZUM ZWECKE DERARTIGER WERBUNG EINZULEGEN; DIES GILT AUCH FÜR DAS PROFILING, SOWEIT ES MIT SOLCHER DIREKTWERBUNG IN VERBINDUNG STEHT. WENN SIE WIDERSPRECHEN, WERDEN IHRE PERSONENBEZOGENEN DATEN ANSCHLIESSEND NICHT MEHR ZUM ZWECKE DER DIREKTWERBUNG VERWENDET (WIDERSPRUCH NACH ART. 21 ABS. 2 DSGVO).</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Beschwerderecht bei der zuständigen Aufsichtsbehörde</h4><p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Recht auf Datenübertragbarkeit</h4><p>Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Auskunft, Berichtigung und Löschung</h4><p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Recht auf Einschränkung der Verarbeitung</h4><p>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li><li>Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie statt der Löschung die Einschränkung der Datenverarbeitung verlangen.</li><li>Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li><li>Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li></ul><p>Wenn Sie die Verarbeitung Ihrer personenbezogenen Daten eingeschränkt haben, dürfen diese Daten – von ihrer Speicherung abgesehen – nur mit Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats verarbeitet werden.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>SSL- bzw. TLS-Verschlüsselung</h4><p>Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p><p>Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Verschlüsselter Zahlungsverkehr auf dieser Website</h4><p>Besteht nach dem Abschluss eines kostenpflichtigen Vertrags eine Verpflichtung, uns Ihre Zahlungsdaten (z. B. Kontonummer bei Einzugsermächtigung) zu übermitteln, werden diese Daten zur Zahlungsabwicklung benötigt.</p><p>Der Zahlungsverkehr über die gängigen Zahlungsmittel (Visa/MasterCard, Lastschriftverfahren) erfolgt ausschließlich über eine verschlüsselte SSL- bzw. TLS-Verbindung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p><p>Bei verschlüsselter Kommunikation können Ihre Zahlungsdaten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Widerspruch gegen Werbe-E-Mails</h4><p>Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-E-Mails, vor.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>4. Datenerfassung auf dieser Website</h3><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Cookies</h4><p>Unsere Internetseiten verwenden so genannte „Cookies“. Cookies sind kleine Datenpakete und richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät gespeichert. Session-Cookies werden nach Ende Ihres Besuchs automatisch gelöscht. Permanente Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese selbst löschen oder eine automatische Löschung durch Ihren Webbrowser erfolgt.</p><p>Cookies können von uns (First-Party-Cookies) oder von Drittunternehmen stammen (sog. Third-Party-Cookies). Third-Party-Cookies ermöglichen die Einbindung bestimmter Dienstleistungen von Drittunternehmen innerhalb von Webseiten (z. B. Cookies zur Abwicklung von Zahlungsdienstleistungen).</p><p>Cookies haben verschiedene Funktionen. Zahlreiche Cookies sind technisch notwendig, da bestimmte Webseitenfunktionen ohne diese nicht funktionieren würden (z. B. die Warenkorbfunktion oder die Anzeige von Videos). Andere Cookies können zur Auswertung des Nutzerverhaltens oder zu Werbezwecken verwendet werden.</p><p>Cookies, die zur Durchführung des elektronischen Kommunikationsvorgangs, zur Bereitstellung bestimmter, von Ihnen erwünschter Funktionen (z. B. für die Warenkorbfunktion) oder zur Optimierung der Website (z. B. Cookies zur Messung des Webpublikums) erforderlich sind (notwendige Cookies), werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO gespeichert, sofern keine andere Rechtsgrundlage angegeben wird. Der Websitebetreiber hat ein berechtigtes Interesse an der Speicherung von notwendigen Cookies zur technisch fehlerfreien und optimierten Bereitstellung seiner Dienste. Sofern eine Einwilligung zur Speicherung von Cookies und vergleichbaren Wiedererkennungstechnologien abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage dieser Einwilligung (Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG); die Einwilligung ist jederzeit widerrufbar.</p><p>Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser Website eingeschränkt sein.</p><p>Sofern weitere Cookies und Dienste auf dieser Website eingesetzt werden, können Sie dies dieser Datenschutzerklärung entnehmen.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>CCM19</h4><p>Unsere Website nutzt CCM19, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät oder zum Einsatz bestimmter Technologien einzuholen und diese datenschutzkonform zu dokumentieren. Anbieter dieser Technologie ist Papoo Software &amp; Media GmbH, Auguststr. 4, 53229 Bonn (im Folgenden „CCM19“).</p><p>Wenn Sie unsere Website betreten, wird eine Verbindung zu den Servern von CCM19 hergestellt, um Ihre Einwilligungen und sonstigen Erklärungen zur Cookie-Nutzung einzuholen. Anschließend speichert CCM19 einen Cookie in Ihrem Browser, um Ihnen die erteilten Einwilligungen bzw. deren Widerruf zuordnen zu können. Die so erfassten Daten werden gespeichert, bis Sie uns zur Löschung auffordern, den CCM19-Cookie selbst löschen oder der Zweck für die Datenspeicherung entfällt. Zwingende gesetzliche Aufbewahrungspflichten bleiben unberührt.</p><p>Der Einsatz von CCM19 erfolgt, um die gesetzlich vorgeschriebenen Einwilligungen für den Einsatz von Cookies einzuholen. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 S. 1 lit. c DSGVO.</p><p style='margin:14px 0 4px'><strong>Auftragsverarbeitung</strong></p><p>Wir haben einen Vertrag über Auftragsverarbeitung (AVV) zur Nutzung des oben genannten Dienstes geschlossen. Hierbei handelt es sich um einen datenschutzrechtlich vorgeschriebenen Vertrag, der gewährleistet, dass dieser die personenbezogenen Daten unserer Websitebesucher nur nach unseren Weisungen und unter Einhaltung der DSGVO verarbeitet.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Server-Log-Dateien</h4><p>Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>Browsertyp und Browserversion</li><li>verwendetes Betriebssystem</li><li>Referrer URL</li><li>Hostname des zugreifenden Rechners</li><li>Uhrzeit der Serveranfrage</li><li>IP-Adresse</li></ul><p>Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.</p><p>Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website – hierzu müssen die Server-Log-Files erfasst werden.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>WhatsApp</h4><p>Sie können Bestellungen auch per WhatsApp an uns senden. Anbieter ist die WhatsApp Ireland Limited, 4 Grand Canal Square, Grand Canal Harbour, Dublin 2, Irland.</p><p>Wenn Sie uns per WhatsApp kontaktieren, verarbeiten wir Ihre Telefonnummer, Ihren WhatsApp-Profilnamen, den Inhalt Ihrer Nachrichten sowie die für die Bestellung erforderlichen Angaben (z. B. Name, Lieferadresse, bestellte Speisen). Die Verarbeitung erfolgt zur Abwicklung Ihrer Bestellung auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO.</p><p>Die Kommunikation über WhatsApp ist Ende-zu-Ende-verschlüsselt. WhatsApp erhält dennoch Metadaten (z. B. Absender, Empfänger, Zeitpunkt) und kann Daten an die Muttergesellschaft Meta Platforms, Inc. in die USA übermitteln. Die Datenübertragung in die USA wird auf das EU-US Data Privacy Framework (DPF) gestützt, nach dem Meta zertifiziert ist. Wir nutzen die WhatsApp-Nachrichten nur zur Bestellabwicklung, nicht zu Werbezwecken.</p><p>Die Nachrichten werden auf unserem Gerät gelöscht, sobald sie für die Abwicklung der Bestellung nicht mehr erforderlich sind; gesetzliche Aufbewahrungspflichten bleiben unberührt. Wenn Sie WhatsApp nicht nutzen möchten, können Sie telefonisch oder über das Online-Bestellformular auf dieser Website bestellen.</p><p>Weitere Informationen finden Sie in der Datenschutzrichtlinie von WhatsApp: <a style='color:#1d5a9e;word-break:break-word' href='https://www.whatsapp.com/legal/privacy-policy-eea' target='_blank' rel='noopener noreferrer'>https://www.whatsapp.com/legal/privacy-policy-eea</a>.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>5. eCommerce und Zahlungsanbieter</h3><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Verarbeiten von Kunden- und Vertragsdaten</h4><p>Wir erheben, verarbeiten und nutzen personenbezogene Kunden- und Vertragsdaten zur Begründung, inhaltlichen Ausgestaltung und Änderung unserer Vertragsbeziehungen. Personenbezogene Daten über die Inanspruchnahme dieser Website (Nutzungsdaten) erheben, verarbeiten und nutzen wir nur, soweit dies erforderlich ist, um dem Nutzer die Inanspruchnahme des Dienstes zu ermöglichen oder abzurechnen. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. b DSGVO.</p><p>Die erhobenen Kundendaten werden nach Abschluss des Auftrags oder Beendigung der Geschäftsbeziehung und Ablauf der ggf. bestehenden gesetzlichen Aufbewahrungsfristen gelöscht. Gesetzliche Aufbewahrungsfristen bleiben unberührt.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Datenübermittlung bei Vertragsschluss für Online-Shops, Händler und Warenversand</h4><p>Wenn Sie Waren bei uns bestellen, geben wir Ihre personenbezogenen Daten an das zur Lieferung betraute Transportunternehmen sowie an den mit der Zahlungsabwicklung beauftragten Zahlungsdienstleister weiter. Es werden nur solche Daten herausgegeben, die der jeweilige Dienstleister zur Erfüllung seiner Aufgabe benötigt. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet. Sofern Sie eine entsprechende Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO erteilt haben, werden wir Ihre E-Mail-Adresse an das mit der Lieferung betraute Transportunternehmen übergeben, damit dieses Sie per E-Mail über den Versandstatus Ihrer Bestellung informieren kann; Sie können die Einwilligung jederzeit widerrufen.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Zahlungsdienste</h4><p>Wir binden Zahlungsdienste von Drittunternehmen auf unserer Website ein. Wenn Sie einen Kauf bei uns tätigen, werden Ihre Zahlungsdaten (z. B. Name, Zahlungssumme, Kontoverbindung, Kreditkartennummer) vom Zahlungsdienstleister zum Zwecke der Zahlungsabwicklung verarbeitet. Für diese Transaktionen gelten die jeweiligen Vertrags- und Datenschutzbestimmungen der jeweiligen Anbieter. Der Einsatz der Zahlungsdienstleister erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragsabwicklung) sowie im Interesse eines möglichst reibungslosen, komfortablen und sicheren Zahlungsvorgangs (Art. 6 Abs. 1 lit. f DSGVO). Soweit für bestimmte Handlungen Ihre Einwilligung abgefragt wird, ist Art. 6 Abs. 1 lit. a DSGVO Rechtsgrundlage der Datenverarbeitung; Einwilligungen sind jederzeit für die Zukunft widerrufbar.</p><p>Folgende Zahlungsdienste / Zahlungsdienstleister setzen wir im Rahmen dieser Website ein:</p><p style='margin:14px 0 4px'><strong>Stripe</strong></p><p>Anbieter für Kunden innerhalb der EU ist die Stripe Payments Europe, Ltd.,1 Grand Canal Street Lower, Grand Canal Dock, Dublin, Irland (im Folgenden „Stripe“).</p><p>Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Details finden Sie hier:<br><a style='color:#1d5a9e;word-break:break-word' href='https://stripe.com/de/privacy' target='_blank' rel='noopener noreferrer'>https://stripe.com/de/privacy</a> und<br><a style='color:#1d5a9e;word-break:break-word' href='https://stripe.com/de/guides/general-data-protection-regulation' target='_blank' rel='noopener noreferrer'>https://stripe.com/de/guides/general-data-protection-regulation</a>.</p><p>Details hierzu können Sie in der Datenschutzerklärung von Stripe unter folgendem Link nachlesen: <a style='color:#1d5a9e;word-break:break-word' href='https://stripe.com/de/privacy' target='_blank' rel='noopener noreferrer'>https://stripe.com/de/privacy</a>.</p>"
+  text:  "<h3 style='color:#0a1e47;margin:0 0 10px;overflow-wrap:anywhere'>1. Datenschutz auf einen Blick</h3><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Allgemeine Hinweise</h4><p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Datenerfassung auf dieser Website</h4><p style='margin:14px 0 4px'><strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong></p><p>Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Abschnitt „Hinweis zur verantwortlichen Stelle“ in dieser Datenschutzerklärung entnehmen.</p><p style='margin:14px 0 4px'><strong>Wie erfassen wir Ihre Daten?</strong></p><p>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.</p><p>Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p><p style='margin:14px 0 4px'><strong>Wofür nutzen wir Ihre Daten?</strong></p><p>Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden. Sofern über die Website Verträge geschlossen oder angebahnt werden können, werden die übermittelten Daten auch für Vertragsangebote, Bestellungen oder sonstige Auftragsanfragen verarbeitet.</p><p style='margin:14px 0 4px'><strong>Welche Rechte haben Sie bezüglich Ihrer Daten?</strong></p><p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.</p><p>Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>2. Hosting</h3><p>Wir hosten die Inhalte unserer Website bei folgendem Anbieter:</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Externes Hosting</h4><p>Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters / der Hoster gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.</p><p>Das externe Hosting erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO). Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG, soweit die Einwilligung die Speicherung von Cookies oder den Zugriff auf Informationen im Endgerät des Nutzers (z. B. Device-Fingerprinting) im Sinne des TDDDG umfasst. Die Einwilligung ist jederzeit widerrufbar.</p><p>Unser(e) Hoster wird bzw. werden Ihre Daten nur insoweit verarbeiten, wie dies zur Erfüllung seiner Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.</p><p>Wir setzen folgende(n) Hoster ein:</p><p>Abed Rachman Falah/ Fluevate<br>Zur Goldbrede 30<br>59269 Beckum<br>Deutschland</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>3. Allgemeine Hinweise und Pflichtinformationen</h3><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Datenschutz</h4><p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p><p>Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.</p><p>Wir weisen darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Hinweis zur verantwortlichen Stelle</h4><p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p><p>Odi’s Bowl<br>Inhaber: Ramazan Özalp<br>Bahnhofstr. 11<br>59302 Oelde<br>Deutschland</p><p>Telefon: 0 2522 9373711<br>E-Mail: <a style='color:#0a1e47;word-break:break-word' href='mailto:raidammorah@yahoo.com'>raidammorah@yahoo.com</a></p><p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Speicherdauer</h4><p>Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Allgemeine Hinweise zu den Rechtsgrundlagen der Datenverarbeitung auf dieser Website</h4><p>Sofern Sie in die Datenverarbeitung eingewilligt haben, verarbeiten wir Ihre personenbezogenen Daten auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO bzw. Art. 9 Abs. 2 lit. a DSGVO, sofern besondere Datenkategorien nach Art. 9 Abs. 1 DSGVO verarbeitet werden. Im Falle einer ausdrücklichen Einwilligung in die Übertragung personenbezogener Daten in Drittstaaten erfolgt die Datenverarbeitung außerdem auf Grundlage von Art. 49 Abs. 1 lit. a DSGVO. Sofern Sie in die Speicherung von Cookies oder in den Zugriff auf Informationen in Ihr Endgerät (z. B. via Device-Fingerprinting) eingewilligt haben, erfolgt die Datenverarbeitung zusätzlich auf Grundlage von § 25 Abs. 1 TDDDG. Die Einwilligung ist jederzeit widerrufbar. Sind Ihre Daten zur Vertragserfüllung oder zur Durchführung vorvertraglicher Maßnahmen erforderlich, verarbeiten wir Ihre Daten auf Grundlage des Art. 6 Abs. 1 lit. b DSGVO. Des Weiteren verarbeiten wir Ihre Daten, sofern diese zur Erfüllung einer rechtlichen Verpflichtung erforderlich sind, auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO. Die Datenverarbeitung kann ferner auf Grundlage unseres berechtigten Interesses nach Art. 6 Abs. 1 lit. f DSGVO erfolgen. Über die jeweils im Einzelfall einschlägigen Rechtsgrundlagen wird in den folgenden Absätzen dieser Datenschutzerklärung informiert.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Empfänger von personenbezogenen Daten</h4><p>Im Rahmen unserer Geschäftstätigkeit arbeiten wir mit verschiedenen externen Stellen zusammen. Dabei ist teilweise auch eine Übermittlung von personenbezogenen Daten an diese externen Stellen erforderlich. Wir geben personenbezogene Daten nur dann an externe Stellen weiter, wenn dies im Rahmen einer Vertragserfüllung erforderlich ist, wenn wir gesetzlich hierzu verpflichtet sind (z. B. Weitergabe von Daten an Steuerbehörden), wenn wir ein berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO an der Weitergabe haben oder wenn eine sonstige Rechtsgrundlage die Datenweitergabe erlaubt. Beim Einsatz von Auftragsverarbeitern geben wir personenbezogene Daten unserer Kunden nur auf Grundlage eines gültigen Vertrags über Auftragsverarbeitung weiter. Im Falle einer gemeinsamen Verarbeitung wird ein Vertrag über gemeinsame Verarbeitung geschlossen.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h4><p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)</h4><p>WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRÜNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FÜR EIN AUF DIESE BESTIMMUNGEN GESTÜTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLÄRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KÖNNEN ZWINGENDE SCHUTZWÜRDIGE GRÜNDE FÜR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN ÜBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSÜBUNG ODER VERTEIDIGUNG VON RECHTSANSPRÜCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).</p><p>WERDEN IHRE PERSONENBEZOGENEN DATEN VERARBEITET, UM DIREKTWERBUNG ZU BETREIBEN, SO HABEN SIE DAS RECHT, JEDERZEIT WIDERSPRUCH GEGEN DIE VERARBEITUNG SIE BETREFFENDER PERSONENBEZOGENER DATEN ZUM ZWECKE DERARTIGER WERBUNG EINZULEGEN; DIES GILT AUCH FÜR DAS PROFILING, SOWEIT ES MIT SOLCHER DIREKTWERBUNG IN VERBINDUNG STEHT. WENN SIE WIDERSPRECHEN, WERDEN IHRE PERSONENBEZOGENEN DATEN ANSCHLIESSEND NICHT MEHR ZUM ZWECKE DER DIREKTWERBUNG VERWENDET (WIDERSPRUCH NACH ART. 21 ABS. 2 DSGVO).</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Beschwerderecht bei der zuständigen Aufsichtsbehörde</h4><p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Recht auf Datenübertragbarkeit</h4><p>Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Auskunft, Berichtigung und Löschung</h4><p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Recht auf Einschränkung der Verarbeitung</h4><p>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li><li>Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie statt der Löschung die Einschränkung der Datenverarbeitung verlangen.</li><li>Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li><li>Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li></ul><p>Wenn Sie die Verarbeitung Ihrer personenbezogenen Daten eingeschränkt haben, dürfen diese Daten – von ihrer Speicherung abgesehen – nur mit Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats verarbeitet werden.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>SSL- bzw. TLS-Verschlüsselung</h4><p>Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p><p>Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Verschlüsselter Zahlungsverkehr auf dieser Website</h4><p>Besteht nach dem Abschluss eines kostenpflichtigen Vertrags eine Verpflichtung, uns Ihre Zahlungsdaten (z. B. Kontonummer bei Einzugsermächtigung) zu übermitteln, werden diese Daten zur Zahlungsabwicklung benötigt.</p><p>Der Zahlungsverkehr über die gängigen Zahlungsmittel (Visa/MasterCard, Lastschriftverfahren) erfolgt ausschließlich über eine verschlüsselte SSL- bzw. TLS-Verbindung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p><p>Bei verschlüsselter Kommunikation können Ihre Zahlungsdaten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Widerspruch gegen Werbe-E-Mails</h4><p>Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-E-Mails, vor.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>4. Datenerfassung auf dieser Website</h3><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Cookies</h4><p>Unsere Internetseiten verwenden so genannte „Cookies“. Cookies sind kleine Datenpakete und richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät gespeichert. Session-Cookies werden nach Ende Ihres Besuchs automatisch gelöscht. Permanente Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese selbst löschen oder eine automatische Löschung durch Ihren Webbrowser erfolgt.</p><p>Cookies können von uns (First-Party-Cookies) oder von Drittunternehmen stammen (sog. Third-Party-Cookies). Third-Party-Cookies ermöglichen die Einbindung bestimmter Dienstleistungen von Drittunternehmen innerhalb von Webseiten (z. B. Cookies zur Abwicklung von Zahlungsdienstleistungen).</p><p>Cookies haben verschiedene Funktionen. Zahlreiche Cookies sind technisch notwendig, da bestimmte Webseitenfunktionen ohne diese nicht funktionieren würden (z. B. die Warenkorbfunktion oder die Anzeige von Videos). Andere Cookies können zur Auswertung des Nutzerverhaltens oder zu Werbezwecken verwendet werden.</p><p>Cookies, die zur Durchführung des elektronischen Kommunikationsvorgangs, zur Bereitstellung bestimmter, von Ihnen erwünschter Funktionen (z. B. für die Warenkorbfunktion) oder zur Optimierung der Website (z. B. Cookies zur Messung des Webpublikums) erforderlich sind (notwendige Cookies), werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO gespeichert, sofern keine andere Rechtsgrundlage angegeben wird. Der Websitebetreiber hat ein berechtigtes Interesse an der Speicherung von notwendigen Cookies zur technisch fehlerfreien und optimierten Bereitstellung seiner Dienste. Sofern eine Einwilligung zur Speicherung von Cookies und vergleichbaren Wiedererkennungstechnologien abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage dieser Einwilligung (Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG); die Einwilligung ist jederzeit widerrufbar.</p><p>Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser Website eingeschränkt sein.</p><p>Sofern weitere Cookies und Dienste auf dieser Website eingesetzt werden, können Sie dies dieser Datenschutzerklärung entnehmen.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>CCM19</h4><p>Unsere Website nutzt CCM19, um Ihre Einwilligung zur Speicherung bestimmter Cookies auf Ihrem Endgerät oder zum Einsatz bestimmter Technologien einzuholen und diese datenschutzkonform zu dokumentieren. Anbieter dieser Technologie ist Papoo Software &amp; Media GmbH, Auguststr. 4, 53229 Bonn (im Folgenden „CCM19“).</p><p>Wenn Sie unsere Website betreten, wird eine Verbindung zu den Servern von CCM19 hergestellt, um Ihre Einwilligungen und sonstigen Erklärungen zur Cookie-Nutzung einzuholen. Anschließend speichert CCM19 einen Cookie in Ihrem Browser, um Ihnen die erteilten Einwilligungen bzw. deren Widerruf zuordnen zu können. Die so erfassten Daten werden gespeichert, bis Sie uns zur Löschung auffordern, den CCM19-Cookie selbst löschen oder der Zweck für die Datenspeicherung entfällt. Zwingende gesetzliche Aufbewahrungspflichten bleiben unberührt.</p><p>Der Einsatz von CCM19 erfolgt, um die gesetzlich vorgeschriebenen Einwilligungen für den Einsatz von Cookies einzuholen. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 S. 1 lit. c DSGVO.</p><p style='margin:14px 0 4px'><strong>Auftragsverarbeitung</strong></p><p>Wir haben einen Vertrag über Auftragsverarbeitung (AVV) zur Nutzung des oben genannten Dienstes geschlossen. Hierbei handelt es sich um einen datenschutzrechtlich vorgeschriebenen Vertrag, der gewährleistet, dass dieser die personenbezogenen Daten unserer Websitebesucher nur nach unseren Weisungen und unter Einhaltung der DSGVO verarbeitet.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Server-Log-Dateien</h4><p>Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>Browsertyp und Browserversion</li><li>verwendetes Betriebssystem</li><li>Referrer URL</li><li>Hostname des zugreifenden Rechners</li><li>Uhrzeit der Serveranfrage</li><li>IP-Adresse</li></ul><p>Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.</p><p>Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website – hierzu müssen die Server-Log-Files erfasst werden.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>WhatsApp</h4><p>Sie können Bestellungen auch per WhatsApp an uns senden. Anbieter ist die WhatsApp Ireland Limited, 4 Grand Canal Square, Grand Canal Harbour, Dublin 2, Irland.</p><p>Wenn Sie uns per WhatsApp kontaktieren, verarbeiten wir Ihre Telefonnummer, Ihren WhatsApp-Profilnamen, den Inhalt Ihrer Nachrichten sowie die für die Bestellung erforderlichen Angaben (z. B. Name, Lieferadresse, bestellte Speisen). Die Verarbeitung erfolgt zur Abwicklung Ihrer Bestellung auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO.</p><p>Die Kommunikation über WhatsApp ist Ende-zu-Ende-verschlüsselt. WhatsApp erhält dennoch Metadaten (z. B. Absender, Empfänger, Zeitpunkt) und kann Daten an die Muttergesellschaft Meta Platforms, Inc. in die USA übermitteln. Die Datenübertragung in die USA wird auf das EU-US Data Privacy Framework (DPF) gestützt, nach dem Meta zertifiziert ist. Wir nutzen die WhatsApp-Nachrichten nur zur Bestellabwicklung, nicht zu Werbezwecken.</p><p>Die Nachrichten werden auf unserem Gerät gelöscht, sobald sie für die Abwicklung der Bestellung nicht mehr erforderlich sind; gesetzliche Aufbewahrungspflichten bleiben unberührt. Wenn Sie WhatsApp nicht nutzen möchten, können Sie telefonisch oder über das Online-Bestellformular auf dieser Website bestellen.</p><p>Weitere Informationen finden Sie in der Datenschutzrichtlinie von WhatsApp: <a style='color:#0a1e47;word-break:break-word' href='https://www.whatsapp.com/legal/privacy-policy-eea' target='_blank' rel='noopener noreferrer'>https://www.whatsapp.com/legal/privacy-policy-eea</a>.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>5. eCommerce und Zahlungsanbieter</h3><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Verarbeiten von Kunden- und Vertragsdaten</h4><p>Wir erheben, verarbeiten und nutzen personenbezogene Kunden- und Vertragsdaten zur Begründung, inhaltlichen Ausgestaltung und Änderung unserer Vertragsbeziehungen. Personenbezogene Daten über die Inanspruchnahme dieser Website (Nutzungsdaten) erheben, verarbeiten und nutzen wir nur, soweit dies erforderlich ist, um dem Nutzer die Inanspruchnahme des Dienstes zu ermöglichen oder abzurechnen. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. b DSGVO.</p><p>Die erhobenen Kundendaten werden nach Abschluss des Auftrags oder Beendigung der Geschäftsbeziehung und Ablauf der ggf. bestehenden gesetzlichen Aufbewahrungsfristen gelöscht. Gesetzliche Aufbewahrungsfristen bleiben unberührt.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Datenübermittlung bei Vertragsschluss für Online-Shops, Händler und Warenversand</h4><p>Wenn Sie Waren bei uns bestellen, geben wir Ihre personenbezogenen Daten an das zur Lieferung betraute Transportunternehmen sowie an den mit der Zahlungsabwicklung beauftragten Zahlungsdienstleister weiter. Es werden nur solche Daten herausgegeben, die der jeweilige Dienstleister zur Erfüllung seiner Aufgabe benötigt. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet. Sofern Sie eine entsprechende Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO erteilt haben, werden wir Ihre E-Mail-Adresse an das mit der Lieferung betraute Transportunternehmen übergeben, damit dieses Sie per E-Mail über den Versandstatus Ihrer Bestellung informieren kann; Sie können die Einwilligung jederzeit widerrufen.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>Zahlungsdienste</h4><p>Wir binden Zahlungsdienste von Drittunternehmen auf unserer Website ein. Wenn Sie einen Kauf bei uns tätigen, werden Ihre Zahlungsdaten (z. B. Name, Zahlungssumme, Kontoverbindung, Kreditkartennummer) vom Zahlungsdienstleister zum Zwecke der Zahlungsabwicklung verarbeitet. Für diese Transaktionen gelten die jeweiligen Vertrags- und Datenschutzbestimmungen der jeweiligen Anbieter. Der Einsatz der Zahlungsdienstleister erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragsabwicklung) sowie im Interesse eines möglichst reibungslosen, komfortablen und sicheren Zahlungsvorgangs (Art. 6 Abs. 1 lit. f DSGVO). Soweit für bestimmte Handlungen Ihre Einwilligung abgefragt wird, ist Art. 6 Abs. 1 lit. a DSGVO Rechtsgrundlage der Datenverarbeitung; Einwilligungen sind jederzeit für die Zukunft widerrufbar.</p><p>Folgende Zahlungsdienste / Zahlungsdienstleister setzen wir im Rahmen dieser Website ein:</p><p style='margin:14px 0 4px'><strong>Stripe</strong></p><p>Anbieter für Kunden innerhalb der EU ist die Stripe Payments Europe, Ltd.,1 Grand Canal Street Lower, Grand Canal Dock, Dublin, Irland (im Folgenden „Stripe“).</p><p>Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Details finden Sie hier:<br><a style='color:#0a1e47;word-break:break-word' href='https://stripe.com/de/privacy' target='_blank' rel='noopener noreferrer'>https://stripe.com/de/privacy</a> und<br><a style='color:#0a1e47;word-break:break-word' href='https://stripe.com/de/guides/general-data-protection-regulation' target='_blank' rel='noopener noreferrer'>https://stripe.com/de/guides/general-data-protection-regulation</a>.</p><p>Details hierzu können Sie in der Datenschutzerklärung von Stripe unter folgendem Link nachlesen: <a style='color:#0a1e47;word-break:break-word' href='https://stripe.com/de/privacy' target='_blank' rel='noopener noreferrer'>https://stripe.com/de/privacy</a>.</p>"
 };
 
 LEGAL.agb = {
   title: "AGB &amp; Widerrufsbelehrung",
-  text:  "<h3 style='color:#1d5a9e;margin:0 0 10px;overflow-wrap:anywhere'>Allgemeine Geschäftsbedingungen</h3><p>für den Online-Shop unter der URL</p><p><a style='color:#1d5a9e;word-break:break-word' href='https://pinnochionordkirchen.de/' target='_blank' rel='noopener noreferrer'>https://pinnochionordkirchen.de/</a></p><p>betrieben von</p><p>Raid Ammorah/ Pinnochio Nordkirchen<br>Bergstraße 19<br>59394 Nordkirchen<br>E-Mail:<br><a style='color:#1d5a9e;word-break:break-word' href='mailto:raidammorah@yahoo.com'>raidammorah@yahoo.com</a><br>Telefonnummer: 0 25 96 / 93 91 91</p><p>- im Folgenden: Anbieter -</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>1. Geltungsbereich</h3><p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten nach ihrer Einbeziehung für alle Vertragsschlüsse über den Erwerb von Waren, Dienstleistungen oder sonstigen Gütern (nachfolgend „Waren“) im Online-Shop unter der o.g. URL in ihrer zum Zeitpunkt des Vertragsschlusses gültigen Fassung. Diese AGB gelten ausschließlich. Abweichende AGB des Kunden werden nicht Vertragsbestandteil, es sei denn, der Anbieter stimmt diesen ausdrücklich zu.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>2. Vertragsschluss</h3><p>2.1 Die Angebote im Online-Shop stellen eine unverbindliche Aufforderung des Anbieters an die Online-Shop-Besucher zur Abgabe eines Angebots zum Erwerb der im Shop angebotenen Waren dar.</p><p>2.2 Die Bestellung der Ware(n) erfolgt über das Online-Bestellformular des Anbieters. Nach der Auswahl der gewünschten Ware(n), der Eingabe aller abgefragten Pflichtinformationen und dem Durchlaufen aller anderen verpflichtenden Schritte im Bestellprozess, können die ausgewählten Waren durch das Betätigen des Bestell-Buttons am Ende der Checkout-Seite bestellt werden (Bestellung). Durch die Bestellung gibt der Kunde ein verbindliches Vertragsangebot zum Erwerb der ausgewählten Ware(n) ab. Der Vertragsschluss erfolgt, indem der Anbieter das Angebot des Kunden annimmt. Die Annahme erfolgt, indem der Anbieter den Vertragsschluss in Schrift- oder Textform (z. B. per E-Mail) bestätigt (Auftragsbestätigung) und diese Auftragsbestätigung dem Kunden zugeht oder indem er die bestellte Ware liefert und diese Ware dem Kunden zugeht oder indem er den Kunden zur Zahlung auffordert (z. B. Rechnung oder Kreditkartenzahlung im Bestellprozess) und die Zahlungsaufforderung dem Kunden zugeht; maßgeblich für den Zeitpunkt des Vertragsschlusses ist dabei der Zeitpunkt, in dem eine der im ersten Halbsatz genannten Alternativen erstmalig eintritt.</p><p>2.3 Vor verbindlicher Abgabe der Bestellung über das Online-Bestellformular des Anbieters kann der Kunde seine Eingaben überprüfen und jederzeit über die üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehenden Eingabefunktionen korrigieren. Darüber hinaus werden alle Eingaben vor der verbindlichen Abgabe der Bestellung noch einmal in einem Bestätigungsfenster angezeigt und können auch dort mittels der üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehende Eingabefunktionen korrigiert werden.</p><p>2.4 Der Anbieter wird den Vertragstext nach dem Vertragsschluss speichern und dem Kunden in Textform (z. B. per E-Mail) übermitteln. Eine darüberhinausgehende Zugänglichmachung des Vertragstexts durch den Anbieter erfolgt nicht. Sofern der Einkauf über ein Kundenkonto im Online-Shop erfolgt ist, kann der Kunde seine Bestellungen und die damit verbundenen Bestelldaten dort einsehen.</p><p>2.5 Für den Vertragsschluss stehen folgende Sprachen zur Verfügung: Deutsch</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>3. Widerrufsrecht für Verbraucher</h3><p>Verbrauchern steht bei außerhalb von Geschäftsräumen geschlossenen Verträgen und bei Fernabsatzverträgen grundsätzlich ein Widerrufsrecht zu. Verbraucher ist jede natürliche Person, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder ihrer gewerblichen noch ihrer selbstständigen beruflichen Tätigkeit zugerechnet werden können. Details sind der Widerrufsbelehrung zu entnehmen, die jedem Verbraucher spätestens unmittelbar vor Vertragsschluss zur Verfügung gestellt wird.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>4. Zahlung, Verzug</h3><p>4.1 Es gelten die zum Zeitpunkt der Bestellung im Online-Shop aufgeführten Preise. Alle Preise gelten inklusive der gesetzlichen Mehrwertsteuer sowie zuzüglich der gegebenenfalls aufgeführten Versandkosten. Über die zur Verfügung stehenden Zahlungsmöglichkeiten wird der Kunde im Online-Shop des Anbieters informiert.</p><p>4.2 Die Zahlung erfolgt ausschließlich in bar bei Übergabe der Ware (Lieferung oder Abholung). Eine Zahlung per Karte, Online-Zahlungsdienst oder auf andere Weise wird nicht angeboten.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>5. Eigentumsvorbehalt</h3><p>Die gekaufte Ware bleibt bis zur vollständigen Bezahlung des Kaufpreises Eigentum des Anbieters.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>6. Lieferung und Selbstbelieferungsvorbehalt</h3><p>6.1 Vorbehaltlich abweichender Vereinbarungen erfolgt die Lieferung innerhalb der im Online-Shop angegebenen Lieferzeit an die vom Kunden angegebene Lieferadresse. Die geltenden Lieferzeiten sind dem Online-Shop zu entnehmen.</p><p>6.2 Wenn der Anbieter die bestellte Ware nicht liefern kann, weil er ohne eigenes Verschulden selbst nicht beliefert wurde, obwohl er rechtzeitig mit einem zuverlässigen Lieferanten ein kongruentes Deckungsgeschäft abgeschlossen hat, wird der Anbieter von seiner Leistungspflicht frei und kann vom Vertrag zurücktreten. Der Anbieter ist verpflichtet, den Kunden unverzüglich über die Unmöglichkeit der Leistungserfüllung in Kenntnis zu setzen. Bereits erbrachte Gegenleistungen des Vertragspartners werden diesem unverzüglich erstattet. Zwingendes Verbraucherrecht bleibt vom vorliegenden Absatz unberührt.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>7. Gewährleistung</h3><p>Es gelten die Vorschriften der gesetzlichen Mängelgewährleistung.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>8. Haftung und Freistellung</h3><p>8.1 Der Anbieter haftet unbeschränkt:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit, die auf einer vorsätzlichen oder fahrlässigen Pflichtverletzung des Anbieters oder einer vorsätzlichen oder fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>für Schäden, die auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung des Anbieters oder auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>aufgrund eines Garantieversprechens, soweit diesbezüglich keine andere Regelung getroffen wurde;</li><li>aufgrund zwingender Haftung (z. B. nach dem Produkthaftungsgesetz)</li></ul><p>8.2 Wenn der Anbieter fahrlässig eine wesentliche Vertragspflicht verletzt, ist dessen Haftung auf den vertragstypischen, vorhersehbaren Schaden beschränkt, sofern nicht gemäß vorstehendem Absatz unbeschränkt gehaftet wird. Wesentliche Vertragspflichten sind Pflichten, die der Vertrag dem Anbieter nach seinem Inhalt zur Erreichung des Vertragszwecks auferlegt, deren Erfüllung die ordnungsgemäße Durchführung des Vertrags überhaupt erst ermöglicht und auf deren Einhaltung der Kunde regelmäßig vertrauen darf.</p><p>8.3 Im Übrigen ist eine Haftung des Anbieters sowie die Haftung seiner Erfüllungsgehilfen und gesetzlichen Vertreter ausgeschlossen.</p><p>8.4 Der Kunde stellt den Anbieter von jeglichen Ansprüchen Dritter – einschließlich der Kosten für die Rechtsverteidigung in ihrer gesetzlichen Höhe – frei, die gegen den Anbieter aufgrund von rechts- oder vertragswidrigen Handlungen des Kunden geltend gemacht werden.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>9. Datenschutz</h3><p>Der Anbieter behandelt die personenbezogenen Daten seiner Kunden vertraulich und im Einklang mit den gesetzlichen Datenschutzvorschriften. Näheres entnehmen Sie der Datenschutzerklärung des Anbieters.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>10. Schlussbestimmungen</h3><p>10.1 Anwendbar ist das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts, soweit diese Rechtswahl nicht dazu führt, dass ein Verbraucher mit gewöhnlichem Aufenthalt in der EU hierdurch zwingenden gesetzlichen Bestimmungen des Rechts seines Aufenthaltsstaates entzogen wird.</p><p>10.2 Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist das Gericht am Sitz des Anbieters zuständig, sofern nicht für die Streitigkeit ein ausschließlicher Gerichtsstand begründet ist. Dies gilt auch, wenn der Kunde keinen Wohnsitz innerhalb der Europäischen Union hat. Der Sitz unseres Unternehmens ist der Überschrift dieser AGB zu entnehmen.</p><p>10.3 Soweit eine Bestimmung dieses Vertrages ungültig oder undurchsetzbar ist oder wird, bleiben die übrigen Bestimmungen dieses Vertrages hiervon unberührt.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>11. Informationen zur Online-Streitbeilegung / Verbraucherschlichtung</h3><p>Der Anbieter ist nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><p>Unsere E-Mail-Adresse entnehmen Sie der Überschrift dieser AGB.</p><h3 style='color:#1d5a9e;margin:22px 0 10px;overflow-wrap:anywhere'>12. Ergänzende Bedingungen der Pizzeria Pinocchio Nordkirchen</h3><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.1 Preise und Servicegebühr</h4><p>Alle Preise inkl. MwSt. (7 % auf Speisen, 19 % auf Getränke). Für die Nutzung der Online-Bestellplattform wird je Bestellung über diese Website eine <strong>Servicegebühr von 0,99&nbsp;€</strong> erhoben (gem. § 312a BGB). Sie wird vor Abgabe der Bestellung im Warenkorb gesondert ausgewiesen und zählt nicht zum Mindestbestellwert. Für Bestellungen per WhatsApp (Ziffer 12.6) fällt keine Servicegebühr an.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.2 Lieferung, Abholung und Mindestbestellwerte</h4><p>Die Bestellung kann zur Lieferung oder zur Abholung im Restaurant erfolgen. Für die Lieferung gelten folgende Mindestbestellwerte und Liefergebühren, die den „Versandkosten“ in Ziffer 4.1 entsprechen:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>Nordkirchen: Mindestbestellwert 10,00&nbsp;€ · Liefergebühr 2,00&nbsp;€</li><li>Südkirchen / Capelle: Mindestbestellwert 15,00&nbsp;€ · Liefergebühr 2,50&nbsp;€</li><li>Andere Orte: Mindestbestellwert 20,00&nbsp;€ · Liefergebühr 4,00&nbsp;€</li></ul><p>Lieferzeiten sind Schätzwerte und nicht verbindlich.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.3 Zahlungsarten</h4><p>Die Zahlung erfolgt ausschließlich Barzahlung bei Übergabe (siehe Ziffer 4.2).</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.4 Kein Widerrufsrecht bei frisch zubereiteten Speisen</h4><p>Gemäß § 312g Abs. 2 Nr. 2 BGB besteht kein Widerrufsrecht, da alle Speisen frisch zubereitet werden.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.5 Allergene</h4><p>Informationen zu Allergenen und Zusatzstoffen sind auf der Speisekarte vermerkt. Trotz größter Sorgfalt können Kreuzverunreinigungen nicht ausgeschlossen werden. Bei Allergien bitte telefonisch unter 0 25 96 / 93 91 91 nachfragen.</p><h4 style='color:#1d5a9e;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.6 Bestellung per WhatsApp</h4><p>Neben dem Online-Bestellformular kann der Kunde auch per WhatsApp unter <a style='color:#1d5a9e;word-break:break-word' href='https://wa.me/491718285884' target='_blank' rel='noopener noreferrer'>0171 8285884</a> bestellen. Die Nachricht des Kunden mit den gewünschten Speisen stellt ein verbindliches Angebot dar. Der Vertrag kommt zustande, sobald der Anbieter die Bestellung per WhatsApp bestätigt oder die Ware liefert bzw. zur Abholung übergibt. Es gelten dieselben Preise, Liefergebiete, Mindestbestellwerte und Liefergebühren wie bei der Online-Bestellung (Ziffer 12.2); eine Servicegebühr wird nicht erhoben. Die Bezahlung erfolgt bar bei Übergabe. Im Übrigen gelten diese AGB entsprechend.</p>"
+  text:  "<h3 style='color:#0a1e47;margin:0 0 10px;overflow-wrap:anywhere'>Allgemeine Geschäftsbedingungen</h3><p>für den Online-Shop unter der URL</p><p><a style='color:#0a1e47;word-break:break-word' href='https://odis-oelde.com/' target='_blank' rel='noopener noreferrer'>https://odis-oelde.com/</a></p><p>betrieben von</p><p>Ramazan Özalp/ Pinnochio Oelde<br>Bahnhofstr. 11<br>59302 Oelde<br>E-Mail:<br><a style='color:#0a1e47;word-break:break-word' href='mailto:raidammorah@yahoo.com'>raidammorah@yahoo.com</a><br>Telefonnummer: 0 2522 9373711</p><p>- im Folgenden: Anbieter -</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>1. Geltungsbereich</h3><p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten nach ihrer Einbeziehung für alle Vertragsschlüsse über den Erwerb von Waren, Dienstleistungen oder sonstigen Gütern (nachfolgend „Waren“) im Online-Shop unter der o.g. URL in ihrer zum Zeitpunkt des Vertragsschlusses gültigen Fassung. Diese AGB gelten ausschließlich. Abweichende AGB des Kunden werden nicht Vertragsbestandteil, es sei denn, der Anbieter stimmt diesen ausdrücklich zu.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>2. Vertragsschluss</h3><p>2.1 Die Angebote im Online-Shop stellen eine unverbindliche Aufforderung des Anbieters an die Online-Shop-Besucher zur Abgabe eines Angebots zum Erwerb der im Shop angebotenen Waren dar.</p><p>2.2 Die Bestellung der Ware(n) erfolgt über das Online-Bestellformular des Anbieters. Nach der Auswahl der gewünschten Ware(n), der Eingabe aller abgefragten Pflichtinformationen und dem Durchlaufen aller anderen verpflichtenden Schritte im Bestellprozess, können die ausgewählten Waren durch das Betätigen des Bestell-Buttons am Ende der Checkout-Seite bestellt werden (Bestellung). Durch die Bestellung gibt der Kunde ein verbindliches Vertragsangebot zum Erwerb der ausgewählten Ware(n) ab. Der Vertragsschluss erfolgt, indem der Anbieter das Angebot des Kunden annimmt. Die Annahme erfolgt, indem der Anbieter den Vertragsschluss in Schrift- oder Textform (z. B. per E-Mail) bestätigt (Auftragsbestätigung) und diese Auftragsbestätigung dem Kunden zugeht oder indem er die bestellte Ware liefert und diese Ware dem Kunden zugeht oder indem er den Kunden zur Zahlung auffordert (z. B. Rechnung oder Kreditkartenzahlung im Bestellprozess) und die Zahlungsaufforderung dem Kunden zugeht; maßgeblich für den Zeitpunkt des Vertragsschlusses ist dabei der Zeitpunkt, in dem eine der im ersten Halbsatz genannten Alternativen erstmalig eintritt.</p><p>2.3 Vor verbindlicher Abgabe der Bestellung über das Online-Bestellformular des Anbieters kann der Kunde seine Eingaben überprüfen und jederzeit über die üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehenden Eingabefunktionen korrigieren. Darüber hinaus werden alle Eingaben vor der verbindlichen Abgabe der Bestellung noch einmal in einem Bestätigungsfenster angezeigt und können auch dort mittels der üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehende Eingabefunktionen korrigiert werden.</p><p>2.4 Der Anbieter wird den Vertragstext nach dem Vertragsschluss speichern und dem Kunden in Textform (z. B. per E-Mail) übermitteln. Eine darüberhinausgehende Zugänglichmachung des Vertragstexts durch den Anbieter erfolgt nicht. Sofern der Einkauf über ein Kundenkonto im Online-Shop erfolgt ist, kann der Kunde seine Bestellungen und die damit verbundenen Bestelldaten dort einsehen.</p><p>2.5 Für den Vertragsschluss stehen folgende Sprachen zur Verfügung: Deutsch</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>3. Widerrufsrecht für Verbraucher</h3><p>Verbrauchern steht bei außerhalb von Geschäftsräumen geschlossenen Verträgen und bei Fernabsatzverträgen grundsätzlich ein Widerrufsrecht zu. Verbraucher ist jede natürliche Person, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder ihrer gewerblichen noch ihrer selbstständigen beruflichen Tätigkeit zugerechnet werden können. Details sind der Widerrufsbelehrung zu entnehmen, die jedem Verbraucher spätestens unmittelbar vor Vertragsschluss zur Verfügung gestellt wird.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>4. Zahlung, Verzug</h3><p>4.1 Es gelten die zum Zeitpunkt der Bestellung im Online-Shop aufgeführten Preise. Alle Preise gelten inklusive der gesetzlichen Mehrwertsteuer sowie zuzüglich der gegebenenfalls aufgeführten Versandkosten. Über die zur Verfügung stehenden Zahlungsmöglichkeiten wird der Kunde im Online-Shop des Anbieters informiert.</p><p>4.2 Die Zahlung erfolgt ausschließlich in bar bei Übergabe der Ware (Lieferung oder Abholung). Eine Zahlung per Karte, Online-Zahlungsdienst oder auf andere Weise wird nicht angeboten.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>5. Eigentumsvorbehalt</h3><p>Die gekaufte Ware bleibt bis zur vollständigen Bezahlung des Kaufpreises Eigentum des Anbieters.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>6. Lieferung und Selbstbelieferungsvorbehalt</h3><p>6.1 Vorbehaltlich abweichender Vereinbarungen erfolgt die Lieferung innerhalb der im Online-Shop angegebenen Lieferzeit an die vom Kunden angegebene Lieferadresse. Die geltenden Lieferzeiten sind dem Online-Shop zu entnehmen.</p><p>6.2 Wenn der Anbieter die bestellte Ware nicht liefern kann, weil er ohne eigenes Verschulden selbst nicht beliefert wurde, obwohl er rechtzeitig mit einem zuverlässigen Lieferanten ein kongruentes Deckungsgeschäft abgeschlossen hat, wird der Anbieter von seiner Leistungspflicht frei und kann vom Vertrag zurücktreten. Der Anbieter ist verpflichtet, den Kunden unverzüglich über die Unmöglichkeit der Leistungserfüllung in Kenntnis zu setzen. Bereits erbrachte Gegenleistungen des Vertragspartners werden diesem unverzüglich erstattet. Zwingendes Verbraucherrecht bleibt vom vorliegenden Absatz unberührt.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>7. Gewährleistung</h3><p>Es gelten die Vorschriften der gesetzlichen Mängelgewährleistung.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>8. Haftung und Freistellung</h3><p>8.1 Der Anbieter haftet unbeschränkt:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit, die auf einer vorsätzlichen oder fahrlässigen Pflichtverletzung des Anbieters oder einer vorsätzlichen oder fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>für Schäden, die auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung des Anbieters oder auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>aufgrund eines Garantieversprechens, soweit diesbezüglich keine andere Regelung getroffen wurde;</li><li>aufgrund zwingender Haftung (z. B. nach dem Produkthaftungsgesetz)</li></ul><p>8.2 Wenn der Anbieter fahrlässig eine wesentliche Vertragspflicht verletzt, ist dessen Haftung auf den vertragstypischen, vorhersehbaren Schaden beschränkt, sofern nicht gemäß vorstehendem Absatz unbeschränkt gehaftet wird. Wesentliche Vertragspflichten sind Pflichten, die der Vertrag dem Anbieter nach seinem Inhalt zur Erreichung des Vertragszwecks auferlegt, deren Erfüllung die ordnungsgemäße Durchführung des Vertrags überhaupt erst ermöglicht und auf deren Einhaltung der Kunde regelmäßig vertrauen darf.</p><p>8.3 Im Übrigen ist eine Haftung des Anbieters sowie die Haftung seiner Erfüllungsgehilfen und gesetzlichen Vertreter ausgeschlossen.</p><p>8.4 Der Kunde stellt den Anbieter von jeglichen Ansprüchen Dritter – einschließlich der Kosten für die Rechtsverteidigung in ihrer gesetzlichen Höhe – frei, die gegen den Anbieter aufgrund von rechts- oder vertragswidrigen Handlungen des Kunden geltend gemacht werden.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>9. Datenschutz</h3><p>Der Anbieter behandelt die personenbezogenen Daten seiner Kunden vertraulich und im Einklang mit den gesetzlichen Datenschutzvorschriften. Näheres entnehmen Sie der Datenschutzerklärung des Anbieters.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>10. Schlussbestimmungen</h3><p>10.1 Anwendbar ist das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts, soweit diese Rechtswahl nicht dazu führt, dass ein Verbraucher mit gewöhnlichem Aufenthalt in der EU hierdurch zwingenden gesetzlichen Bestimmungen des Rechts seines Aufenthaltsstaates entzogen wird.</p><p>10.2 Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist das Gericht am Sitz des Anbieters zuständig, sofern nicht für die Streitigkeit ein ausschließlicher Gerichtsstand begründet ist. Dies gilt auch, wenn der Kunde keinen Wohnsitz innerhalb der Europäischen Union hat. Der Sitz unseres Unternehmens ist der Überschrift dieser AGB zu entnehmen.</p><p>10.3 Soweit eine Bestimmung dieses Vertrages ungültig oder undurchsetzbar ist oder wird, bleiben die übrigen Bestimmungen dieses Vertrages hiervon unberührt.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>11. Informationen zur Online-Streitbeilegung / Verbraucherschlichtung</h3><p>Der Anbieter ist nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><p>Unsere E-Mail-Adresse entnehmen Sie der Überschrift dieser AGB.</p><h3 style='color:#0a1e47;margin:22px 0 10px;overflow-wrap:anywhere'>12. Ergänzende Bedingungen der Odi’s Bowl</h3><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.1 Preise und Servicegebühr</h4><p>Alle Preise inkl. MwSt. (7 % auf Speisen, 19 % auf Getränke). Für die Nutzung der Online-Bestellplattform wird je Bestellung über diese Website eine <strong>Servicegebühr von 0,99&nbsp;€</strong> erhoben (gem. § 312a BGB). Sie wird vor Abgabe der Bestellung im Warenkorb gesondert ausgewiesen und zählt nicht zum Mindestbestellwert. Für Bestellungen per WhatsApp (Ziffer 12.6) fällt keine Servicegebühr an.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.2 Lieferung, Abholung und Mindestbestellwerte</h4><p>Die Bestellung kann zur Lieferung oder zur Abholung im Restaurant erfolgen. Für die Lieferung gelten folgende Mindestbestellwerte und Liefergebühren, die den „Versandkosten“ in Ziffer 4.1 entsprechen:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>Oelde: Mindestbestellwert 10,00&nbsp;€ · Liefergebühr 2,00&nbsp;€</li><li>Südkirchen / Capelle: Mindestbestellwert 15,00&nbsp;€ · Liefergebühr 2,50&nbsp;€</li><li>Andere Orte: Mindestbestellwert 20,00&nbsp;€ · Liefergebühr 4,00&nbsp;€</li></ul><p>Lieferzeiten sind Schätzwerte und nicht verbindlich.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.3 Zahlungsarten</h4><p>Die Zahlung erfolgt ausschließlich Barzahlung bei Übergabe (siehe Ziffer 4.2).</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.4 Kein Widerrufsrecht bei frisch zubereiteten Speisen</h4><p>Gemäß § 312g Abs. 2 Nr. 2 BGB besteht kein Widerrufsrecht, da alle Speisen frisch zubereitet werden.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.5 Allergene</h4><p>Informationen zu Allergenen und Zusatzstoffen sind auf der Speisekarte vermerkt. Trotz größter Sorgfalt können Kreuzverunreinigungen nicht ausgeschlossen werden. Bei Allergien bitte telefonisch unter 0 2522 9373711 nachfragen.</p><h4 style='color:#0a1e47;margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.6 Bestellung per WhatsApp</h4><p>Neben dem Online-Bestellformular kann der Kunde auch per WhatsApp unter <a style='color:#0a1e47;word-break:break-word' href='https://wa.me/FEHLT_WHATSAPP' target='_blank' rel='noopener noreferrer'>0171 8285884</a> bestellen. Die Nachricht des Kunden mit den gewünschten Speisen stellt ein verbindliches Angebot dar. Der Vertrag kommt zustande, sobald der Anbieter die Bestellung per WhatsApp bestätigt oder die Ware liefert bzw. zur Abholung übergibt. Es gelten dieselben Preise, Liefergebiete, Mindestbestellwerte und Liefergebühren wie bei der Online-Bestellung (Ziffer 12.2); eine Servicegebühr wird nicht erhoben. Die Bezahlung erfolgt bar bei Übergabe. Im Übrigen gelten diese AGB entsprechend.</p>"
 };
 
 LEGAL.allergene = {
   title: "Allergene &amp; Zusatzstoffe",
-  text:  "<h3 style='color:#1d5a9e;margin:0 0 6px'>Allergene &amp; Zusatzstoffe</h3>"
+  text:  "<h3 style='color:#0a1e47;margin:0 0 6px'>Allergene &amp; Zusatzstoffe</h3>"
        + "<p style='color:#888;font-size:.78rem;margin-bottom:14px'>Gem&auml;&szlig; EU-Lebensmittelinformationsverordnung (LMIV) Nr.&nbsp;1169/2011</p>"
        + "<div style='background:#f2f7fc;border:1px solid #f0d0a0;border-radius:8px;padding:12px 14px;margin-bottom:16px'>"
-       + "<strong style='color:#1d5a9e'>&#9888;&#65039; Wichtiger Hinweis f&uuml;r Allergiker</strong><br>"
-       + "<span style='font-size:.81rem;color:#666'>In unserer K&uuml;che werden alle 14 Hauptallergene verarbeitet. Kreuzkontaminationen sind m&ouml;glich. Eine Kennzeichnung je Gericht liegt online noch nicht vor &ndash; bitte ruf uns an: <strong>0&nbsp;25&nbsp;96&nbsp;/&nbsp;93&nbsp;91&nbsp;91</strong></span>"
+       + "<strong style='color:#0a1e47'>&#9888;&#65039; Wichtiger Hinweis f&uuml;r Allergiker</strong><br>"
+       + "<span style='font-size:.81rem;color:#666'>In unserer K&uuml;che werden alle 14 Hauptallergene verarbeitet. Kreuzkontaminationen sind m&ouml;glich. Eine Kennzeichnung je Gericht liegt online noch nicht vor &ndash; bitte ruf uns an: <strong>0&nbsp;2522&nbsp;9373711</strong></span>"
        + "</div>"
-       + "<h4 style='color:#1d5a9e;margin:0 0 10px;font-size:.91rem'>Allergene (Buchstaben-Kennzeichnung)</h4>"
+       + "<h4 style='color:#0a1e47;margin:0 0 10px;font-size:.91rem'>Allergene (Buchstaben-Kennzeichnung)</h4>"
        + "<div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:5px;margin-bottom:16px'>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>A</span><span style='font-size:.74rem;color:#555'>Glutenhaltiges Getreide</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>B</span><span style='font-size:.74rem;color:#555'>Krebstiere</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>C</span><span style='font-size:.74rem;color:#555'>Eier &amp; Eierzeugnisse</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>D</span><span style='font-size:.74rem;color:#555'>Fisch &amp; Fischerzeugnisse</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>E</span><span style='font-size:.74rem;color:#555'>Erdnüsse</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>F</span><span style='font-size:.74rem;color:#555'>Sojabohnen</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>G</span><span style='font-size:.74rem;color:#555'>Milch &amp; Laktose</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>H</span><span style='font-size:.74rem;color:#555'>Schalenfrüchte / Nüsse</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>I</span><span style='font-size:.74rem;color:#555'>Sellerie</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>J</span><span style='font-size:.74rem;color:#555'>Senf</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>K</span><span style='font-size:.74rem;color:#555'>Sesamsamen</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>L</span><span style='font-size:.74rem;color:#555'>Schwefeldioxid / Sulfit</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>M</span><span style='font-size:.74rem;color:#555'>Lupinen</span></div>"
-       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#1d5a9e;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>N</span><span style='font-size:.74rem;color:#555'>Weichtiere</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>A</span><span style='font-size:.74rem;color:#555'>Glutenhaltiges Getreide</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>B</span><span style='font-size:.74rem;color:#555'>Krebstiere</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>C</span><span style='font-size:.74rem;color:#555'>Eier &amp; Eierzeugnisse</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>D</span><span style='font-size:.74rem;color:#555'>Fisch &amp; Fischerzeugnisse</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>E</span><span style='font-size:.74rem;color:#555'>Erdnüsse</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>F</span><span style='font-size:.74rem;color:#555'>Sojabohnen</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>G</span><span style='font-size:.74rem;color:#555'>Milch &amp; Laktose</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>H</span><span style='font-size:.74rem;color:#555'>Schalenfrüchte / Nüsse</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>I</span><span style='font-size:.74rem;color:#555'>Sellerie</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>J</span><span style='font-size:.74rem;color:#555'>Senf</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>K</span><span style='font-size:.74rem;color:#555'>Sesamsamen</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>L</span><span style='font-size:.74rem;color:#555'>Schwefeldioxid / Sulfit</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>M</span><span style='font-size:.74rem;color:#555'>Lupinen</span></div>"
+       + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#0a1e47;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>N</span><span style='font-size:.74rem;color:#555'>Weichtiere</span></div>"
        + "</div>"
-       + "<h4 style='color:#1d5a9e;margin:0 0 10px;font-size:.91rem'>Zusatzstoffe (Zahlen-Kennzeichnung)</h4>"
+       + "<h4 style='color:#0a1e47;margin:0 0 10px;font-size:.91rem'>Zusatzstoffe (Zahlen-Kennzeichnung)</h4>"
        + "<div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:5px;margin-bottom:16px'>"
        + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#d4a76a;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>1</span><span style='font-size:.74rem;color:#555'>Antioxidationsmittel</span></div>"
        + "<div style='background:#f9f9f9;border:1px solid #dbe6f1;border-radius:7px;padding:6px 9px;display:flex;align-items:center;gap:7px'><span style='background:#d4a76a;color:#fff;border-radius:4px;padding:2px 6px;font-size:.69rem;font-weight:900;min-width:18px;text-align:center'>2</span><span style='font-size:.74rem;color:#555'>Farbstoff</span></div>"
@@ -3697,7 +3697,7 @@ document.addEventListener('keydown', function(e) {
 (function() {
 var AM = {
   // TODO: Allergene und Zusatzstoffe je Artikelnummer vom Wirt einholen.
-  // Bewusst leer – die Codes der Pinocchio-Karte gehören zu anderen Gerichten und
+  // Bewusst leer – die Codes der Odi’s Bowl-Karte gehören zu anderen Gerichten und
   // dürfen hier nicht angezeigt werden. Solange leer, erscheint keine Kennzeichnung.
 };
 function run() {
@@ -3709,7 +3709,7 @@ function run() {
     var code = AM[m[1]];
     if (!code || code === '-') return;
     var sup = document.createElement('sup');
-    sup.style.cssText = 'font-size:.58rem;color:#1d5a9e;font-weight:normal;margin-left:4px;opacity:.85;';
+    sup.style.cssText = 'font-size:.58rem;color:#0a1e47;font-weight:normal;margin-left:4px;opacity:.85;';
     sup.textContent = code;
     h3.appendChild(sup);
   });
@@ -4298,11 +4298,11 @@ body.modal-open {
 
   /* ── 1. Banner einblenden ─────────────────────────────────── */
   function showClosedBanner(mode) {
-    if (document.getElementById('pinocchio-closed-banner')) {
-      document.getElementById('pinocchio-closed-banner').remove();
+    if (document.getElementById('odisbowl-closed-banner')) {
+      document.getElementById('odisbowl-closed-banner').remove();
     }
     const banner = document.createElement('div');
-    banner.id = 'pinocchio-closed-banner';
+    banner.id = 'odisbowl-closed-banner';
     banner.style.cssText = [
       'position:fixed','top:0','left:0','width:100%','z-index:999999',
       'color:#fff','text-align:center',
@@ -4311,7 +4311,7 @@ body.modal-open {
       'display:flex','align-items:center','justify-content:center','gap:10px',
       mode === 'neutral'
         ? 'background:#4a4a00;'
-        : 'background:#1d5a9e;'
+        : 'background:#0a1e47;'
     ].join(';');
     banner.innerHTML = mode === 'neutral'
       ? '🚧 &nbsp;Wir arbeiten gerade an unserem Online-Bestellsystem – schau bald wieder vorbei!'
@@ -4321,7 +4321,7 @@ body.modal-open {
   }
 
   function hideClosedBanner() {
-    const b = document.getElementById('pinocchio-closed-banner');
+    const b = document.getElementById('odisbowl-closed-banner');
     if (b) b.remove();
     document.body.style.paddingTop = '';
   }
@@ -4352,13 +4352,13 @@ body.modal-open {
     const msg = mode === 'neutral'
       ? '🚧 Online-Bestellung aktuell nicht verfügbar – wir arbeiten daran!'
       : '🔴 Bestellung nicht möglich – Restaurant ist geschlossen.';
-    let t = document.getElementById('pinocchio-closed-toast');
+    let t = document.getElementById('odisbowl-closed-toast');
     if (t) { clearTimeout(t._timer); t.remove(); }
     t = document.createElement('div');
-    t.id = 'pinocchio-closed-toast';
+    t.id = 'odisbowl-closed-toast';
     t.style.cssText = [
       'position:fixed','bottom:80px','left:50%','transform:translateX(-50%)',
-      mode === 'neutral' ? 'background:#4a4a00;' : 'background:#1d5a9e;',
+      mode === 'neutral' ? 'background:#4a4a00;' : 'background:#0a1e47;',
       'color:#fff','padding:12px 22px','border-radius:10px',
       'font-size:14px','font-weight:600','z-index:9999999',
       'box-shadow:0 4px 18px rgba(0,0,0,.4)','text-align:center','max-width:90vw'
@@ -4397,11 +4397,11 @@ body.modal-open {
 
       // Ausverkauft-Badge
       const badge = document.createElement('span');
-      badge.className = 'pinocchio-sold-out-badge';
+      badge.className = 'odisbowl-sold-out-badge';
       badge.textContent = 'Ausverkauft';
       badge.style.cssText = [
         'position:absolute','top:8px','right:8px',
-        'background:#1d5a9e','color:#fff',
+        'background:#0a1e47','color:#fff',
         'font-size:11px','font-weight:700','letter-spacing:.4px',
         'padding:3px 9px','border-radius:20px','z-index:10',
         'pointer-events:none'
@@ -4412,10 +4412,10 @@ body.modal-open {
       el.setAttribute('data-orig-onclick', el.getAttribute('onclick') || '');
       el.onclick = function(e) {
         e.stopImmediatePropagation();
-        let t = document.getElementById('pinocchio-so-toast');
+        let t = document.getElementById('odisbowl-so-toast');
         if (t) { clearTimeout(t._timer); t.remove(); }
         t = document.createElement('div');
-        t.id = 'pinocchio-so-toast';
+        t.id = 'odisbowl-so-toast';
         t.style.cssText = [
           'position:fixed','bottom:80px','left:50%','transform:translateX(-50%)',
           'background:#555','color:#fff','padding:11px 20px','border-radius:10px',
@@ -4564,7 +4564,7 @@ body.modal-open {
 
 <!-- Stempelkarte Promo -->
 <script>
-  // ── Stempelkarte abgeschaltet (Pinocchio Nordkirchen) ─────────────
+  // ── Stempelkarte abgeschaltet (Odi’s Bowl) ─────────────
   // Auf true setzen, um sie wieder zu aktivieren. Die Backend-Endpunkte
   // /api/account/stamps und /api/account/redeem-stamp bleiben bestehen.
   window.STEMPELKARTE_AKTIV = false;
@@ -4644,7 +4644,7 @@ body.modal-open {
         <div class="stamp-icon">🎁</div>
       </div>
       <div style="font-size:11px;color:#aaa;text-align:center;margin-bottom:12px;">3 Bestellungen = 1 Gratis-Margherita</div>
-      <a href="account.html" class="stamp-redeem-btn" style="display:block;text-align:center;text-decoration:none;padding:11px;background:#1d5a9e;color:#fff;border-radius:8px;font-size:14px;font-weight:700;">Anmelden / Registrieren</a>
+      <a href="account.html" class="stamp-redeem-btn" style="display:block;text-align:center;text-decoration:none;padding:11px;background:#0a1e47;color:#fff;border-radius:8px;font-size:14px;font-weight:700;">Anmelden / Registrieren</a>
     `;
   }
 

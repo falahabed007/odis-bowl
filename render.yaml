@@ -1,17 +1,17 @@
-# Render Blueprint – Pizzeria Pinocchio Nordkirchen
+# Render Blueprint – Odi’s Bowl
 #
 # Render → New → Blueprint → dieses Repository wählen.
 # Render legt den Service dann mit den Einstellungen unten an; abgefragt werden
 # nur noch die als `sync: false` markierten Geheimnisse.
 #
 # Nach dem ersten Deploy:
-#   1. Service-URL kopieren (z. B. https://pinnochio-nordkirchen.onrender.com)
+#   1. Service-URL kopieren (z. B. https://odis-bowl.onrender.com)
 #   2. In config.js window.FLUEVATE_BACKEND auf genau diese URL setzen
 #   3. Render → Connect/Outbound → Static Outbound IPs in MongoDB Atlas freigeben
 
 services:
   - type: web
-    name: pinnochio-nordkirchen
+    name: odis-bowl
     runtime: node
     plan: starter
     region: frankfurt
@@ -27,7 +27,7 @@ services:
       - key: NODE_VERSION
         value: "20"
       - key: FRONTEND_URL
-        value: https://pinnochionordkirchen.de
+        value: https://odis-oelde.com
 
       # ── Datenbank ──
       - key: MONGODB_URI
@@ -55,7 +55,7 @@ services:
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM
-        value: bestellungen@pinnochionordkirchen.de
+        value: bestellungen@odis-oelde.com
       - key: RESTAURANT_EMAIL
         sync: false
       - key: OWNER_EMAIL
@@ -71,7 +71,7 @@ services:
 
       # ── Sonstiges ──
       - key: WHATSAPP_NUMBER
-        value: "491718285884"
+        value: "FEHLT_WHATSAPP"
       - key: STEUERNUMMER
         sync: false
       - key: PRINTNODE_API_KEY

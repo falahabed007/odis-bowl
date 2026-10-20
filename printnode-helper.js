@@ -20,10 +20,10 @@ async function printOrder(order) {
     },
     body: JSON.stringify({
       printer: parseInt(process.env.PRINTNODE_PRINTER_ID),
-      title: `Pizzeria Pinocchio Bestellung #${order.orderNum}`,
+      title: `Odi’s Bowl Bestellung #${order.orderNum}`,
       contentType: 'raw_base64',
       content: base64Content,
-      source: 'Pizzeria Pinocchio Backend'
+      source: 'Odi’s Bowl Backend'
     })
   });
 
@@ -61,9 +61,9 @@ function buildReceipt(order) {
 
   // Header
   receipt += CENTER;
-  receipt += DOUBLE_ON + BOLD_ON + 'PIZZERIA PINOCCHIO' + LF + DOUBLE_OFF + BOLD_OFF;
-  receipt += 'Bergstr. 19 · 59394 Nordkirchen' + LF;
-  receipt += 'Tel: 0 25 96 / 93 91 91' + LF;
+  receipt += DOUBLE_ON + BOLD_ON + 'ODIS BOWL' + LF + DOUBLE_OFF + BOLD_OFF;
+  receipt += 'Bahnhofstr. 11 · 59302 Oelde' + LF;
+  receipt += 'Tel: 0 2522 9373711' + LF;
   receipt += SEPARATOR;
 
   // Bestellnummer + Zeit

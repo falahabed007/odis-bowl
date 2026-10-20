@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="build" content="2026-04-27-v3">
-<title>Pizzeria Pinocchio – Admin Dashboard</title>
+<title>Odi’s Bowl – Admin Dashboard</title>
 <link href="fonts/fonts-dashboard.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -297,8 +297,8 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">🍕 Pinocchio</div>
-    <div class="login-sub">Admin Dashboard · Pizzeria Pinocchio</div>
+    <div class="login-logo">🍕 Odi’s Bowl</div>
+    <div class="login-sub">Admin Dashboard · Odi’s Bowl</div>
     <input type="password" id="loginPw" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()">
     <label style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.82rem;margin-bottom:12px;cursor:pointer;user-select:none;">
       <input type="checkbox" id="rememberPw" style="width:auto;margin:0;accent-color:var(--red);">
@@ -315,7 +315,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <!-- TOPBAR -->
   <div class="topbar">
     <div>
-      <div class="topbar-logo">🍕 Pizzeria Pinocchio</div>
+      <div class="topbar-logo">🍕 Odi’s Bowl</div>
       <div class="topbar-sub">Admin Dashboard</div>
     </div>
     <div class="topbar-clock">
@@ -462,7 +462,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
               </div>
               <div class="pos-field"><div class="pos-label">Ort</div>
                 <select class="pos-input" id="posCity" onchange="renderPOSTotals()">
-                  <option value="Nordkirchen">Nordkirchen (+2,00 €)</option>
+                  <option value="Oelde">Oelde (+2,00 €)</option>
                   <option value="Südkirchen / Capelle">Südkirchen / Capelle (+2,50 €)</option>
                   <option value="Andere Orte">Andere Orte (+4,00 €)</option>
                 </select>
@@ -843,13 +843,13 @@ if (!window.FLUEVATE_BACKEND) {
 // ausgeliefert, jeder koennte sie im Quelltext mitlesen. Geprueft wird
 // ausschliesslich serverseitig ueber POST /api/admin/login.
 const SERVICE_FEE     = 0.99;
-const DELIVERY_FEES   = { 'Nordkirchen':2.00, 'Südkirchen / Capelle':2.50, 'Andere Orte':4.00 };
+const DELIVERY_FEES   = { 'Oelde':2.00, 'Südkirchen / Capelle':2.50, 'Andere Orte':4.00 };
 
-let token       = localStorage.getItem('pinocchioToken')
-               || sessionStorage.getItem('pinocchioToken') || '';
+let token       = localStorage.getItem('odisbowlToken')
+               || sessionStorage.getItem('odisbowlToken') || '';
 // Altlast: fruehere Versionen legten das Admin-Passwort im Klartext ab.
 // Auf jedem Geraet, das diese Seite laedt, einmal aufraeumen.
-localStorage.removeItem('pinocchioSavedPw');
+localStorage.removeItem('odisbowlSavedPw');
 let orders      = [];
 let allOrders   = [];
 let stripeOrders = [];
@@ -864,13 +864,13 @@ function onDateChange() {
   document.getElementById('ordersList').innerHTML = '<div class="empty-state">⏳ Lade…</div>';
   dateChangeTimer = setTimeout(loadOrders, 300);
 }
-let knownIds    = new Set(JSON.parse(localStorage.getItem('pinocchioKnownIds')||'[]'));
+let knownIds    = new Set(JSON.parse(localStorage.getItem('odisbowlKnownIds')||'[]'));
 // Täglich zurücksetzen
 const today = new Date().toDateString();
-if (localStorage.getItem('pinocchioKnownIdsDate') !== today) {
+if (localStorage.getItem('odisbowlKnownIdsDate') !== today) {
   knownIds = new Set();
-  localStorage.setItem('pinocchioKnownIds', '[]');
-  localStorage.setItem('pinocchioKnownIdsDate', today);
+  localStorage.setItem('odisbowlKnownIds', '[]');
+  localStorage.setItem('odisbowlKnownIdsDate', today);
 }
 let selOrder    = null;
 let sideTab     = 'detail';
@@ -1109,8 +1109,8 @@ async function doLogin() {
     // "Angemeldet bleiben" entscheidet nur, ob das Token den Tab ueberlebt.
     const bleibt = bleiben ? localStorage : sessionStorage;
     const geht   = bleiben ? sessionStorage : localStorage;
-    bleibt.setItem('pinocchioToken', token);
-    geht.removeItem('pinocchioToken');
+    bleibt.setItem('odisbowlToken', token);
+    geht.removeItem('odisbowlToken');
     document.getElementById('loginPw').value = '';
     sitzungAbgelaufenGemeldet = false;
     showApp();
@@ -1127,8 +1127,8 @@ function sitzungBeenden() {
   // Ohne Token war nie eine Sitzung offen – dann waere der Hinweis falsch.
   if (sitzungAbgelaufenGemeldet || !token) return;
   sitzungAbgelaufenGemeldet = true;
-  localStorage.removeItem('pinocchioToken');
-  sessionStorage.removeItem('pinocchioToken');
+  localStorage.removeItem('odisbowlToken');
+  sessionStorage.removeItem('odisbowlToken');
   token = '';
   const app = document.getElementById('app');
   if (app) app.style.display = 'none';
@@ -1159,8 +1159,8 @@ function showApp() {
   initDashboard();
 }
 function doLogout() {
-  localStorage.removeItem('pinocchioToken');
-  sessionStorage.removeItem('pinocchioToken');
+  localStorage.removeItem('odisbowlToken');
+  sessionStorage.removeItem('odisbowlToken');
   location.reload();
 }
 function apiHeaders() { return {'Content-Type':'application/json','Authorization':'Bearer '+token}; }
@@ -1209,7 +1209,7 @@ async function pollPending() {
       if (new Date(o.createdAt) < todayStart) continue; // alte Bestellungen ignorieren
       if (!knownIds.has(o._id)) {
         knownIds.add(o._id);
-        localStorage.setItem('pinocchioKnownIds', JSON.stringify([...knownIds]));
+        localStorage.setItem('odisbowlKnownIds', JSON.stringify([...knownIds]));
         startAlarm();
         showPendingModal(o);
         break; // ein Modal auf einmal
@@ -1247,14 +1247,14 @@ function startAlarm() {
   alarmTimer = setInterval(ringOnce, 2000); // alle 2 s wiederholen
   // Tab-Titel blinken (ohne Auto-Stop – endet erst mit stopAlarm)
   let b=false;
-  titleTimer = setInterval(()=>{document.title=b?'🔴 NEUE BESTELLUNG!':'🍕 Pinocchio Dashboard';b=!b;},700);
+  titleTimer = setInterval(()=>{document.title=b?'🔴 NEUE BESTELLUNG!':'🍕 Odi’s Bowl Dashboard';b=!b;},700);
 }
 
 // Stoppt Klingeln + Blinken (bei Annehmen/Ablehnen)
 function stopAlarm() {
   if (alarmTimer) { clearInterval(alarmTimer); alarmTimer=null; }
   if (titleTimer) { clearInterval(titleTimer); titleTimer=null; }
-  document.title='🍕 Pinocchio Dashboard';
+  document.title='🍕 Odi’s Bowl Dashboard';
 }
 
 function showPendingModal(order) {
@@ -1904,7 +1904,7 @@ function changeQty(idx,d) {
 }
 function renderPOSTotals() {
   const subtotal = posCart.reduce((s,i)=>s+i.price*i.qty,0);
-  const city = document.getElementById('posCity')?.value||'Nordkirchen';
+  const city = document.getElementById('posCity')?.value||'Oelde';
   const fee  = posMode==='lieferung'?(DELIVERY_FEES[city]||0):0;
   const total = subtotal+fee+SERVICE_FEE;
   document.getElementById('posTotals').innerHTML = `
@@ -1921,7 +1921,7 @@ async function submitPOS() {
   if (!first||!last) { showToast('⚠️ Kundenname fehlt'); return; }
   const email = document.getElementById('posEmail').value.trim();
   const subtotal = posCart.reduce((s,i)=>s+i.price*i.qty,0);
-  const city  = document.getElementById('posCity')?.value||'Nordkirchen';
+  const city  = document.getElementById('posCity')?.value||'Oelde';
   const fee   = posMode==='lieferung'?(DELIVERY_FEES[city]||0):0;
   const total = subtotal+fee+SERVICE_FEE;
   const payload = {
@@ -2041,9 +2041,9 @@ async function eposPrint(order) {
 
   let body = '';
   // Header
-  body += `<text align="center" dh="true" dw="true" em="true">PIZZERIA PINOCCHIO&#10;</text>`;
-  body += `<text align="center">Bergstr. 19 - 59394 Nordkirchen&#10;</text>`;
-  body += `<text align="center">0 25 96 / 93 91 91&#10;</text>`;
+  body += `<text align="center" dh="true" dw="true" em="true">ODIS BOWL&#10;</text>`;
+  body += `<text align="center">Bahnhofstr. 11 - 59302 Oelde&#10;</text>`;
+  body += `<text align="center">0 2522 9373711&#10;</text>`;
   body += div();
   // Bestellnummer
   body += `<text align="center" dh="true" dw="true" em="true">#${order.orderNum}&#10;</text>`;
@@ -2187,9 +2187,9 @@ function buildBonText(order) {
   const isD = order.mode === 'lieferung';
   const sep = '--------------------------------';
   let txt = '';
-  txt += 'PIZZERIA PINOCCHIO\n';
-  txt += 'Bergstr. 19 - 59394 Nordkirchen\n';
-  txt += '0 25 96 / 93 91 91\n';
+  txt += 'ODIS BOWL\n';
+  txt += 'Bahnhofstr. 11 - 59302 Oelde\n';
+  txt += '0 2522 9373711\n';
   txt += sep + '\n';
   txt += `BESTELLUNG #${order.orderNum}\n`;
   txt += new Date(order.createdAt).toLocaleString('de-DE') + '\n';
@@ -2336,9 +2336,9 @@ function buildBonHtml(order) {
     return html;
   }).join('');
   return `<div style="font-family:monospace;font-size:12px;max-width:320px;margin:0 auto;padding:10px;background:white;color:black;">
-  <h2 style="text-align:center;margin-bottom:4px;">PIZZERIA PINOCCHIO</h2>
-  <p style="text-align:center;margin:2px 0;">Bergstr. 19 · 59394 Nordkirchen</p>
-  <p style="text-align:center;margin:2px 0;">0 25 96 / 93 91 91</p>
+  <h2 style="text-align:center;margin-bottom:4px;">ODIS BOWL</h2>
+  <p style="text-align:center;margin:2px 0;">Bahnhofstr. 11 · 59302 Oelde</p>
+  <p style="text-align:center;margin:2px 0;">0 2522 9373711</p>
   <hr style="border:none;border-top:1px dashed #000;margin:8px 0;">
   <h3 style="text-align:center">BESTELLUNG #${order.orderNum}</h3>
   <p style="text-align:center;margin:2px 0;">${new Date(order.createdAt).toLocaleString('de-DE')}</p>
@@ -2549,7 +2549,7 @@ async function printDayReport() {
     td,th{padding:3px 4px;}
     .sum{font-weight:bold;font-size:13px;}
   </style></head><body>
-  <h2>PIZZERIA PINOCCHIO</h2>
+  <h2>ODIS BOWL</h2>
   <h3>Tagesabschluss</h3>
   <p style="text-align:center;margin:0 0 6px">${label}</p>
   <hr>
@@ -2634,7 +2634,7 @@ async function openKundenModal() {
 }
 
 function renderStampBadge(k) {
-  // Stempelkarte bei Pinocchio Nordkirchen abgeschaltet – Zeile zum Reaktivieren entfernen
+  // Stempelkarte bei Odi’s Bowl abgeschaltet – Zeile zum Reaktivieren entfernen
   return '';
   const stamps = k.stamps || 0;
   const avail  = k.rewardsAvailable || 0;

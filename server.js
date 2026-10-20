@@ -65,7 +65,7 @@ function getResend() {
 // Die einzige Stelle, an der die Domain steht. Sie wurde vorher sechsmal
 // getippt, waehrend FRONTEND_URL zwar in .env und render.yaml stand, aber
 // nie gelesen wurde - ein Umzug haette funf Stellen stumm veralten lassen.
-const FRONTEND = process.env.FRONTEND_URL || 'https://pinnochionordkirchen.de';
+const FRONTEND = process.env.FRONTEND_URL || 'https://odis-oelde.com';
 
 // ─── CORS ────────────────────────────────────────────────────────
 const allowedOrigins = [
@@ -468,7 +468,7 @@ app.get('/api/health', (req, res) => {
   res.status(dbUp ? 200 : 503).json({
     status: dbUp ? 'ok' : 'degraded',
     ...befund,
-    restaurant: 'Pizzeria Pinocchio', time: new Date(),
+    restaurant: 'Odi’s Bowl', time: new Date(),
     // Render setzt RENDER_GIT_COMMIT selbst. Ohne diese Angabe laesst sich
     // von aussen nicht feststellen, welcher Stand gerade laeuft.
     commit: (process.env.RENDER_GIT_COMMIT || 'unbekannt').slice(0, 7)
@@ -479,7 +479,7 @@ app.get('/api/config', (req, res) => res.json({
   whatsapp: process.env.WHATSAPP_NUMBER || '',
   serviceFee: 0.99,
   deliveryCities: {
-    'Nordkirchen':          { min: 10.00, fee: 2.00 },
+    'Oelde':          { min: 10.00, fee: 2.00 },
     'Südkirchen / Capelle': { min: 15.00, fee: 2.50 },
     'Andere Orte':          { min: 20.00, fee: 4.00 },
   }
@@ -532,7 +532,7 @@ app.get('/api/availability', async (req, res) => {
 // ── Finanzschüler-Rabatt: serverseitig nachrechnen ───────────────
 // Flyer: "Bei Lieferung erhalten Finanzschüler ab 70 Euro 10 Prozent Rabatt."
 // Der Client darf einen Betrag vorschlagen – maßgeblich ist allein diese Rechnung.
-const RABATT_CODE        = 'FINANZ';
+const RABATT_CODE        = 'FEHLT_RABATT';
 const RABATT_PROZENT     = 0.10;
 const RABATT_MINDESTWERT = 70.00;
 
@@ -768,11 +768,11 @@ app.post('/api/create-paypal-order', async (req, res) => {
       purchase_units: [{
         reference_id: String(orderNum),
         custom_id:    String(orderNum),
-        description:  `Pizzeria Pinocchio Bestellung #${orderNum}`,
+        description:  `Odi’s Bowl Bestellung #${orderNum}`,
         amount: { currency_code: 'EUR', value: Number(total).toFixed(2) }
       }],
       application_context: {
-        brand_name:          'Pizzeria Pinocchio',
+        brand_name:          'Odi’s Bowl',
         locale:              'de-DE',
         user_action:         'PAY_NOW',
         shipping_preference: 'NO_SHIPPING',
@@ -1236,28 +1236,28 @@ async function sendConfirmationEmail(order, mins) {
   const m    = mins || order.prepTime || (order.mode==='lieferung'?45:20);
   const addr = order.mode==='lieferung'
     ? `${order.customer.street} ${order.customer.house}, ${order.customer.city}`
-    : 'Bergstr. 19, 59394 Nordkirchen';
+    : 'Bahnhofstr. 11, 59302 Oelde';
   const rows = (order.items||[]).map(i => {
     const extras = (i.extraDetails||[]).map(e => `<div style="font-size:11px;color:#888;padding-left:8px">↳ ${e.name}${e.price>0?' (+'+e.price.toFixed(2).replace('.',',')+'€)':''}</div>`).join('');
     return `<tr><td style="padding:4px 8px;vertical-align:top">${i.qty}×</td><td style="padding:4px 8px">${cleanName(i.name)}${i.note?' <em>('+i.note+')</em>':''}${extras}</td><td style="padding:4px 8px;text-align:right;vertical-align:top">${(i.price*i.qty).toFixed(2).replace('.',',')} €</td></tr>`;
   }).join('');
   try {
     await getResend()?.emails.send({
-      from: process.env.EMAIL_FROM || 'bestellungen@pizzeria-pinocchio.de',
+      from: process.env.EMAIL_FROM || 'bestellungen@odis-oelde.com',
       to:   order.customer.email,
-      subject: `✅ Bestellung #${order.orderNum} bestätigt – Pizzeria Pinocchio`,
+      subject: `✅ Bestellung #${order.orderNum} bestätigt – Odi’s Bowl`,
       html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto">
-        <div style="background:#1d5a9e;color:#fff;padding:22px;text-align:center">
-          <h1 style="margin:0;font-size:22px">🍕 Pizzeria Pinocchio</h1>
-          <p style="margin:4px 0 0;opacity:.8;font-size:13px">Bergstr. 19 · 59394 Nordkirchen</p>
+        <div style="background:#0a1e47;color:#fff;padding:22px;text-align:center">
+          <h1 style="margin:0;font-size:22px">🍕 Odi’s Bowl</h1>
+          <p style="margin:4px 0 0;opacity:.8;font-size:13px">Bahnhofstr. 11 · 59302 Oelde</p>
         </div>
         <div style="padding:26px 22px">
-          <h2 style="color:#1d5a9e;margin:0 0 14px">Bestellung #${order.orderNum} bestätigt ✅</h2>
+          <h2 style="color:#0a1e47;margin:0 0 14px">Bestellung #${order.orderNum} bestätigt ✅</h2>
           <p>Hallo <strong>${order.customer.first}</strong>, deine Bestellung ist in der Küche!</p>
           <div style="background:#fff8f0;border-left:4px solid #d4a76a;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0">
             <p style="margin:0 0 4px;font-weight:bold">${order.mode==='lieferung'?'🛵 Lieferung':'🏃 Abholung'}</p>
             <p style="margin:0;font-size:13px;color:#666">${addr}</p>
-            <p style="margin:4px 0 0;font-size:15px;font-weight:bold;color:#1d5a9e">⏱ Voraussichtlich ~${m} Minuten</p>
+            <p style="margin:4px 0 0;font-size:15px;font-weight:bold;color:#0a1e47">⏱ Voraussichtlich ~${m} Minuten</p>
           </div>
           <table style="width:100%;border-collapse:collapse;font-size:13px;margin:14px 0">
             <thead><tr style="border-bottom:2px solid #eee"><th align="left" style="padding:4px 8px">Menge</th><th align="left" style="padding:4px 8px">Artikel</th><th align="right" style="padding:4px 8px">Preis</th></tr></thead>
@@ -1268,7 +1268,7 @@ async function sendConfirmationEmail(order, mins) {
             ${order.discount>0?`<div style="display:flex;justify-content:space-between;color:#2e7d32;margin:3px 0"><span>Rabatt Finanzsch\u00fcler (10 %)</span><span>\u2212${order.discount.toFixed(2)} \u20ac</span></div>`:''}
             ${order.deliveryFee>0?`<div style="display:flex;justify-content:space-between;color:#666;margin:3px 0"><span>Liefergebühr</span><span>${order.deliveryFee.toFixed(2).replace('.',',')} €</span></div>`:''}
             <div style="display:flex;justify-content:space-between;color:#666;margin:3px 0"><span>Servicegebühr</span><span>${(order.serviceFee||0.99).toFixed(2).replace('.',',')} €</span></div>
-            <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;border-top:2px solid #1d5a9e;padding-top:8px;margin-top:6px"><span>Gesamt</span><span style="color:#1d5a9e">${(order.total||0).toFixed(2).replace('.',',')} €</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;border-top:2px solid #0a1e47;padding-top:8px;margin-top:6px"><span>Gesamt</span><span style="color:#0a1e47">${(order.total||0).toFixed(2).replace('.',',')} €</span></div>
           </div>
           <p style="font-size:13px;color:#666;margin-top:14px">
             Zahlung: ${order.payment==='stripe'?'💳 Online (Stripe)':order.payment==='paypal'?'💙 PayPal':order.payment==='karte'?'💳 EC-Karte':'💵 Barzahlung'} ·
@@ -1276,7 +1276,7 @@ async function sendConfirmationEmail(order, mins) {
           </p>
           ${order.note?`<p style="background:#fff3ea;padding:10px;border-radius:6px;font-size:13px">📝 Anmerkung: ${order.note}</p>`:''}
         </div>
-        <div style="background:#f7f3ee;padding:14px;text-align:center;font-size:11px;color:#999">Pizzeria Pinocchio · Bergstr. 19 · 59394 Nordkirchen · Tel: 0 25 96 / 93 91 91</div>
+        <div style="background:#f7f3ee;padding:14px;text-align:center;font-size:11px;color:#999">Odi’s Bowl · Bahnhofstr. 11 · 59302 Oelde · Tel: 0 2522 9373711</div>
       </div>`
     });
     console.log(`📧 Bestätigung → ${order.customer.email}`);
@@ -1292,7 +1292,7 @@ async function sendRestaurantEmail(order) {
   }).join('\n');
   try {
     await getResend()?.emails.send({
-      from: process.env.EMAIL_FROM||'bestellungen@pizzeria-pinocchio.de',
+      from: process.env.EMAIL_FROM||'bestellungen@odis-oelde.com',
       to:   process.env.RESTAURANT_EMAIL,
       subject: `🔔 Bestellung #${order.orderNum} – ${order.mode==='lieferung'?'Lieferung':'Abholung'}`,
       html: `<pre style="font-family:monospace;font-size:13px">BESTELLUNG #${order.orderNum} · ${order.source==='pos'?'POS':'ONLINE'}
@@ -1326,17 +1326,17 @@ async function sendCancellationEmail(order, reason, refundStatus) {
        </div>` : '';
   try {
     await getResend()?.emails.send({
-      from: process.env.EMAIL_FROM||'bestellungen@pizzeria-pinocchio.de',
+      from: process.env.EMAIL_FROM||'bestellungen@odis-oelde.com',
       to:   order.customer.email,
-      subject: `❌ Bestellung #${order.orderNum} storniert – Pizzeria Pinocchio`,
+      subject: `❌ Bestellung #${order.orderNum} storniert – Odi’s Bowl`,
       html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto">
-        <div style="background:#1d5a9e;color:#fff;padding:22px;text-align:center"><h1 style="margin:0">🍕 Pizzeria Pinocchio</h1></div>
+        <div style="background:#0a1e47;color:#fff;padding:22px;text-align:center"><h1 style="margin:0">🍕 Odi’s Bowl</h1></div>
         <div style="padding:26px 22px">
           <h2>Bestellung #${order.orderNum} storniert</h2>
           <p>Hallo <strong>${order.customer.first}</strong>, deine Bestellung wurde leider storniert.</p>
           ${reason?`<div style="background:#fff3ea;border-radius:8px;padding:12px;margin:14px 0"><strong>Grund:</strong> ${reason}</div>`:''}
           ${refundHtml}
-          <p>Bei Fragen: <strong>0 25 96 / 93 91 91</strong></p>
+          <p>Bei Fragen: <strong>0 2522 9373711</strong></p>
         </div>
       </div>`
     });
@@ -1524,7 +1524,7 @@ const PDF_SV = 0.99;
 const PDF_BASE = 150; // monatliche Grundgebühr (Fixmodell: 150 € + Servicegebühr/Bestellung)
 const pdfFmt = n => n.toFixed(2).replace('.', ',') + ' €';
 
-function pdfColorBox(doc, title, sub, color = '#1d5a9e', h = 70) {
+function pdfColorBox(doc, title, sub, color = '#0a1e47', h = 70) {
   doc.rect(0, 0, PDF_PW, h).fill(color);
   doc.font('Helvetica-Bold').fontSize(20).fillColor('#fff').text(title, PDF_M, 18);
   if (sub) doc.font('Helvetica').fontSize(9).fillColor('rgba(255,255,255,0.75)').text(sub, PDF_M, 44);
@@ -1600,7 +1600,7 @@ function pdfKundenliste(doc, orders) {
     doc.font('Helvetica-Bold').fontSize(10).fillColor('#333').text(pdfFmt(sub), PDF_M+2, sy+5, { width:PDF_W-4, align:'right' });
     doc.y = sy + 20 + 10;
   }
-  drawGroup('Barzahlung', '#1d5a9e', orders.filter(o => o.payment === 'bar'));
+  drawGroup('Barzahlung', '#0a1e47', orders.filter(o => o.payment === 'bar'));
   drawGroup('Online-Zahlung (Stripe)', '#276749', orders.filter(o => o.payment === 'stripe'));
   drawGroup('Online-Zahlung (PayPal)', '#003087', orders.filter(o => o.payment === 'paypal'));
   drawGroup('EC-Karte', '#555555', orders.filter(o => o.payment === 'karte'));
@@ -1617,7 +1617,7 @@ function pdfBarRechnung(doc, barOrders, barStats, zeitraum) {
   doc.font('Helvetica-Bold').fontSize(9).fillColor('#1a1a2e').text('Anbieter:', PDF_M, addrY);
   doc.font('Helvetica').fontSize(9).fillColor('#444').text('Abed Rachman Falah · FlueVate', PDF_M, addrY+12).text('Zur Goldbrede 30, 59269 Beckum', PDF_M, addrY+22);
   doc.font('Helvetica-Bold').fontSize(9).fillColor('#1a1a2e').text('Restaurant:', PDF_M+270, addrY);
-  doc.font('Helvetica').fontSize(9).fillColor('#444').text('Pizzeria Pinocchio', PDF_M+270, addrY+12).text('Bergstr. 19, 59394 Nordkirchen', PDF_M+270, addrY+22);
+  doc.font('Helvetica').fontSize(9).fillColor('#444').text('Odi’s Bowl', PDF_M+270, addrY+12).text('Bahnhofstr. 11, 59302 Oelde', PDF_M+270, addrY+22);
   doc.y = addrY + 38;
   doc.font('Helvetica').fontSize(8.5).fillColor('#888').text(`Zeitraum: ${zeitraum}`, PDF_M, doc.y);
   doc.y += 12;
@@ -1698,10 +1698,10 @@ cron.schedule('0 22 * * *', async () => {
       const fmt = n => n.toFixed(2).replace('.',',')+' €';
 
       // Header
-      doc.rect(0,0,595,70).fill('#1d5a9e');
+      doc.rect(0,0,595,70).fill('#0a1e47');
       doc.fontSize(22).font('Helvetica-Bold').fillColor('#fff').text('Tagesbericht', 50, 16);
       doc.fontSize(10).font('Helvetica').fillColor('rgba(255,255,255,0.8)')
-        .text(`Pizzeria Pinocchio  ·  ${label}`, 50, 44);
+        .text(`Odi’s Bowl  ·  ${label}`, 50, 44);
 
       doc.moveDown(3.5);
 
@@ -1724,7 +1724,7 @@ cron.schedule('0 22 * * *', async () => {
 
       // Gesamtumsatz
       const ty = doc.y;
-      doc.rect(50,ty,W,36).fill('#1d5a9e');
+      doc.rect(50,ty,W,36).fill('#0a1e47');
       doc.font('Helvetica-Bold').fontSize(14).fillColor('#fff')
         .text('GESAMTUMSATZ', 58, ty+11);
       doc.text(fmt(total), 50, ty+11, { width:W-8, align:'right' });
@@ -1733,7 +1733,7 @@ cron.schedule('0 22 * * *', async () => {
       doc.moveDown(1);
 
       // Bestelldetails
-      doc.font('Helvetica-Bold').fontSize(13).fillColor('#1d5a9e').text('Alle Bestellungen');
+      doc.font('Helvetica-Bold').fontSize(13).fillColor('#0a1e47').text('Alle Bestellungen');
       doc.moveDown(0.4);
 
       orders.forEach((o, i) => {
@@ -1758,7 +1758,7 @@ cron.schedule('0 22 * * *', async () => {
         // Trennlinie
         doc.rect(50, rowY, W, 0.5).fill('#e0e0e0');
 
-        doc.font('Helvetica-Bold').fontSize(10).fillColor('#1d5a9e')
+        doc.font('Helvetica-Bold').fontSize(10).fillColor('#0a1e47')
           .text(`#${o.orderNum}  ${new Date(o.createdAt).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}  ${o.mode==='lieferung'?'LIEFERUNG':'ABHOLUNG'}`, 50, rowY+6, { width: W/2 });
         doc.font('Helvetica-Bold').fontSize(10).fillColor('#222')
           .text(fmt(o.total||0), 50, rowY+6, { width:W, align:'right' });
@@ -1773,16 +1773,16 @@ cron.schedule('0 22 * * *', async () => {
 
       // Footer
       doc.fontSize(8).fillColor('#aaa')
-        .text(`Pizzeria Pinocchio  ·  Tagesbericht ${label}  ·  Erstellt: ${now.toLocaleTimeString('de-DE')}`, 50, 790, { width: W, align:'center' });
+        .text(`Odi’s Bowl  ·  Tagesbericht ${label}  ·  Erstellt: ${now.toLocaleTimeString('de-DE')}`, 50, 790, { width: W, align:'center' });
     });
 
     if (process.env.RESTAURANT_EMAIL) {
       await getResend()?.emails.send({
-        from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+        from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
         to: process.env.RESTAURANT_EMAIL,
-        subject: `📋 Tagesbericht ${label} · Pizzeria Pinocchio`,
+        subject: `📋 Tagesbericht ${label} · Odi’s Bowl`,
         html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#222">
-          <div style="background:#1d5a9e;padding:22px 28px;color:#fff">
+          <div style="background:#0a1e47;padding:22px 28px;color:#fff">
             <h2 style="margin:0;font-size:20px">Tagesbericht</h2>
             <p style="margin:4px 0 0;opacity:.8;font-size:13px">${label}</p>
           </div>
@@ -1794,7 +1794,7 @@ cron.schedule('0 22 * * *', async () => {
               <tr><td style="padding:8px">Umsatz Barzahlung</td><td style="padding:8px;text-align:right">${totalBar.toFixed(2).replace('.',',')} €</td></tr>
               <tr style="background:#f5f5f5"><td style="padding:8px">Umsatz Kreditkarte (Stripe)</td><td style="padding:8px;text-align:right">${totalStripe.toFixed(2).replace('.',',')} €</td></tr>
               <tr><td style="padding:8px">Umsatz PayPal</td><td style="padding:8px;text-align:right">${totalPayPal.toFixed(2).replace('.',',')} €</td></tr>
-              <tr style="background:#1d5a9e"><td style="padding:10px;font-weight:bold;color:#fff;font-size:15px">Gesamtumsatz</td><td style="padding:10px;text-align:right;font-weight:bold;color:#fff;font-size:15px">${total.toFixed(2).replace('.',',')} €</td></tr>
+              <tr style="background:#0a1e47"><td style="padding:10px;font-weight:bold;color:#fff;font-size:15px">Gesamtumsatz</td><td style="padding:10px;text-align:right;font-weight:bold;color:#fff;font-size:15px">${total.toFixed(2).replace('.',',')} €</td></tr>
             </table>
             <p style="font-size:12px;color:#888;margin-top:12px">Die vollständige Bestellliste mit Kundendaten finden Sie im beigefügten PDF.</p>
           </div>
@@ -1811,7 +1811,7 @@ function buildWochenberichtPdf(doc, d) {
   const { kw, jahr, vonBis, orders, brutto, svcFees, auszahlung,
           barOrders, barSvc, barNetto, barBetrag } = d;
 
-  pdfColorBox(doc, `Wochenbericht KW ${kw} / ${jahr}`, `Pizzeria Pinocchio  ·  ${vonBis}`, '#1d5a9e');
+  pdfColorBox(doc, `Wochenbericht KW ${kw} / ${jahr}`, `Odi’s Bowl  ·  ${vonBis}`, '#0a1e47');
   pdfKacheln(doc, [
     ['Bestellungen gesamt', `${orders.length}`,                                                   '#1a1a2e'],
     ['Davon Bar',           `${barOrders.length}`,                                                '#2c5282'],
@@ -1826,7 +1826,7 @@ function buildWochenberichtPdf(doc, d) {
   doc.y += 4;
   const ay = doc.y;
   doc.rect(PDF_M, ay, PDF_W, 28).fill('#e8f5e9');
-  doc.font('Helvetica-Bold').fontSize(12).fillColor('#2e7d32').text('Auszahlung an Pizzeria Pinocchio', PDF_M+10, ay+8, { width: PDF_W*0.65 });
+  doc.font('Helvetica-Bold').fontSize(12).fillColor('#2e7d32').text('Auszahlung an Odi’s Bowl', PDF_M+10, ay+8, { width: PDF_W*0.65 });
   doc.font('Helvetica-Bold').fontSize(13).fillColor('#2e7d32').text(pdfFmt(auszahlung), PDF_M+2, ay+8, { width: PDF_W-4, align: 'right' });
   doc.y = ay + 28 + 12;
   pdfHr(doc, '#bbb');
@@ -1886,11 +1886,11 @@ async function wochenberichtVersenden(now, { nurOwner = false } = {}) {
   // ── E-Mail 1: Restaurant bekommt Wochenbericht als PDF-Anhang ────────
   if (resend && process.env.RESTAURANT_EMAIL && !nurOwner) {
     const antwort = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+      from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
       to: process.env.RESTAURANT_EMAIL,
-      subject: `📊 Wochenbericht KW ${kw} / ${now.getFullYear()} · Pizzeria Pinocchio`,
+      subject: `📊 Wochenbericht KW ${kw} / ${now.getFullYear()} · Odi’s Bowl`,
       html: `<div style="font-family:Arial,sans-serif;max-width:580px;margin:0 auto;color:#222">
-<div style="background:#1d5a9e;padding:24px 28px;color:#fff">
+<div style="background:#0a1e47;padding:24px 28px;color:#fff">
   <h2 style="margin:0;font-size:20px">Wochenbericht KW ${kw} / ${now.getFullYear()}</h2>
   <p style="margin:4px 0 0;opacity:.8;font-size:13px">${vonBis}</p>
 </div>
@@ -1904,7 +1904,7 @@ async function wochenberichtVersenden(now, { nurOwner = false } = {}) {
   <p style="font-size:11px;color:#aaa;margin-top:8px">Anbei der Wochenbericht mit Kundenliste${barOrders.length > 0 ? ' und Bar-Übersicht' : ''}.</p>
 </div>
 </div>`,
-      attachments: [{ filename: `KW${kw}_${now.getFullYear()}_Pinocchio_Wochenbericht.pdf`, content: berichtPdf.toString('base64') }],
+      attachments: [{ filename: `KW${kw}_${now.getFullYear()}_Odi’s Bowl_Wochenbericht.pdf`, content: berichtPdf.toString('base64') }],
     });
     if (antwort?.error) console.error('Resend lehnte die Restaurant-Mail ab:', antwort.error);
     else versandt.push('restaurant');
@@ -1913,14 +1913,14 @@ async function wochenberichtVersenden(now, { nurOwner = false } = {}) {
   // ── E-Mail 2: Owner bekommt den Wochenbericht als Anhang ──────
   if (resend && process.env.OWNER_EMAIL) {
     const antwort = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+      from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
       to: process.env.OWNER_EMAIL,
-      subject: `📊 Wochenbericht KW ${kw} · Pizzeria Pinocchio`,
-      html: `<p style="font-family:Arial,sans-serif;color:#555">Anbei der Wochenbericht KW ${kw} / ${now.getFullYear()} für Pizzeria Pinocchio.</p>
+      subject: `📊 Wochenbericht KW ${kw} · Odi’s Bowl`,
+      html: `<p style="font-family:Arial,sans-serif;color:#555">Anbei der Wochenbericht KW ${kw} / ${now.getFullYear()} für Odi’s Bowl.</p>
              <p style="font-family:Arial,sans-serif;color:#555"><b>Zeitraum:</b> ${vonBis}<br><b>Dein Verdienst:</b> ${svcFees.toFixed(2).replace('.',',')} €</p>
              <p style="font-family:Arial,sans-serif;color:#999;font-size:12px">Die Gebühren-Rechnung wird separat über Lexware gestellt.</p>`,
       attachments: [
-        { filename: `KW${kw}_${now.getFullYear()}_Pinocchio_Wochenbericht.pdf`, content: berichtPdf.toString('base64') },
+        { filename: `KW${kw}_${now.getFullYear()}_Odi’s Bowl_Wochenbericht.pdf`, content: berichtPdf.toString('base64') },
       ],
     });
     if (antwort?.error) console.error('Resend lehnte die Owner-Mail ab:', antwort.error);
@@ -1952,7 +1952,7 @@ function buildMonatsberichtPdf(doc, d) {
   const { monat, vonBis, orders, brutto, svcFees, auszahlung,
           barOrdersM, barSvcM, barNettoM, barBetragM, weekRows } = d;
 
-  pdfColorBox(doc, `Monatsbericht ${monat}`, `Pizzeria Pinocchio  ·  ${vonBis}`, '#1d5a9e');
+  pdfColorBox(doc, `Monatsbericht ${monat}`, `Odi’s Bowl  ·  ${vonBis}`, '#0a1e47');
   pdfKacheln(doc, [
     ['Bestellungen gesamt', `${orders.length}`,                                                   '#1a1a2e'],
     ['Davon Bar',           `${barOrdersM.length}`,                                               '#2c5282'],
@@ -1969,7 +1969,7 @@ function buildMonatsberichtPdf(doc, d) {
   doc.y += 4;
   const ay = doc.y;
   doc.rect(PDF_M, ay, PDF_W, 28).fill('#e8f5e9');
-  doc.font('Helvetica-Bold').fontSize(12).fillColor('#2e7d32').text('Auszahlung an Pizzeria Pinocchio', PDF_M+10, ay+8, { width: PDF_W*0.65 });
+  doc.font('Helvetica-Bold').fontSize(12).fillColor('#2e7d32').text('Auszahlung an Odi’s Bowl', PDF_M+10, ay+8, { width: PDF_W*0.65 });
   doc.font('Helvetica-Bold').fontSize(13).fillColor('#2e7d32').text(pdfFmt(auszahlung), PDF_M+2, ay+8, { width: PDF_W-4, align: 'right' });
   doc.y = ay + 28 + 16;
   pdfHr(doc, '#bbb');
@@ -2051,12 +2051,12 @@ cron.schedule('0 22 * * *', async () => {
     for (const [rolle, an, cc] of [['restaurant', process.env.RESTAURANT_EMAIL, []], ['inhaber', process.env.INHABER_EMAIL, inhaberCc]]) {
       if (!an) continue;
       const antwort = await getResend()?.emails.send({
-        from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+        from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
         to:   an,
         ...(cc.length ? { cc } : {}),
-        subject: `📅 Monatsbericht ${monat} · Pizzeria Pinocchio`,
+        subject: `📅 Monatsbericht ${monat} · Odi’s Bowl`,
         html: `<div style="font-family:Arial,sans-serif;max-width:580px;margin:0 auto;color:#222">
-  <div style="background:#1d5a9e;padding:24px 28px;color:#fff">
+  <div style="background:#0a1e47;padding:24px 28px;color:#fff">
     <h2 style="margin:0;font-size:20px">Monatsbericht ${monat}</h2>
     <p style="margin:4px 0 0;opacity:.8;font-size:13px">${vonBis}</p>
   </div>
@@ -2070,7 +2070,7 @@ cron.schedule('0 22 * * *', async () => {
     <p style="font-size:11px;color:#aaa;margin-top:8px">Anbei der Monatsbericht mit Kundenliste${barOrdersM.length > 0 ? ' und Bar-Übersicht' : ''}.</p>
   </div>
 </div>`,
-        attachments: [{ filename: `${monat.replace(' ','_')}_Pinocchio_Monatsbericht.pdf`, content: monatsPdf.toString('base64') }],
+        attachments: [{ filename: `${monat.replace(' ','_')}_Odi’s Bowl_Monatsbericht.pdf`, content: monatsPdf.toString('base64') }],
       });
       if (!antwort || antwort.error) console.error(`Monatsbericht an ${rolle} nicht versendet:`, antwort?.error || 'kein RESEND_API_KEY');
       else versandt.push(rolle + (cc.length ? ` (cc ${cc.length})` : ''));
@@ -2079,14 +2079,14 @@ cron.schedule('0 22 * * *', async () => {
     // ── E-Mail: Owner ─────────────────────────────────────────────────────
     if (process.env.OWNER_EMAIL) {
       const antwort = await getResend()?.emails.send({
-        from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+        from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
         to: process.env.OWNER_EMAIL,
-        subject: `📅 Monatsbericht ${monat} · Pizzeria Pinocchio`,
-        html: `<p style="font-family:Arial,sans-serif;color:#555">Anbei der Monatsbericht <b>${monat}</b> für Pizzeria Pinocchio.</p>
+        subject: `📅 Monatsbericht ${monat} · Odi’s Bowl`,
+        html: `<p style="font-family:Arial,sans-serif;color:#555">Anbei der Monatsbericht <b>${monat}</b> für Odi’s Bowl.</p>
                <p style="font-family:Arial,sans-serif;color:#555"><b>Zeitraum:</b> ${vonBis}<br><b>Grundgebühr:</b> ${PDF_BASE.toFixed(2).replace('.',',')} €<br><b>Servicegebühren:</b> ${svcFees.toFixed(2).replace('.',',')} €<br><b>Gesamt-Gebühren:</b> ${(svcFees + PDF_BASE).toFixed(2).replace('.',',')} €${barOrdersM.length > 0 ? `<br><b>davon Bar:</b> ${barBetragM.toFixed(2).replace('.',',')} € (${barOrdersM.length} Barzahlungen)` : ''}</p>
                <p style="font-family:Arial,sans-serif;color:#999;font-size:12px">Die Gebühren-Rechnung wird separat über Lexware gestellt.</p>`,
         attachments: [
-          { filename: `${monat.replace(' ','_')}_Pinocchio_Monatsbericht.pdf`, content: monatsPdf.toString('base64') },
+          { filename: `${monat.replace(' ','_')}_Odi’s Bowl_Monatsbericht.pdf`, content: monatsPdf.toString('base64') },
         ],
       });
       if (!antwort || antwort.error) console.error('Monatsbericht an owner nicht versendet:', antwort?.error || 'kein RESEND_API_KEY');
@@ -2178,26 +2178,26 @@ app.post('/api/admin/send-monthly', auth, async (req, res) => {
     for (const [rolle, an, cc] of [['restaurant', process.env.RESTAURANT_EMAIL, []], ['inhaber', process.env.INHABER_EMAIL, inhaberCc]]) {
       if (!an || (nur && nur !== rolle)) continue;
       const antwort = await getResend()?.emails.send({
-        from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+        from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
         to:   an,
         ...(cc.length ? { cc } : {}),
-        subject: `📅 Monatsbericht ${monat} · Pizzeria Pinocchio`,
+        subject: `📅 Monatsbericht ${monat} · Odi’s Bowl`,
         html: `<p style="font-family:Arial,sans-serif">Monatsbericht für <b>${monat}</b>.<br>${orders.length} Bestellungen · Auszahlung: ${auszahlung.toFixed(2).replace('.',',')} €</p>`,
-        attachments: [{ filename: `${monat.replace(' ','_')}_Pinocchio_Monatsbericht.pdf`, content: monatsPdf.toString('base64') }],
+        attachments: [{ filename: `${monat.replace(' ','_')}_Odi’s Bowl_Monatsbericht.pdf`, content: monatsPdf.toString('base64') }],
       });
       if (!antwort || antwort.error) console.error(`Monatsbericht an ${rolle} nicht versendet:`, antwort?.error || 'kein RESEND_API_KEY');
       else versandt.push(rolle + (cc.length ? ` (cc ${cc.length})` : ''));
     }
     if (process.env.OWNER_EMAIL && (!nur || nur === 'owner')) {
       const antwort = await getResend()?.emails.send({
-        from: process.env.EMAIL_FROM || 'system@pizzeria-pinocchio.de',
+        from: process.env.EMAIL_FROM || 'system@odis-oelde.com',
         to: process.env.OWNER_EMAIL,
-        subject: `📅 Monatsbericht ${monat} · Pizzeria Pinocchio`,
+        subject: `📅 Monatsbericht ${monat} · Odi’s Bowl`,
         html: `<p style="font-family:Arial,sans-serif;color:#555">Manuell ausgelöst: Monatsbericht <b>${monat}</b>.</p>
                <p style="font-family:Arial,sans-serif;color:#555"><b>Zeitraum:</b> ${vonBis}<br><b>Grundgebühr:</b> ${PDF_BASE.toFixed(2).replace('.',',')} €<br><b>Servicegebühren:</b> ${svcFees.toFixed(2).replace('.',',')} €<br><b>Gesamt-Gebühren:</b> ${(svcFees + PDF_BASE).toFixed(2).replace('.',',')} €${barOrdersM.length > 0 ? `<br><b>davon Bar:</b> ${barBetragM.toFixed(2).replace('.',',')} € (${barOrdersM.length} Barzahlungen)` : ''}</p>
                <p style="font-family:Arial,sans-serif;color:#999;font-size:12px">Die Gebühren-Rechnung wird separat über Lexware gestellt.</p>`,
         attachments: [
-          { filename: `${monat.replace(' ','_')}_Pinocchio_Monatsbericht.pdf`, content: monatsPdf.toString('base64') },
+          { filename: `${monat.replace(' ','_')}_Odi’s Bowl_Monatsbericht.pdf`, content: monatsPdf.toString('base64') },
         ],
       });
       if (!antwort || antwort.error) console.error('Monatsbericht an owner nicht versendet:', antwort?.error || 'kein RESEND_API_KEY');
@@ -2310,4 +2310,4 @@ app.get('/api/admin/history', auth, async (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log(`🍕 Pizzeria Pinocchio Backend · Port ${PORT}`));
+app.listen(PORT, () => console.log(`🍕 Odi’s Bowl Backend · Port ${PORT}`));
