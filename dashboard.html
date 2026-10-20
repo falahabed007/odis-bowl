@@ -297,7 +297,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">🍕 Odi’s Bowl</div>
+    <div class="login-logo">🥗 Odi’s Bowl</div>
     <div class="login-sub">Admin Dashboard · Odi’s Bowl</div>
     <input type="password" id="loginPw" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()">
     <label style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.82rem;margin-bottom:12px;cursor:pointer;user-select:none;">
@@ -315,7 +315,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <!-- TOPBAR -->
   <div class="topbar">
     <div>
-      <div class="topbar-logo">🍕 Odi’s Bowl</div>
+      <div class="topbar-logo">🥗 Odi’s Bowl</div>
       <div class="topbar-sub">Admin Dashboard</div>
     </div>
     <div class="topbar-clock">
@@ -1232,14 +1232,14 @@ function startAlarm() {
   alarmTimer = setInterval(ringOnce, 2000); // alle 2 s wiederholen
   // Tab-Titel blinken (ohne Auto-Stop – endet erst mit stopAlarm)
   let b=false;
-  titleTimer = setInterval(()=>{document.title=b?'🔴 NEUE BESTELLUNG!':'🍕 Odi’s Bowl Dashboard';b=!b;},700);
+  titleTimer = setInterval(()=>{document.title=b?'🔴 NEUE BESTELLUNG!':'🥗 Odi’s Bowl Dashboard';b=!b;},700);
 }
 
 // Stoppt Klingeln + Blinken (bei Annehmen/Ablehnen)
 function stopAlarm() {
   if (alarmTimer) { clearInterval(alarmTimer); alarmTimer=null; }
   if (titleTimer) { clearInterval(titleTimer); titleTimer=null; }
-  document.title='🍕 Odi’s Bowl Dashboard';
+  document.title='🥗 Odi’s Bowl Dashboard';
 }
 
 function showPendingModal(order) {
