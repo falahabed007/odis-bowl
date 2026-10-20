@@ -793,6 +793,7 @@
     border-radius: 50%; animation: warteSpin .7s linear infinite;
 }
 
+/* FARBEN:EIGEN:START - Farben aus dem Titelbild, erscheinungsbild.js laesst sie stehen */
 /* ═══ ODI'S: BUEHNE UND BAUKASTEN-KARTEN ═══
    Farben aus dem Titelbild: Pink #f07e99 (Grund), Dunkelblau #0a1e47 (Schale),
    Beere #a54376 (Acai). Weiss auf Pink hat nur 2,6:1 - Schrift deshalb dunkelblau (7:1). */
@@ -859,6 +860,7 @@
     text-transform: uppercase; letter-spacing: .04em; }
 .odisbowl-logo em { color: #f07e99; }
 
+/* FARBEN:EIGEN:ENDE */
 /* Baukasten-Artikel als Karten */
 .product-item[data-bk] {
     position: relative; border-radius: 16px; padding: 1.1rem 1.25rem 1.1rem 1.4rem !important;
@@ -910,7 +912,7 @@
     </div>
     <!-- Suchleiste -->
     <div class="search-bar-wrap" id="searchBarWrap">
-      <input type="text" id="searchInput" placeholder="Gericht oder Nr. suchen…" oninput="handleSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      <input type="text" id="searchInput" placeholder="Zutat oder Gericht suchen…" oninput="handleSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
       <button class="search-clear-btn" onclick="clearSearch()" title="Suche leeren"><i class="fas fa-times"></i></button>
     </div>
     <button class="search-btn" id="searchToggleBtn" onclick="toggleSearch()" title="Suchen"><i class="fas fa-search"></i></button>
@@ -1021,6 +1023,7 @@
         </a>
     </div>
 
+    <!-- FARBEN:EIGEN:START -->
     <!-- ═══ ODI'S: BUEHNE ═══ Bild: img/hero-acai.jpg, Herkunft in img/QUELLEN.md -->
     <section class="odis-hero" aria-labelledby="odis-hero-titel">
       <div class="odis-hero-innen">
@@ -1045,6 +1048,7 @@
         </div>
       </div>
     </section>
+    <!-- FARBEN:EIGEN:ENDE -->
 
     <!-- ═══ AKTIONS-BANNER ═══ -->
     <div id="aktionsBanner" style="display:none; background: linear-gradient(135deg, #0a1e47 0%, #c62828 60%, #d4793a 100%); color: white; text-align: center; padding: 18px 20px; border-bottom: 3px solid #a02222;">
@@ -1061,27 +1065,7 @@
     <!-- ═══ STICKY KATEGORIE-NAVIGATION ═══ -->
     <div class="cat-nav-wrap" id="catNavWrap">
         <div class="cat-nav" id="catNav">
-            <a href="#antipasta" class="cat-nav-link">🍅 Vorspeisen</a>
-            <a href="#pizza-kaese" class="cat-nav-link">🧀 Käse-Pizza</a>
-            <a href="#pizza-vegetarisch" class="cat-nav-link">🥦 Vegetarisch</a>
-            <a href="#pizza-mozzarella" class="cat-nav-link">🍅 Mozzarella</a>
-            <a href="#pizza-fisch" class="cat-nav-link">🐟 Fisch</a>
-            <a href="#pizza-fleischsauce" class="cat-nav-link">🍖 Fleischsauce</a>
-            <a href="#pizza-belaege" class="cat-nav-link">🍕 Beläge</a>
-            <a href="#calzone" class="cat-nav-link">🥟 Calzone</a>
-            <a href="#familienpizza" class="cat-nav-link">🍕 Familienpizza</a>
-            <a href="#spaghetti" class="cat-nav-link">🍝 Spaghetti</a>
-            <a href="#tagliatelle" class="cat-nav-link">🍝 Tagliatelle</a>
-            <a href="#rigatoni" class="cat-nav-link">🍝 Rigatoni</a>
-            <a href="#tortellini" class="cat-nav-link">🍝 Tortellini</a>
-            <a href="#backofen" class="cat-nav-link">🫕 Backofen</a>
-            <a href="#auflaeufe" class="cat-nav-link">🧀 Aufläufe</a>
-            <a href="#gnocchi" class="cat-nav-link">🥔 Gnocchi</a>
-            <a href="#puten" class="cat-nav-link">🍗 Putengeschn.</a>
-            <a href="#schnitzel" class="cat-nav-link">🍗 Schnitzel</a>
-            <a href="#salate" class="cat-nav-link">🥗 Salate</a>
-            <a href="#mittagsmenue" class="cat-nav-link">☀️ Mittagsmenü</a>
-            <a href="#getraenke" class="cat-nav-link">🥤 Getränke</a>
+            <!-- Wird beim Laden aus den Kategorie-Ueberschriften der Karte gefuellt (SCROLL-SPY unten). -->
         </div>
     </div>
 
@@ -1307,7 +1291,10 @@ function updateCartSummary() {
     const box = document.getElementById('cart-summary-box');
     const summeWaren = warenkorb.reduce((a, b) => a + b.preis, 0);
     if (warenkorb.length === 0) { box.innerHTML = ''; return; }
-    box.innerHTML = `Warenwert: <b>${summeWaren.toFixed(2).replace('.', ',')} €</b><br><span style="color:#0a1e47; font-weight:bold; font-size:14px;">Gesamt: ${summeWaren.toFixed(2).replace('.', ',')} €</span>`;
+    // Die Vorlage zeigte hier "Gesamt" ohne Servicegebuehr - der Gast sah an der Kasse 0,99 € mehr.
+    const sg = (typeof SERVICE_FEE === 'number') ? SERVICE_FEE : 0;
+    const euro = n => n.toFixed(2).replace('.', ',') + ' €';
+    box.innerHTML = `Warenwert: <b>${euro(summeWaren)}</b><br>Servicegebühr: ${euro(sg)}<br><span style="color:#0a1e47; font-weight:bold; font-size:14px;">Gesamt: ${euro(summeWaren + sg)}</span>`;
 }
 
 function goToCheckoutFromCart() {
@@ -1772,7 +1759,7 @@ function toggleMobileMenu() {
           <span style="font-size:.65rem;color:#999;">Bezahlen mit deinem PayPal-Konto</span>
         </div>
 
-        <textarea id="c-notiz" placeholder="📝 Anmerkungen zur Bestellung (z.B. Nr. 53 ohne Spinat)" maxlength="300" style="width:100%; padding:12px; margin-bottom:14px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit; font-size:14px; resize:vertical; min-height:70px;"></textarea>
+        <textarea id="c-notiz" placeholder="📝 Anmerkungen zur Bestellung (z. B. Sauce extra, ohne Zwiebeln)" maxlength="300" style="width:100%; padding:12px; margin-bottom:14px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit; font-size:14px; resize:vertical; min-height:70px;"></textarea>
 
         <div id="final-summary" style="background:#f9f9f9;padding:14px;border-radius:10px;margin-bottom:14px;font-size:13px;line-height:1.8;border:1px dashed #ddd;"></div>
 
@@ -3526,6 +3513,17 @@ document.readyState === 'loading'
   function initScrollSpy() {
     var wrap = document.getElementById('catNavWrap');
     var nav  = document.getElementById('catNav');
+    // Die Leiste kommt aus der Karte selbst, nicht aus einer festen Liste: Die Vorlage
+    // trug hier Nordkirchens Kategorien. Bei nur einer Kategorie bleibt sie aus.
+    var titel = document.querySelectorAll('.menu-section h2.category-title[id]');
+    if (nav && wrap) {
+      if (titel.length < 2) { wrap.hidden = true; return; }
+      titel.forEach(function(h) {
+        var a = document.createElement('a');
+        a.href = '#' + h.id; a.className = 'cat-nav-link'; a.textContent = h.textContent.trim();
+        nav.appendChild(a);
+      });
+    }
     var links = document.querySelectorAll('.cat-nav-link');
     var sections = [];
 

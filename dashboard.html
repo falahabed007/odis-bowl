@@ -2579,7 +2579,7 @@ function showToast(msg) {
 async function sendTestOrder() {
   try {
     await fetch(API_BASE+'/orders',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({mode:'abholung',payment:'bar',customer:{first:'Test',last:'Kunde',phone:'0000',email:''},items:[{name:'Pizza Margherita',price:5.00,qty:1,note:''}],subtotal:5.00,deliveryFee:0,serviceFee:0.99,total:5.99})});
+      body:JSON.stringify({mode:'abholung',payment:'bar',customer:{first:'Test',last:'Kunde',phone:'0000',email:''},items:[{name:'Testbestellung (bitte nicht zubereiten)',price:5.00,qty:1,note:''}],subtotal:5.00,deliveryFee:0,serviceFee:0.99,total:5.99})});
     showToast('🧪 Test-Bestellung gesendet');
     await loadOrders();
   } catch(e) { showToast('❌ Fehler'); }
