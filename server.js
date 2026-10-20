@@ -475,14 +475,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Odi’s Bowl liefert nicht: keine Lieferorte, nur Abholung.
 app.get('/api/config', (req, res) => res.json({
-  whatsapp: process.env.WHATSAPP_NUMBER || '',
   serviceFee: 0.99,
-  deliveryCities: {
-    'Oelde':          { min: 10.00, fee: 2.00 },
-    'Südkirchen / Capelle': { min: 15.00, fee: 2.50 },
-    'Andere Orte':          { min: 20.00, fee: 4.00 },
-  }
+  nurAbholung: NUR_ABHOLUNG,
+  deliveryCities: {}
 }));
 
 // ── Restaurant Status (öffentlich) ───────────────────────────────
@@ -529,26 +526,37 @@ app.get('/api/availability', async (req, res) => {
   } catch(e) { res.status(500).json({ message: 'Fehler' }); }
 });
 
-// ── Finanzschüler-Rabatt: serverseitig nachrechnen ───────────────
-// Flyer: "Bei Lieferung erhalten Finanzschüler ab 70 Euro 10 Prozent Rabatt."
-// Der Client darf einen Betrag vorschlagen – maßgeblich ist allein diese Rechnung.
-const RABATT_CODE        = 'FEHLT_RABATT';
-const RABATT_PROZENT     = 0.10;
-const RABATT_MINDESTWERT = 70.00;
+// ── Rabatt: gibt es bei Odi’s Bowl nicht ─────────────────────────
+// Alle Bestellwege rufen berechneRabatt() auf und speichern das Ergebnis.
+// Ein mitgeschickter Gutscheincode oder Rabattbetrag wird ignoriert.
+const RABATT_CODE = null;
 
-function berechneRabatt({ coupon, mode, items, subtotal }) {
-  if (!coupon || String(coupon).toUpperCase() !== RABATT_CODE) return 0;
-  if (mode !== 'lieferung') return 0;                 // laut Flyer nur bei Lieferung
-  const warenwert = Array.isArray(items)
-    ? items.reduce((a, i) => a + (Number(i.price) || 0) * (Number(i.qty) || 1), 0)
-    : Number(subtotal) || 0;
-  if (warenwert < RABATT_MINDESTWERT) return 0;
-  return Math.round(warenwert * RABATT_PROZENT * 100) / 100;
+function berechneRabatt() {
+  return 0;
+}
+
+// ── Nur Abholung ─────────────────────────────────────────────────
+// Odi’s Bowl liefert nicht. Eine Bestellung mit Modus Lieferung wird
+// abgelehnt, statt mit Liefergebuehren gerechnet zu werden, die es nicht
+// gibt. Bei Abholung zaehlt keine Liefergebuehr, egal was der Client schickt.
+const NUR_ABHOLUNG = true;
+
+function lieferungAbgelehnt(req, res) {
+  if (!NUR_ABHOLUNG || !req.body) return false;
+  if (req.body.mode === 'lieferung') {
+    res.status(400).json({
+      message: 'Odi’s Bowl liefert nicht. Bestellungen sind nur zur Abholung möglich.'
+    });
+    return true;
+  }
+  req.body.deliveryFee = 0;
+  return false;
 }
 
 // ── Neue Web-Bestellung (pending) ────────────────────────────────
 app.post('/api/orders', async (req, res) => {
   try {
+    if (lieferungAbgelehnt(req, res)) return;   // nur Abholung, auch an der Kasse
     // userId aus Kunden-JWT extrahieren falls vorhanden (Gastbestellung bleibt möglich)
     let userId = null;
     const authHeader = req.headers.authorization;
@@ -613,6 +621,7 @@ app.get('/api/orders/status/:token', async (req, res) => {
 // ── Stripe Checkout ───────────────────────────────────────────────
 app.post('/api/create-stripe-checkout', async (req, res) => {
   try {
+    if (lieferungAbgelehnt(req, res)) return;   // nur Abholung
     const { items, subtotal, deliveryFee, serviceFee, customer, mode, note } = req.body;
     const orderNum = await getNextOrderNum();
 
@@ -672,7 +681,7 @@ app.post('/api/create-stripe-checkout', async (req, res) => {
     if (rabatt > 0) {
       const coupon = await getStripe().coupons.create({
         amount_off: Math.round(rabatt * 100), currency: 'eur', duration: 'once',
-        name: 'Finanzschüler-Rabatt 10 %'
+        name: 'Rabatt'
       });
       sessionOpts.discounts = [{ coupon: coupon.id }];
     }
@@ -749,6 +758,7 @@ app.post('/api/verify-payment', async (req, res) => {
 // ── PayPal Checkout ───────────────────────────────────────────────
 app.post('/api/create-paypal-order', async (req, res) => {
   try {
+    if (lieferungAbgelehnt(req, res)) return;   // nur Abholung
     const { items, subtotal, deliveryFee, serviceFee, customer, mode, note } = req.body;
     const orderNum = await getNextOrderNum();
 
@@ -1265,7 +1275,7 @@ async function sendConfirmationEmail(order, mins) {
           </table>
           <div style="border-top:1px solid #eee;padding-top:10px;font-size:13px">
             <div style="display:flex;justify-content:space-between;color:#666;margin:3px 0"><span>Zwischensumme</span><span>${(order.subtotal||0).toFixed(2).replace('.',',')} €</span></div>
-            ${order.discount>0?`<div style="display:flex;justify-content:space-between;color:#2e7d32;margin:3px 0"><span>Rabatt Finanzsch\u00fcler (10 %)</span><span>\u2212${order.discount.toFixed(2)} \u20ac</span></div>`:''}
+            ${order.discount>0?`<div style="display:flex;justify-content:space-between;color:#2e7d32;margin:3px 0"><span>Rabatt</span><span>\u2212${order.discount.toFixed(2)} \u20ac</span></div>`:''}
             ${order.deliveryFee>0?`<div style="display:flex;justify-content:space-between;color:#666;margin:3px 0"><span>Liefergebühr</span><span>${order.deliveryFee.toFixed(2).replace('.',',')} €</span></div>`:''}
             <div style="display:flex;justify-content:space-between;color:#666;margin:3px 0"><span>Servicegebühr</span><span>${(order.serviceFee||0.99).toFixed(2).replace('.',',')} €</span></div>
             <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;border-top:2px solid #0a1e47;padding-top:8px;margin-top:6px"><span>Gesamt</span><span style="color:#0a1e47">${(order.total||0).toFixed(2).replace('.',',')} €</span></div>
@@ -1306,7 +1316,7 @@ ARTIKEL:
 ${items}
 
 Zwischensumme: ${(order.subtotal||0).toFixed(2)} €
-${order.discount>0?`Rabatt (10 %): -${order.discount.toFixed(2)} €\n`:''}${order.deliveryFee?`Liefergebühr:  ${order.deliveryFee.toFixed(2)} €`:''}
+${order.discount>0?`Rabatt: -${order.discount.toFixed(2)} €\n`:''}${order.deliveryFee?`Liefergebühr:  ${order.deliveryFee.toFixed(2)} €`:''}
 Servicegebühr: ${(order.serviceFee||0.99).toFixed(2)} €
 GESAMT:        ${(order.total||0).toFixed(2)} €
 
@@ -1372,26 +1382,15 @@ function calcAutoMode() {
   // Wochentag berechnen (0=So, 1=Mo, ..., 6=Sa)
   const wd = new Date(year, mon - 1, day).getDay();
 
-  // Zeiten wie auf der gedruckten Speisekarte
-  // Montag: 16:30–21:00
-  if (wd === 1) {
-    return (mins >= 16*60+30 && mins < 21*60) ? 'online' : 'geschlossen';
-  }
-
-  // Freitag, Samstag: 15:30–21:30
-  if (wd === 5 || wd === 6) {
-    return (mins >= 15*60+30 && mins < 21*60+30) ? 'online' : 'geschlossen';
-  }
-
-  // Sonntag: 13:00–21:30
+  // Öffnungszeiten Odi’s Bowl (stammdaten.json, Abed 20.10.2026), kein Ruhetag.
+  // Dieselben Zeiten nennt der Kopfbereich der Bestellseite (index.html).
+  // Sonntag: 14:00–21:00
   if (wd === 0) {
-    return (mins >= 13*60 && mins < 21*60+30) ? 'online' : 'geschlossen';
+    return (mins >= 14*60 && mins < 21*60) ? 'online' : 'geschlossen';
   }
 
-  // Di, Mi, Do: 11:30–14:00 & 16:30–21:30
-  const session1 = mins >= 11*60+30 && mins < 14*60;
-  const session2 = mins >= 16*60+30 && mins < 21*60+30;
-  return (session1 || session2) ? 'online' : 'geschlossen';
+  // Montag bis Samstag: 11:30–21:00
+  return (mins >= 11*60+30 && mins < 21*60) ? 'online' : 'geschlossen';
 }
 
 cron.schedule('* * * * *', async () => {
@@ -1410,7 +1409,7 @@ cron.schedule('* * * * *', async () => {
 // Eine Kartenzahlung wird erst zur Bestellung, wenn Stripes Webhook sie
 // meldet. Bricht diese Kette, bleibt die Bestellung auf `awaiting_payment`
 // stehen: Der Gast hat gezahlt, die Kueche sieht nichts, und nichts meldet
-// sich. Genau das ist Ararat, Amoura und Vorhelm von April bis September 2026
+// sich. Genau das ist an drei FlueVate-Standorten von April bis September 2026
 // passiert - allein in den letzten 30 Tagen 18 Zahlungen ueber 757,91 €.
 //
 // Der Wachhund schaut alle fuenf Minuten nach Bestellungen, die laenger als
@@ -1419,8 +1418,8 @@ cron.schedule('* * * * *', async () => {
 // und es faellt trotzdem auf, statt monatelang unbemerkt zu bleiben.
 const WACHHUND_MINUTEN = 10;
 // Obere Altersgrenze, und die ist nicht optional. Ohne sie greift der
-// Wachhund beim ersten Lauf nach JEDER haengenden Bestellung - bei Ararat,
-// Amoura und Vorhelm also nach allem seit April. Die Liste der eingehenden
+// Wachhund beim ersten Lauf nach JEDER haengenden Bestellung - an diesen
+// drei Standorten also nach allem seit April. Die Liste der eingehenden
 // Bestellungen im Dashboard hat keine Datumsgrenze und sortiert die aeltesten
 // nach oben: Mitten im Betrieb stuende dort eine Wand aus Monate alten
 // "neuen" Bestellungen, jede mit Alarmton. Und weil "pending" im Umsatz
@@ -1521,7 +1520,7 @@ const PDF_PW = 595;
 const PDF_FT = 790; // Unterkante fuer Tabellenzeilen. Der Textbereich endet bei page.height-50 = 791,9;
                     // reicht eine Zeile darueber, bricht pdfkit selbst um und jede Zelle landet auf eigener Seite.
 const PDF_SV = 0.99;
-const PDF_BASE = 150; // monatliche Grundgebühr (Fixmodell: 150 € + Servicegebühr/Bestellung)
+const PDF_BASE = 100; // monatliche Grundgebühr (Fixmodell: 100 € + Servicegebühr/Bestellung)
 const pdfFmt = n => n.toFixed(2).replace('.', ',') + ' €';
 
 function pdfColorBox(doc, title, sub, color = '#0a1e47', h = 70) {

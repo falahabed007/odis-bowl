@@ -440,9 +440,9 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
           <div class="pos-cart-hd">🛒 Warenkorb</div>
           <div class="pos-cart-items" id="posCartItems"><div class="pos-cart-empty">Leer</div></div>
           <div class="pos-form">
+            <!-- Nur Abholung: Odi’s Bowl liefert nicht, keine Adresse und keine Lieferorte -->
             <div class="pos-mode-btns">
-              <div class="pos-mode-btn active" id="posModeL" onclick="setPOSMode('lieferung')">🛵 Lieferung</div>
-              <div class="pos-mode-btn" id="posModeA" onclick="setPOSMode('abholung')">🏃 Abholung</div>
+              <div class="pos-mode-btn active" id="posModeA" onclick="setPOSMode('abholung')">🏃 Nur Abholung</div>
             </div>
             <div class="pos-field"><div class="pos-label">Kunde</div>
               <div class="pos-row2">
@@ -452,21 +452,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
             </div>
             <div class="pos-field"><div class="pos-label">E-Mail (Bestellbestätigung)</div>
               <input class="pos-input" id="posEmail" type="email" placeholder="kunde@beispiel.de">
-            </div>
-            <div id="posAddrFields">
-              <div class="pos-field"><div class="pos-label">Adresse</div>
-                <div class="pos-row2">
-                  <input class="pos-input" id="posStreet" placeholder="Straße">
-                  <input class="pos-input" id="posHouse" placeholder="Nr.">
-                </div>
-              </div>
-              <div class="pos-field"><div class="pos-label">Ort</div>
-                <select class="pos-input" id="posCity" onchange="renderPOSTotals()">
-                  <option value="Oelde">Oelde (+2,00 €)</option>
-                  <option value="Südkirchen / Capelle">Südkirchen / Capelle (+2,50 €)</option>
-                  <option value="Andere Orte">Andere Orte (+4,00 €)</option>
-                </select>
-              </div>
             </div>
             <div class="pos-field"><div class="pos-label">Zahlung</div>
               <select class="pos-pay-select" id="posPayment">
@@ -843,7 +828,7 @@ if (!window.FLUEVATE_BACKEND) {
 // ausgeliefert, jeder koennte sie im Quelltext mitlesen. Geprueft wird
 // ausschliesslich serverseitig ueber POST /api/admin/login.
 const SERVICE_FEE     = 0.99;
-const DELIVERY_FEES   = { 'Oelde':2.00, 'Südkirchen / Capelle':2.50, 'Andere Orte':4.00 };
+// Keine Lieferorte und keine Liefergebühren: Odi’s Bowl bietet nur Abholung an.
 
 let token       = localStorage.getItem('odisbowlToken')
                || sessionStorage.getItem('odisbowlToken') || '';
@@ -877,7 +862,7 @@ let sideTab     = 'detail';
 let filter      = 'all';
 let currentMode     = 'online'; // wird von loadRestaurantStatus gesetzt
 let posCart     = [];
-let posMode     = 'lieferung';
+let posMode     = 'abholung';   // Nur Abholung
 let currentPending = null;
 let selectedTime   = null;
 let showCancelReason = false;
@@ -1731,7 +1716,7 @@ async function toggleSoldOut(name, cb) {
 // POS – MANUELLE BESTELLUNG
 // ═══════════════════════════════════════════════════════════════
 function openPOS() {
-  posCart=[]; posMode='lieferung'; posCategory=POS_START;
+  posCart=[]; posMode='abholung'; posCategory=POS_START;
   document.getElementById('posModal').classList.add('show');
   document.getElementById('posFirst').value='';
   document.getElementById('posLast').value='';
@@ -1744,15 +1729,13 @@ function openPOS() {
     `<div class="pos-cat${c===posCategory?' active':''}" onclick="setPOSCat('${c}',this)">${labels[c]||(window.POS_TITEL||{})[c]||c}</div>`
   ).join('');
   renderPOSItems(); renderPOSCart(); renderPOSTotals();
-  document.getElementById('posAddrFields').style.display='block';
 }
 function closePOS() { document.getElementById('posModal').classList.remove('show'); }
 
-function setPOSMode(m) {
-  posMode=m;
-  document.getElementById('posModeL').classList.toggle('active',m==='lieferung');
-  document.getElementById('posModeA').classList.toggle('active',m==='abholung');
-  document.getElementById('posAddrFields').style.display=m==='lieferung'?'block':'none';
+// Nur Abholung: Odi’s Bowl liefert nicht, der Server lehnt Lieferungen ab.
+function setPOSMode() {
+  posMode='abholung';
+  document.getElementById('posModeA').classList.add('active');
   renderPOSTotals();
 }
 function setPOSCat(c, el) {
@@ -1904,13 +1887,10 @@ function changeQty(idx,d) {
 }
 function renderPOSTotals() {
   const subtotal = posCart.reduce((s,i)=>s+i.price*i.qty,0);
-  const city = document.getElementById('posCity')?.value||'Oelde';
-  const fee  = posMode==='lieferung'?(DELIVERY_FEES[city]||0):0;
-  const total = subtotal+fee+SERVICE_FEE;
+  const total = subtotal+SERVICE_FEE;   // nur Abholung: keine Liefergebühr
   document.getElementById('posTotals').innerHTML = `
     <div class="pos-total-row"><span>Speisen</span><span>${subtotal.toFixed(2).replace('.',',')} €</span></div>
-    ${fee>0?`<div class="pos-total-row"><span>Liefergebühr</span><span>${fee.toFixed(2).replace('.',',')} €</span></div>`:''}
-    <div class="pos-total-row"><span>Servicegebühr</span><span>0,99 €</span></div>
+    <div class="pos-total-row"><span>Servicegebühr</span><span>${SERVICE_FEE.toFixed(2).replace('.',',')} €</span></div>
     <div class="pos-total-row grand"><span>Gesamt</span><span>${total.toFixed(2).replace('.',',')} €</span></div>
   `;
 }
@@ -1921,19 +1901,18 @@ async function submitPOS() {
   if (!first||!last) { showToast('⚠️ Kundenname fehlt'); return; }
   const email = document.getElementById('posEmail').value.trim();
   const subtotal = posCart.reduce((s,i)=>s+i.price*i.qty,0);
-  const city  = document.getElementById('posCity')?.value||'Oelde';
-  const fee   = posMode==='lieferung'?(DELIVERY_FEES[city]||0):0;
-  const total = subtotal+fee+SERVICE_FEE;
+  const fee   = 0;   // nur Abholung
+  const total = subtotal+SERVICE_FEE;
   const payload = {
-    mode:    posMode, source:'pos',
+    mode:    'abholung', source:'pos',
     payment: document.getElementById('posPayment').value,
     paymentStatus: 'paid',
     customer: {
       first, last, email,
       phone:  '',
-      city:   posMode==='lieferung'?city:'',
-      street: posMode==='lieferung'?document.getElementById('posStreet').value.trim():'',
-      house:  posMode==='lieferung'?document.getElementById('posHouse').value.trim():'',
+      city:   '',
+      street: '',
+      house:  '',
     },
     items: posCart.map(i=>({name:i.name,price:i.price,qty:i.qty,note:i.note||''})),
     subtotal, deliveryFee:fee, serviceFee:SERVICE_FEE, total, prepTime:20,
