@@ -760,19 +760,29 @@ app.post('/api/stripe-webhook', async (req, res) => {
     event = getStripe().webhooks.constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
   } catch(e) { return res.status(400).send('Webhook Error: '+e.message); }
 
-  if (event.type === 'checkout.session.completed') {
-    const s = event.data.object;
-    const order = await Order.findOne({ stripeSessionId: s.id });
-    if (order) {
-      order.paymentStatus = 'paid';
-      order.status = 'pending'; // wartet auf Admin-Bestätigung
-      order.stripePaymentIntentId = s.payment_intent;
-      await order.save();
-      console.log(`💳 Bezahlt: #${order.orderNum} → wartet auf Bestätigung`);
+  // Nur aus `awaiting_payment` heraus, und atomar. Stripe wiederholt eine
+  // Zustellung bis zu drei Tage lang. Bis dahin ist die Bestellung laengst per
+  // verify-payment oder Wachhund eingebucht, vielleicht schon ausgeliefert.
+  // Ohne die Statusbedingung setzt eine spaete Wiederholung sie auf `pending`
+  // zurueck, und sie steht als neue Bestellung an der Kasse (Fix aus Amoura,
+  // 18.09.2026 - Nordkirchen als Vorlage nimmt keine Karte und hatte ihn nicht).
+  try {
+    if (event.type === 'checkout.session.completed') {
+      const s = event.data.object;
+      const order = await Order.findOneAndUpdate(
+        { stripeSessionId: s.id, status: 'awaiting_payment' },
+        { $set: { paymentStatus: 'paid', status: 'pending', stripePaymentIntentId: s.payment_intent } }, // wartet auf Admin-Bestätigung
+        { new: true });
+      if (order) console.log(`💳 Bezahlt: #${order.orderNum} → wartet auf Bestätigung`);
     }
-  }
-  if (event.type === 'checkout.session.expired') {
-    await Order.findOneAndUpdate({ stripeSessionId: event.data.object.id }, { status:'cancelled' });
+    if (event.type === 'checkout.session.expired') {
+      await Order.findOneAndUpdate({ stripeSessionId: event.data.object.id, status: 'awaiting_payment' }, { status:'cancelled' });
+    }
+  } catch(e) {
+    // Antworten statt haengen lassen: Stripe versucht es spaeter erneut, und
+    // dank der Statusbedingung richtet die Wiederholung keinen Schaden an.
+    console.error('Stripe-Webhook Verarbeitung fehlgeschlagen:', e.message);
+    return res.status(500).send('Verarbeitung fehlgeschlagen');
   }
   res.json({ received: true });
 });
@@ -1499,12 +1509,15 @@ cron.schedule('*/5 * * * *', async () => {
       try {
         const sitzung = await stripe.checkout.sessions.retrieve(order.stripeSessionId);
         if (sitzung.payment_status !== 'paid') continue;   // Gast hat abgebrochen
-        order.paymentStatus = 'paid';
-        order.status = 'pending';
-        order.nachgeholt = true;
-        if (sitzung.payment_intent) order.stripePaymentIntentId = sitzung.payment_intent;
-        await order.save();
-        geholt.push(order);
+        // Atomar und nur aus awaiting_payment: kam der Webhook in der
+        // Zwischenzeit doch noch an, bleibt die Bestellung, wie sie ist.
+        const nachgeholt = await Order.findOneAndUpdate(
+          { _id: order._id, status: 'awaiting_payment' },
+          { $set: { paymentStatus: 'paid', status: 'pending', nachgeholt: true,
+                    ...(sitzung.payment_intent ? { stripePaymentIntentId: sitzung.payment_intent } : {}) } },
+          { new: true });
+        if (!nachgeholt) continue;
+        geholt.push(nachgeholt);
         console.error(`🚨 Wachhund: #${order.orderNum} war bezahlt und unsichtbar - jetzt auf pending`);
       } catch (e) {
         console.warn(`Wachhund uebersprungen #${order.orderNum}: ${e.message}`);
