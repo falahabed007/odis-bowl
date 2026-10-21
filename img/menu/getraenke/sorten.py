@@ -81,6 +81,31 @@ def umfaerben(bild, regeln, band=None):
     return im
 
 
+def schrift_schwarz(bild, von, bis):
+    """Coca-Cola Zero: Etikett bleibt rot, die weisse Schrift wird schwarz.
+    Je weisser ein Pixel, desto dunkler wird er; Kantenpixel zwischen Rot und
+    Weiss werden dunkelrot, damit die Schrift nicht ausfranst."""
+    im = bild.copy()
+    w, h = im.size
+    px = im.load()
+    for y in range(int(von * h), int(bis * h) + 1):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a == 0:
+                continue
+            hh, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if v < 0.55:
+                continue                      # Etikettkante, Glas, Schatten
+            weiss = max(0.0, min(1.0, (0.6 - s) / 0.45))
+            if weiss == 0:
+                continue                      # reines Etikettrot bleibt, wie es ist
+            rot = colorsys.hsv_to_rgb(hh if s > 0.15 else 0.0, 0.85, v)   # Etikettrot bei gleicher Helligkeit
+            schwarz = (0.07, 0.05, 0.05)
+            neu = [rot[i] * (1 - weiss) + schwarz[i] * weiss for i in range(3)]
+            px[x, y] = tuple(round(c * 255) for c in neu) + (a,)
+    return im
+
+
 def gesaris_einzeln():
     """gesaris.png zeigt zwei Flaschen; die linke steht vorn. Ihre rechte Kante
     ist die gespiegelte linke (Achse aus Hals und Fuss), alles rechts davon
@@ -115,10 +140,8 @@ SORTENBAND = (0.832, 0.872)   # Richard's Sun: helles Band mit "LEMON"
 SORTEN = {
     'cola-original': ('cola', []),
     # Zero: Etikett und Deckel schwarz, das weisse Logo bleibt
-    'cola-zero': ('cola', [
-        {'zeilen': (0, 0.045), 'hue': ROT, 's_min': 0.3, 's_faktor': 0, 'v_faktor': 0.16},
-        {'zeilen': (0.375, 0.56), 'hue': ROT, 's_min': 0.3, 's_faktor': 0, 'v_faktor': 0.16},
-    ]),
+    # Zero: Etikett und Deckel bleiben rot, nur die Schrift wird schwarz (Abed)
+    'cola-zero': ('cola*zero', []),
     'limonade-limette-minze': ('limonade', []),
     'limonade-orange': ('limonade', [
         {'hue': LIMETTE, 's_min': 0.22, 'ziel': 30, 's_faktor': 1.15, 'v_faktor': 1.0},
@@ -164,7 +187,9 @@ def main():
     gesaris = gesaris_einzeln()
     for name, (vorlage, *rest) in SORTEN.items():
         band, regeln = rest if len(rest) == 2 else (None, rest[0])
-        basis = gesaris if vorlage == 'gesaris*' else laden(vorlage)
+        basis = (gesaris if vorlage == 'gesaris*'
+                 else schrift_schwarz(laden('cola'), 0.375, 0.56) if vorlage == 'cola*zero'
+                 else laden(vorlage))
         umfaerben(basis, regeln, band).save(os.path.join(ZIEL, name + '.png'), optimize=True)
         print(name)
 
