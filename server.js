@@ -475,11 +475,19 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Odi’s Bowl liefert nicht: keine Lieferorte, nur Abholung.
+// Odi’s Bowl liefert nach Fahrstrecke statt nach Orten - deliveryCities bleibt
+// deshalb leer, die Zonen stehen unter lieferung. onlineZahlung sagt der
+// Bestellseite, ob Stripe fertig eingerichtet ist; vorher bietet sie nur bar an.
 app.get('/api/config', (req, res) => res.json({
   serviceFee: 0.99,
-  nurAbholung: NUR_ABHOLUNG,
-  deliveryCities: {}
+  nurAbholung: false,
+  deliveryCities: {},
+  lieferung: {
+    zonen: LIEFERGEBIET.zonen,
+    mindestwert: LIEFERGEBIET.mindestwert,
+    nurAbholung: NUR_ABHOLUNG_NAMEN
+  },
+  onlineZahlung: stripeBereit()
 }));
 
 // ── Restaurant Status (öffentlich) ───────────────────────────────
@@ -535,28 +543,68 @@ function berechneRabatt() {
   return 0;
 }
 
-// ── Nur Abholung ─────────────────────────────────────────────────
-// Odi’s Bowl liefert nicht. Eine Bestellung mit Modus Lieferung wird
-// abgelehnt, statt mit Liefergebuehren gerechnet zu werden, die es nicht
-// gibt. Bei Abholung zaehlt keine Liefergebuehr, egal was der Client schickt.
-const NUR_ABHOLUNG = true;
+// ── Lieferung nach Fahrstrecke ───────────────────────────────────
+// Bis 2 km 3 €, bis 3 km 4 €, bis 5 km 5 €, Mindestbestellwert 30 € (Abed,
+// 22.10.2026). Die Strecke je Adresse steht in liefergebiet.json; dieselbe
+// Nachschlagefunktion nutzt die Bestellseite. Der Server rechnet die Gebuehr
+// trotzdem selbst - was der Client als deliveryFee schickt, zaehlt nicht.
+// Açaí gibt es nur zur Abholung.
+const Liefergebiet = require('./liefergebiet.js');
+const LIEFERGEBIET = Liefergebiet.erstelle(
+  JSON.parse(fs.readFileSync(path.join(__dirname, 'liefergebiet.json'), 'utf8')));
+// Was nie geliefert wird, steht in menu.json (nur_abholung: Açaí). Im
+// Warenkorb heisst es "Açaí-Bowl Classic" usw. - Vergleich per Namensanfang.
+// (MENU_FILE steht erst weiter unten - hier der Pfad direkt.)
+const NUR_ABHOLUNG_NAMEN = JSON.parse(fs.readFileSync(path.join(__dirname, 'Menue', 'menu.json'), 'utf8')).kategorien
+  .flatMap(k => k.items || []).filter(it => it.nur_abholung).map(it => it.name);
+const nurAbholung = (name) => NUR_ABHOLUNG_NAMEN.some(n => String(name || '').startsWith(n));
+
+const LIEFER_FEHLER = {
+  'strasse-fehlt':     'Bitte gib Straße und Hausnummer an.',
+  'nr-fehlt':          'Bitte gib eine Hausnummer an.',
+  'mehrdeutig':        'Diese Straße gibt es in mehreren Orten - bitte wähle den Ort aus der Liste.',
+  'strasse-unbekannt': 'Diese Straße liegt nicht in unserem Liefergebiet (bis 5 km Fahrstrecke).',
+  'nr-unbekannt':      'Diese Hausnummer kennen wir nicht. Ruf uns bitte an: 0 2522 9373711.',
+  'zu-weit':           'Diese Adresse liegt außerhalb unseres Liefergebiets (bis 5 km Fahrstrecke).',
+};
 
 function lieferungAbgelehnt(req, res) {
-  if (!NUR_ABHOLUNG || !req.body) return false;
-  if (req.body.mode === 'lieferung') {
-    res.status(400).json({
-      message: 'Odi’s Bowl liefert nicht. Bestellungen sind nur zur Abholung möglich.'
-    });
-    return true;
+  if (!req.body) return false;
+  if (req.body.mode !== 'lieferung') { req.body.deliveryFee = 0; return false; }
+  const ablehnen = (message) => { res.status(400).json({ message }); return true; };
+
+  const items = Array.isArray(req.body.items) ? req.body.items : [];
+  if (items.some(i => nurAbholung(i.name))) {
+    return ablehnen('Açaí-Bowls gibt es nur zur Abholung. Bitte wähle Abholung oder nimm die Açaí-Bowl aus dem Warenkorb.');
   }
-  req.body.deliveryFee = 0;
+  const warenwert = items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
+  if (warenwert + 0.005 < LIEFERGEBIET.mindestwert) {
+    return ablehnen(`Der Mindestbestellwert für Lieferung beträgt ${LIEFERGEBIET.mindestwert.toFixed(2).replace('.', ',')} €.`);
+  }
+
+  const c = req.body.customer || {};
+  const eingabe = c.city && c.city !== Liefergebiet.HAUPTORT ? `${c.street || ''} (${c.city})` : (c.street || '');
+  const treffer = LIEFERGEBIET.finde(eingabe, c.house);
+  if (treffer.status !== 'ok') return ablehnen(LIEFER_FEHLER[treffer.status] || 'Adresse nicht lieferbar.');
+
+  req.body.deliveryFee = treffer.gebuehr;
+  req.body.customer = { ...c, street: treffer.strasse, city: treffer.ort };
   return false;
+}
+
+// Stripe ist erst bereit, wenn Schluessel, Webhook-Geheimnis und das
+// Connect-Konto des Restaurants in Coolify stehen. Ohne Webhook kaeme eine
+// bezahlte Bestellung nie in der Kueche an, ohne Connect-Konto landete das
+// Geld auf dem FlueVate-Konto statt bei Odi’s.
+function stripeBereit() {
+  return Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_WEBHOOK_SECRET
+    && process.env.STRIPE_CONNECT_ACCOUNT);
 }
 
 // ── Neue Web-Bestellung (pending) ────────────────────────────────
 app.post('/api/orders', async (req, res) => {
   try {
-    if (lieferungAbgelehnt(req, res)) return;   // nur Abholung, auch an der Kasse
+    if (lieferungAbgelehnt(req, res)) return;   // Liefergebiet, Mindestwert, Açaí nur Abholung
     // userId aus Kunden-JWT extrahieren falls vorhanden (Gastbestellung bleibt möglich)
     let userId = null;
     const authHeader = req.headers.authorization;
@@ -621,7 +669,10 @@ app.get('/api/orders/status/:token', async (req, res) => {
 // ── Stripe Checkout ───────────────────────────────────────────────
 app.post('/api/create-stripe-checkout', async (req, res) => {
   try {
-    if (lieferungAbgelehnt(req, res)) return;   // nur Abholung
+    if (!stripeBereit()) {
+      return res.status(503).json({ message: 'Online-Zahlung ist noch nicht eingerichtet. Bitte wähle Barzahlung.' });
+    }
+    if (lieferungAbgelehnt(req, res)) return;   // Liefergebiet, Mindestwert, Açaí nur Abholung
     const { items, subtotal, deliveryFee, serviceFee, customer, mode, note } = req.body;
     const orderNum = await getNextOrderNum();
 
@@ -758,7 +809,7 @@ app.post('/api/verify-payment', async (req, res) => {
 // ── PayPal Checkout ───────────────────────────────────────────────
 app.post('/api/create-paypal-order', async (req, res) => {
   try {
-    if (lieferungAbgelehnt(req, res)) return;   // nur Abholung
+    if (lieferungAbgelehnt(req, res)) return;   // Liefergebiet, Mindestwert, Açaí nur Abholung
     const { items, subtotal, deliveryFee, serviceFee, customer, mode, note } = req.body;
     const orderNum = await getNextOrderNum();
 

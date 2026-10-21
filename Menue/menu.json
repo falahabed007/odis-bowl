@@ -1,6 +1,6 @@
 {
-  "_quelle": "Gedruckte Karten Odi's Bowl (Bowl-Faltkarte, Wrap- und Açaí-Flyer), Foto-PDFs vom 13.10.2026; Aufschläge von Abed am 13.10.2026 bestätigt",
-  "_hinweis": "Bowl-Karte: handschriftlich '1 €' an Schritt 2 = jede Zutat über 5 hinaus, '1,50' an Fleisch = Fleischaufschlag, gilt auch beim Wrap. Wrap Schritt 2 'aus unserer Frische-Theke' = dieselbe Liste wie die Bowl, ab der 4. Zutat +1 €. Saucen: Bowl- und Wrap-Karte weichen ab (Sriracha Mayo / Sriracha Hemp, Cinnamon Plum nur auf dem Wrap-Flyer); laut Abed dieselben Saucen, hier vereinigt, 'Sriracha Hemp' als Sriracha Mayo gelesen. Bowl und Wrap: eine Sauce inklusive, jede weitere +1 €; drei Toppings inklusive, jedes weitere +1 € (Abed, 14.10.2026). Druckfehler korrigiert: 'White Choclate', 'Chia-Puddig'. Getränke fehlen noch - solange die Liste leer ist, bietet der Baukasten kein Menü an.",
+  "_quelle": "Gedruckte Karten Odi's Bowl (Bowl-Faltkarte, Wrap- und Açaí-Flyer), Foto-PDFs vom 13.10.2026; Aufschläge von Abed am 13.10.2026 bestätigt; Preiserhöhung Bowl/Wrap +2 €, Açaí 8,90/9,90 und Getränkekarte von Abed am 22.10.2026",
+  "_hinweis": "Bowl-Karte: handschriftlich '1 €' an Schritt 2 = jede Zutat über 5 hinaus, '1,50' an Fleisch = Fleischaufschlag, gilt auch beim Wrap. Wrap Schritt 2 'aus unserer Frische-Theke' = dieselbe Liste wie die Bowl, ab der 4. Zutat +1 €. Saucen: Bowl- und Wrap-Karte weichen ab (Sriracha Mayo / Sriracha Hemp, Cinnamon Plum nur auf dem Wrap-Flyer); laut Abed dieselben Saucen, hier vereinigt, 'Sriracha Hemp' als Sriracha Mayo gelesen. Bowl und Wrap: eine Sauce inklusive, jede weitere +1 €; drei Toppings inklusive, jedes weitere +1 € (Abed, 14.10.2026). Druckfehler korrigiert: 'White Choclate', 'Chia-Puddig'. Getränke laut Getränkekarte von Abed (22.10.2026), alle 2,90 €; Menü +2 € nur bei Bowl und Wrap. \"Kirsche & Granatapfel\" ist laut Abed eine Sorte. Coca-Cola heißt \"Original\", weil die Ausverkauft-Prüfung per Namensanfang vergleicht und sonst Zero mitsperren würde. Cinnamon Plum am 22.10.2026 auf Abeds Wunsch gestrichen. Açaí nur Abholung, wird nie geliefert (Abed, 22.10.2026) - Feld nur_abholung.",
   "_pos_start": "zusammenstellen",
   "_listen": {
     "frische": [
@@ -31,7 +31,6 @@
     ],
     "saucen": [
       "Avocado Sesam",
-      "Cinnamon Plum",
       "Curry Mango",
       "Erdnuss",
       "Honig Senf",
@@ -46,7 +45,22 @@
       "Sesam",
       "Granatapfel"
     ],
-    "getraenke": []
+    "getraenke": [
+      "Coca-Cola Original",
+      "Coca-Cola Zero",
+      "Proviant Bio Limonade Orange",
+      "Proviant Bio Limonade Rhabarber",
+      "Proviant Bio Limonade Limette & Minze",
+      "Proviant Bio Schorle Kirsche & Granatapfel",
+      "Richard's Sun Ice Tea Peach",
+      "Richard's Sun Ice Tea Lemon",
+      "Richard's Sun Ice Tea Pomegranate",
+      "Richard's Sun Ice Tea Blueberry",
+      "Gesaris Mineralwasser Classic",
+      "Gesaris Mineralwasser Still",
+      "Gesaris Apfelschorle",
+      "Pott's Cola Mix"
+    ]
   },
   "kategorien": [
     {
@@ -60,7 +74,7 @@
           "num": "B1",
           "name": "Bowl",
           "desc": "Basic, bis zu 5 Zutaten aus der Frische-Theke, Hot Special, Sauce und Topping",
-          "preis": 11.9,
+          "preis": 13.9,
           "menue": 2.0,
           "schritte": [
             {
@@ -129,7 +143,7 @@
           "num": "W1",
           "name": "Wrap",
           "desc": "Basic, bis zu 3 Zutaten aus der Frische-Theke, Hot Special, Sauce und Topping",
-          "preis": 7.9,
+          "preis": 9.9,
           "menue": 2.0,
           "schritte": [
             {
@@ -195,10 +209,11 @@
           "name": "Açaí-Bowl",
           "desc": "Eine Sauce, zwei Layer, drei Toppings",
           "groessen": {
-            "Classic": 7.9,
-            "Large": 8.9
+            "Classic": 8.9,
+            "Large": 9.9
           },
           "farbe": "#6b2c74",
+          "nur_abholung": true,
           "schritte": [
             {
               "titel": "Sauce",
@@ -246,6 +261,85 @@
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "getraenke",
+      "titel": "Erfrischendes",
+      "typ": "simple",
+      "note": "Alle Getränke 2,90 €.",
+      "nummer_zeigen": false,
+      "items": [
+        {
+          "num": "G1",
+          "name": "Coca-Cola Original",
+          "preis": 2.9
+        },
+        {
+          "num": "G2",
+          "name": "Coca-Cola Zero",
+          "preis": 2.9
+        },
+        {
+          "num": "G3",
+          "name": "Proviant Bio Limonade Orange",
+          "preis": 2.9
+        },
+        {
+          "num": "G4",
+          "name": "Proviant Bio Limonade Rhabarber",
+          "preis": 2.9
+        },
+        {
+          "num": "G5",
+          "name": "Proviant Bio Limonade Limette & Minze",
+          "preis": 2.9
+        },
+        {
+          "num": "G6",
+          "name": "Proviant Bio Schorle Kirsche & Granatapfel",
+          "preis": 2.9
+        },
+        {
+          "num": "G7",
+          "name": "Richard's Sun Ice Tea Peach",
+          "preis": 2.9
+        },
+        {
+          "num": "G8",
+          "name": "Richard's Sun Ice Tea Lemon",
+          "preis": 2.9
+        },
+        {
+          "num": "G9",
+          "name": "Richard's Sun Ice Tea Pomegranate",
+          "preis": 2.9
+        },
+        {
+          "num": "G10",
+          "name": "Richard's Sun Ice Tea Blueberry",
+          "preis": 2.9
+        },
+        {
+          "num": "G11",
+          "name": "Gesaris Mineralwasser Classic",
+          "preis": 2.9
+        },
+        {
+          "num": "G12",
+          "name": "Gesaris Mineralwasser Still",
+          "preis": 2.9
+        },
+        {
+          "num": "G13",
+          "name": "Gesaris Apfelschorle",
+          "preis": 2.9
+        },
+        {
+          "num": "G14",
+          "name": "Pott's Cola Mix",
+          "preis": 2.9
         }
       ]
     }
