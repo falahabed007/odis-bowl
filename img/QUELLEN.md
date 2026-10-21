@@ -6,5 +6,6 @@
 | menu/bowl.jpg | rawpixel, „Free vegan falafel image“ – https://www.rawpixel.com/image/5918629/image-public-domain-greens-food (über Openverse) | CC0 1.0, keine Namensnennung nötig | Zuschnitt 4:3, 683 x 512 |
 | menu/wrap.jpg | rawpixel, „Free healthy vegan wraps image“ – https://www.rawpixel.com/image/5927972/photo-image-public-domain-wood-food | CC0 1.0 | Zuschnitt 4:3, 683 x 512 |
 | menu/acai.jpg | rawpixel, „Healthy smoothie acai bowl berries“ – https://www.rawpixel.com/image/3282999/free-photo-image-organic-food-healthy-breakfast-bowl | CC0 1.0 | Zuschnitt 4:3, 912 x 684 |
+| menu/getraenke/*.png | ausgeschnitten aus Odi’s eigener Getränkekarte (Bild „Erfrischendes“), von Abed am 22.10.2026 im Chat geliefert; Hintergrund freigestellt | Karte des Kunden, Produktfotos der Hersteller | je ca. 55 x 205 px, für Retina knapp |
 
 Die drei Kartenfotos sind Stockbilder, keine Gerichte von Odi's. Sobald der Wirt eigene Fotos liefert, ersetzen - Gäste sollen sehen, was sie bekommen.

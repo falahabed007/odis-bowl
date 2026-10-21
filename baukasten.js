@@ -65,6 +65,7 @@
   .bk-kopf{padding:18px 20px 12px;border-bottom:1px solid var(--bk-rand);position:relative}
   .bk-kopf h2{margin:0;font-size:1.35rem;color:var(--bk-a)}
   .bk-kopf p{margin:4px 0 0;color:var(--bk-leise);font-size:.88rem}
+  .bk-kopf .bk-nur-abholung{display:inline-block;margin-top:8px;background:var(--bk-a);color:var(--bk-auf);font-weight:700;font-size:.8rem;padding:4px 10px;border-radius:20px}
   .bk-zu{position:absolute;right:14px;top:10px;background:none;border:0;font-size:28px;line-height:1;color:var(--bk-leise);cursor:pointer;padding:4px 8px}
   .bk-rumpf{overflow-y:auto;padding:6px 20px 16px;-webkit-overflow-scrolling:touch}
   .bk-schritt{padding:14px 0;border-bottom:1px dashed var(--bk-rand)}
@@ -126,6 +127,7 @@
       <div class="bk-kopf">
         <h2 id="bk-titel">${esc(art.name)}</h2>
         <p>Stell dir deine${art.name.endsWith('Wrap') ? 'n' : ''} ${esc(art.name)} zusammen.</p>
+        ${art.nurAbholung ? '<p class="bk-nur-abholung">🏠 Nur zur Abholung – wird nicht geliefert.</p>' : ''}
         <button class="bk-zu" type="button" aria-label="Schließen">&times;</button>
       </div>
       <div class="bk-rumpf">${rumpfHtml()}</div>

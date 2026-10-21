@@ -188,6 +188,53 @@
         background: var(--odis-flaeche-2);
     }
 
+    /* Schild fuer Artikel, die nie geliefert werden (Açaí) */
+    .product-item { position: relative; }
+    .nur-abholung-schild {
+        position: absolute; top: 10px; left: 10px; z-index: 2;
+        background: var(--odis-akzent); color: var(--odis-auf-akzent);
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 0.3px;
+        padding: 5px 11px; border-radius: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    /* Getraenke: freigestellte Flasche auf hellem Grund statt Foto */
+    .card-img-flasche {
+        height: 150px;
+        object-fit: contain;
+        padding: 14px 0 6px;
+        box-sizing: border-box;
+        background: var(--odis-flaeche-2);
+        transition: transform 0.2s;
+    }
+    .product-item:hover .card-img-flasche { transform: scale(1.04); }
+
+    /* "Mach's zum Menü" unter der Getraenke-Ueberschrift, wie auf Odi’s Karte */
+    .menue-hinweis {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--odis-akzent);
+        color: var(--odis-auf-akzent);
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin: 0 0 16px 0;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .menue-hinweis small { display: block; font-size: 0.78rem; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0.85; }
+    .menue-hinweis strong {
+        display: block;
+        font-family: 'Oswald', 'Arial Narrow', Arial, sans-serif;
+        font-size: 1.7rem;
+        line-height: 1.1;
+        margin: 2px 0 4px;
+    }
+    .menue-hinweis span { font-size: 0.88rem; }
+    .menue-hinweis img { height: 110px; width: auto; flex-shrink: 0; margin: -6px -4px -16px 0; }
+
     /* Foto-Banner unter jedem Kategorie-Titel */
     .category-banner {
         width: 100%;
@@ -212,6 +259,9 @@
         .price { font-size: 0.9rem; }
         .card-add-btn { width: 28px; height: 28px; font-size: 1.1rem; }
         .card-img { height: 96px; }
+        .card-img-flasche { height: 130px; }
+        .menue-hinweis strong { font-size: 1.35rem; }
+        .menue-hinweis img { height: 92px; }
         .category-banner { height: 110px; border-radius: 12px; }
     }
     @media (max-width: 360px) {
@@ -914,6 +964,7 @@
 </style>
   <!-- Zentrale Backend-Adresse, muss vor allen anderen Skripten stehen -->
   <script src="config.js"></script>
+  <script src="liefergebiet.js"></script>
 </head>
 <body>
 
@@ -989,12 +1040,16 @@
         <!-- Artikel Liste -->
         <div id="mobileCartItems" style="flex:1; overflow-y:auto; padding:16px;"></div>
 
-        <!-- Nur Abholung: Odi’s Bowl liefert nicht, es gibt keine Lieferoption und keine Lieferorte -->
+        <!-- Lieferung / Abholung (Lieferung nach Fahrstrecke, siehe liefergebiet.js) -->
         <div style="padding:0 16px 12px 16px; flex-shrink:0;">
             <div style="display:flex; border-radius:10px; overflow:hidden; border:2px solid var(--odis-akzent);">
-                <button id="cart-btn-pickup" onclick="setCartOption('pickup')"
+                <button id="cart-btn-delivery" onclick="setCartOption('delivery')" aria-pressed="false"
+                    style="flex:1; padding:10px; font-weight:bold; font-size:13px; border:none; cursor:pointer; background:var(--odis-flaeche); color:var(--odis-akzent);">
+                    🛵 Lieferung
+                </button>
+                <button id="cart-btn-pickup" onclick="setCartOption('pickup')" aria-pressed="true"
                     style="flex:1; padding:10px; font-weight:bold; font-size:13px; border:none; cursor:pointer; background:var(--odis-akzent); color:var(--odis-auf-akzent);">
-                    🏠 Nur Abholung
+                    🏠 Abholung
                 </button>
             </div>
 
@@ -1175,17 +1230,75 @@
     <p class="category-note">Bowl, Wrap oder Açaí wählen – dann Schritt für Schritt nach deinem Geschmack.</p>
     <div class="product-item" onclick="openBaukasten(this)" data-bk="B1" style="cursor: pointer;">
         <div class="product-info"><h3>Bowl</h3><p>Basic, bis zu 5 Zutaten aus der Frische-Theke, Hot Special, Sauce und Topping</p></div>
-        <div class="price">11,90 €</div>
+        <div class="price">13,90 €</div>
     </div>
     <div class="product-item" onclick="openBaukasten(this)" data-bk="W1" style="cursor: pointer;">
         <div class="product-info"><h3>Wrap</h3><p>Basic, bis zu 3 Zutaten aus der Frische-Theke, Hot Special, Sauce und Topping</p></div>
-        <div class="price">7,90 €</div>
+        <div class="price">9,90 €</div>
     </div>
     <div class="product-item" onclick="openBaukasten(this)" data-bk="A1" style="cursor: pointer;">
         <div class="product-info"><h3>Açaí-Bowl</h3><p>Eine Sauce, zwei Layer, drei Toppings</p></div>
-        <div class="price">ab 7,90 €</div>
+        <div class="price">ab 8,90 €</div>
     </div>
-    <script>window.BAUKASTEN = {"B1":{"name":"Bowl","preis":11.9,"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Basmati-Reis","Frischer Blattsalatmix","Mixed-Bowl (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 5 inklusive, jede weitere +1,00 €","min":0,"inklusive":5,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Teriyaki Tofu","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Creamie Chicken","Curry Chicken","Teriyaki Chicken","Crispy Chicken","Chicken Bites"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Cinnamon Plum","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"W1":{"name":"Wrap","preis":7.9,"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Frischer Blattsalatmix","Krautsalat","Mixed-Wrap (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 3 inklusive, jede weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Crispy Chicken","Chicken Stripes"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Cinnamon Plum","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"A1":{"name":"Açaí-Bowl","groessen":{"Classic":7.9,"Large":8.9},"farbe":"#6b2c74","schritte":[{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":1,"inklusive":1,"aufpreis":1,"optionen":["Choco","Haselnuss","Pistazie","White Chocolate"]},{"titel":"Layer","hinweis":"zwei inklusive, jeder weitere +1,00 €","min":2,"inklusive":2,"aufpreis":1,"optionen":["Granola","Granola Choco","Peanut Butter","Chia-Pudding","Smashed Mango","Lotus Crumbles","Oreo Crumbles"]},{"titel":"Toppings","hinweis":"drei inklusive, jedes weitere +1,00 €","min":3,"inklusive":3,"aufpreis":1,"optionen":["Banane","Blaubeere","Erdbeere","Kiwi","Erdnüsse","Kakaonibs","Kokoschips"]}]}};</script>
+    <h2 class="category-title" id="getraenke">Erfrischendes</h2>
+    <p class="category-note">Alle Getränke 2,90 €.</p>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Coca-Cola Original</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Coca-Cola Zero</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Proviant Bio Limonade Orange</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Proviant Bio Limonade Rhabarber</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Proviant Bio Limonade Limette &amp; Minze</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Proviant Bio Schorle Kirsche &amp; Granatapfel</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Richard's Sun Ice Tea Peach</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Richard's Sun Ice Tea Lemon</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Richard's Sun Ice Tea Pomegranate</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Richard's Sun Ice Tea Blueberry</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Gesaris Mineralwasser Classic</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Gesaris Mineralwasser Still</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Gesaris Apfelschorle</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <div class="product-item" onclick="openQuickAdd(this)" style="cursor: pointer;">
+        <div class="product-info"><h3>Pott's Cola Mix</h3></div>
+        <div class="price">2,90 €</div>
+    </div>
+    <script>window.BAUKASTEN = {"B1":{"name":"Bowl","preis":13.9,"menue":{"aufpreis":2,"getraenke":["Coca-Cola Original","Coca-Cola Zero","Proviant Bio Limonade Orange","Proviant Bio Limonade Rhabarber","Proviant Bio Limonade Limette & Minze","Proviant Bio Schorle Kirsche & Granatapfel","Richard's Sun Ice Tea Peach","Richard's Sun Ice Tea Lemon","Richard's Sun Ice Tea Pomegranate","Richard's Sun Ice Tea Blueberry","Gesaris Mineralwasser Classic","Gesaris Mineralwasser Still","Gesaris Apfelschorle","Pott's Cola Mix"]},"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Basmati-Reis","Frischer Blattsalatmix","Mixed-Bowl (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 5 inklusive, jede weitere +1,00 €","min":0,"inklusive":5,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Teriyaki Tofu","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Creamie Chicken","Curry Chicken","Teriyaki Chicken","Crispy Chicken","Chicken Bites"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"W1":{"name":"Wrap","preis":9.9,"menue":{"aufpreis":2,"getraenke":["Coca-Cola Original","Coca-Cola Zero","Proviant Bio Limonade Orange","Proviant Bio Limonade Rhabarber","Proviant Bio Limonade Limette & Minze","Proviant Bio Schorle Kirsche & Granatapfel","Richard's Sun Ice Tea Peach","Richard's Sun Ice Tea Lemon","Richard's Sun Ice Tea Pomegranate","Richard's Sun Ice Tea Blueberry","Gesaris Mineralwasser Classic","Gesaris Mineralwasser Still","Gesaris Apfelschorle","Pott's Cola Mix"]},"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Frischer Blattsalatmix","Krautsalat","Mixed-Wrap (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 3 inklusive, jede weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Crispy Chicken","Chicken Stripes"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"A1":{"name":"Açaí-Bowl","groessen":{"Classic":8.9,"Large":9.9},"farbe":"#6b2c74","nurAbholung":true,"schritte":[{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":1,"inklusive":1,"aufpreis":1,"optionen":["Choco","Haselnuss","Pistazie","White Chocolate"]},{"titel":"Layer","hinweis":"zwei inklusive, jeder weitere +1,00 €","min":2,"inklusive":2,"aufpreis":1,"optionen":["Granola","Granola Choco","Peanut Butter","Chia-Pudding","Smashed Mango","Lotus Crumbles","Oreo Crumbles"]},{"titel":"Toppings","hinweis":"drei inklusive, jedes weitere +1,00 €","min":3,"inklusive":3,"aufpreis":1,"optionen":["Banane","Blaubeere","Erdbeere","Kiwi","Erdnüsse","Kakaonibs","Kokoschips"]}]}};</script>
     <!-- KARTE:ENDE -->
 
     </div>
@@ -1243,14 +1356,20 @@
 
         <h3 class="mobile-only-title" style="display:none; color:var(--odis-akzent); margin-top:0;">Mein Warenkorb</h3>
 
-        <!-- Nur Abholung: Odi’s Bowl liefert nicht -->
-        <div class="btn-toggle" style="display: flex; gap: 8px; margin-bottom: 15px;">
-            <div id="option-pickup"
+        <!-- Lieferung / Abholung (Lieferung nach Fahrstrecke, siehe liefergebiet.js) -->
+        <div class="btn-toggle" style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <div id="option-delivery" role="button" tabindex="0" aria-pressed="false"
+                 onclick="selectOption('delivery')"
+                 style="flex: 1; padding: 10px; font-size: 13px; border-radius: 8px; cursor: pointer; border: 1px solid var(--odis-akzent); background: var(--odis-flaeche); color: var(--odis-akzent); text-align: center; font-weight: bold; transition: all 0.3s;">
+                Lieferung
+            </div>
+            <div id="option-pickup" role="button" tabindex="0" aria-pressed="true"
                  onclick="selectOption('pickup')"
                  style="flex: 1; padding: 10px; font-size: 13px; border-radius: 8px; cursor: pointer; border: 1px solid var(--odis-akzent); background: var(--odis-akzent); color: var(--odis-auf-akzent); text-align: center; font-weight: bold; transition: all 0.3s;">
-                Nur Abholung
+                Abholung
             </div>
         </div>
+        <div id="liefer-hinweis-seite" style="display:none; margin-bottom:12px; font-size:12px; line-height:1.5; color:var(--odis-schrift-leise);"></div>
 
         <div id="cart-items" style="margin-bottom: 15px; font-size: 13px; color: var(--odis-schrift); max-height: 50vh; overflow-y: auto;">
             <div style="text-align:center; color:var(--odis-schrift-leise); padding:20px;">Warenkorb leer</div>
@@ -1280,11 +1399,9 @@ function closeMobileCartOverlay() {
     document.body.style.overflow = '';
 }
 
-// Odi’s Bowl liefert nicht: jede Auswahl endet bei Abholung.
 function setCartOption(option, silent) {
-    currentSelection = 'pickup';
-    const btnPick = document.getElementById('cart-btn-pickup');
-    if (btnPick) { btnPick.style.background = '#0a1e47'; btnPick.style.color = 'white'; }
+    currentSelection = option === 'delivery' ? 'delivery' : 'pickup';
+    zeigeAuswahl();
     if (!silent) updateCartSummary();
 }
 
@@ -1295,11 +1412,18 @@ function updateCartSummary() {
     // Die Vorlage zeigte hier "Gesamt" ohne Servicegebuehr - der Gast sah an der Kasse 0,99 € mehr.
     const sg = (typeof SERVICE_FEE === 'number') ? SERVICE_FEE : 0;
     const euro = n => n.toFixed(2).replace('.', ',') + ' €';
-    box.innerHTML = `Warenwert: <b>${euro(summeWaren)}</b><br>Servicegebühr: ${euro(sg)}<br><span style="color:var(--odis-akzent); font-weight:bold; font-size:14px;">Gesamt: ${euro(summeWaren + sg)}</span>`;
+    let html = `Warenwert: <b>${euro(summeWaren)}</b><br>`;
+    if (currentSelection === 'delivery') html += `Liefergebühr: ${lieferSpanne()} je nach Entfernung<br>`;
+    html += `Servicegebühr: ${euro(sg)}<br><span style="color:var(--odis-akzent); font-weight:bold; font-size:14px;">Gesamt: ${currentSelection === 'delivery' ? 'ab ' + euro(summeWaren + sg + lieferGebuehrMin()) : euro(summeWaren + sg)}</span>`;
+    const hindernis = lieferHindernis();
+    if (hindernis) html += `<br><span style="color:var(--odis-rot); font-size:12px; font-weight:bold;">⚠️ ${hindernis}</span>`;
+    box.innerHTML = html;
 }
 
 function goToCheckoutFromCart() {
     if (warenkorb.length === 0) return;
+    const hindernis = lieferHindernis();
+    if (hindernis) { alert(hindernis); return; }
     closeMobileCartOverlay();
     openUpsellModal();
 }
@@ -1353,7 +1477,8 @@ function toggleMobileCart() {}
 function renderWarenkorb() {
     const itemsContainer = document.getElementById('cart-items');
     const checkoutBtn = document.getElementById('checkout-btn');
-    
+    if (typeof zeigeAuswahl === 'function') zeigeAuswahl();   // Lieferhinweis (Açaí, Mindestwert)
+
     if (!itemsContainer) return;
 
     if (warenkorb.length === 0) {
@@ -1421,19 +1546,75 @@ function renderWarenkorb() {
 </script>
 
 <script>
-// Nur Abholung: Odi’s Bowl liefert nicht. Abholung ist voreingestellt und
-// die einzige Auswahl; 'delivery' wird nirgends mehr gesetzt.
+// Lieferung oder Abholung. Abholung ist voreingestellt: Açaí gibt es nur dort,
+// und geliefert wird erst ab 30 € Warenwert (Abed, 22.10.2026).
 let currentSelection = 'pickup';
 
-function selectOption(option) {
-    currentSelection = 'pickup';
-    const pickupBtn = document.getElementById('option-pickup');
-    if (pickupBtn) {
-        pickupBtn.style.background = '#0a1e47';
-        pickupBtn.style.color = 'white';
-        pickupBtn.style.borderColor = '#0a1e47';
+// Liefergebiet nach Fahrstrecke - dieselben Daten und dieselbe Rechnung wie im
+// Server (liefergebiet.js + liefergebiet.json). Bis die Datei geladen ist,
+// laesst sich nicht liefern; auf file:// laedt sie gar nicht.
+let LIEFERGEBIET = null;
+fetch('liefergebiet.json')
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(d => {
+        LIEFERGEBIET = Liefergebiet.erstelle(d);
+        const liste = document.getElementById('strassen-liste');
+        if (liste) liste.innerHTML = LIEFERGEBIET.vorschlaege.map(k => `<option value="${k}"></option>`).join('');
+        zeigeAuswahl();
+        if (typeof updateCartSummary === 'function') updateCartSummary();
+    })
+    .catch(e => console.error('Liefergebiet nicht geladen:', e.message));
+
+// Artikel mit nur_abholung in menu.json (Açaí). Der Warenkorb fuehrt sie als
+// "Açaí-Bowl Classic" usw., deshalb Vergleich per Namensanfang - wie im Server.
+const NUR_ABHOLUNG_NAMEN = Object.values(window.BAUKASTEN || {}).filter(a => a.nurAbholung).map(a => a.name);
+const nurAbholung = name => NUR_ABHOLUNG_NAMEN.some(n => String(name).startsWith(n));
+const euroText = n => n.toFixed(2).replace('.', ',') + ' €';
+const lieferMindestwert = () => LIEFERGEBIET ? LIEFERGEBIET.mindestwert : 30;
+const lieferGebuehrMin = () => LIEFERGEBIET ? LIEFERGEBIET.zonen[0].gebuehr : 3;
+function lieferSpanne() {
+    if (!LIEFERGEBIET) return '3,00–5,00 €';
+    const z = LIEFERGEBIET.zonen;
+    return euroText(z[0].gebuehr).replace(' €', '') + '–' + euroText(z[z.length - 1].gebuehr);
+}
+
+// Was einer Lieferung im Weg steht, als Satz fuer den Gast - oder ''.
+function lieferHindernis() {
+    if (currentSelection !== 'delivery') return '';
+    if (warenkorb.some(i => nurAbholung(i.name))) {
+        return 'Açaí-Bowls gibt es nur zur Abholung. Bitte wähle Abholung oder nimm die Açaí-Bowl aus dem Warenkorb.';
+    }
+    const summe = warenkorb.reduce((a, b) => a + b.preis, 0);
+    if (warenkorb.length && summe + 0.005 < lieferMindestwert()) {
+        return `Noch ${euroText(lieferMindestwert() - summe)} bis zum Mindestbestellwert von ${euroText(lieferMindestwert())} für Lieferung.`;
+    }
+    return '';
+}
+
+function zeigeAuswahl() {
+    [['option-delivery', 'delivery'], ['option-pickup', 'pickup'],
+     ['cart-btn-delivery', 'delivery'], ['cart-btn-pickup', 'pickup']].forEach(([id, wert]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const aktiv = currentSelection === wert;
+        el.style.background = aktiv ? 'var(--odis-akzent)' : 'var(--odis-flaeche)';
+        el.style.color = aktiv ? 'var(--odis-auf-akzent)' : 'var(--odis-akzent)';
+        el.setAttribute('aria-pressed', String(aktiv));
+    });
+    const hinweis = document.getElementById('liefer-hinweis-seite');
+    if (hinweis) {
+        const hindernis = lieferHindernis();
+        hinweis.style.display = currentSelection === 'delivery' ? 'block' : 'none';
+        hinweis.innerHTML = `Lieferung ab ${euroText(lieferMindestwert())} Warenwert, Liefergebühr ${lieferSpanne()} je nach Entfernung (bis 5 km).`
+            + (hindernis ? `<br><b style="color:var(--odis-rot);">⚠️ ${hindernis}</b>` : '');
     }
 }
+
+function selectOption(option) {
+    currentSelection = option === 'delivery' ? 'delivery' : 'pickup';
+    zeigeAuswahl();
+}
+document.addEventListener('DOMContentLoaded', zeigeAuswahl);
 </script>
 
 
@@ -1730,19 +1911,28 @@ function toggleMobileMenu() {
         </div>
         <input type="tel" id="c-telefon" placeholder="Telefonnummer *" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid var(--odis-rahmen); border-radius:8px; box-sizing:border-box;">
         <input type="email" id="c-email" placeholder="E-Mail (für Bestellbestätigung)" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid var(--odis-rahmen); border-radius:8px; box-sizing:border-box;">
-        <!-- Keine Adressfelder und keine Lieferorte: Odi’s Bowl bietet nur Abholung an -->
+        <!-- Nur bei Lieferung: Strasse + Hausnummer, die Gebuehr kommt aus liefergebiet.json -->
+        <div id="address-fields" style="display:none;">
+            <div style="display:flex; gap:10px; margin-bottom:8px;">
+                <input type="text" id="c-strasse" list="strassen-liste" placeholder="Straße" autocomplete="off" oninput="updateSummary()"
+                       style="flex:3; min-width:0; padding:12px; border:1px solid var(--odis-rahmen); border-radius:8px; box-sizing:border-box;">
+                <input type="text" id="c-hausnummer" placeholder="Nr." autocomplete="off" oninput="updateSummary()"
+                       style="flex:1; min-width:0; padding:12px; border:1px solid var(--odis-rahmen); border-radius:8px; box-sizing:border-box;">
+            </div>
+            <datalist id="strassen-liste"></datalist>
+            <div id="liefer-info" aria-live="polite" style="font-size:13px; line-height:1.5; margin-bottom:12px; color:var(--odis-schrift-leise);"></div>
+        </div>
 
         <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">Zahlungsmethode:</div>
         <select id="c-zahlung" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid var(--odis-rahmen); border-radius:8px; background: var(--odis-flaeche); cursor:pointer;" onchange="togglePaymentLogos()">
             <option value="stripe">💳 Online bezahlen (Stripe)</option>
-            <option value="paypal">💙 Online bezahlen (PayPal)</option>
-            <option value="bar">Barzahlung bei Abholung</option>
+            <option value="bar">💵 Barzahlung bei Übergabe</option>
         </select>
 
         <!-- Tritt an die Stelle des Auswahlfelds, solange nur bar bezahlt wird -->
-        <div id="zahlung-hinweis" style="display:none;width:100%;padding:12px;margin-bottom:10px;
+        <div id="zahlung-hinweis" style="display:none;width:100%;box-sizing:border-box;padding:12px;margin-bottom:10px;
              border:1px solid var(--odis-rahmen);border-radius:8px;background:var(--odis-flaeche);font-size:14px;">
-          💵 Barzahlung bei Abholung
+          💵 Barzahlung bei Übergabe
         </div>
 
         <!-- Payment Logos (Stripe) -->
@@ -1811,20 +2001,25 @@ function togglePaymentLogos() {
   if (ppLogo) ppLogo.style.display = zahlung.value === 'paypal' ? 'flex' : 'none';
 }
 
-// ── Online-Zahlung abgeschaltet (Odi’s Bowl) ───────────
-// Auf true setzen, um Stripe und PayPal wieder anzubieten. Die Backend-
-// Endpunkte /api/create-stripe-checkout, /api/create-paypal-order und die
-// beiden Webhooks bleiben bestehen, ebenso die Umgebungsvariablen in Coolify.
+// ── Online-Zahlung (Odi’s Bowl: Stripe, kein PayPal) ───────────
+// Der Server meldet in /api/config, ob Stripe fertig eingerichtet ist
+// (Schluessel, Webhook-Geheimnis und Connect-Konto in Coolify). Bis dahin gibt
+// es nur Barzahlung - ein halb eingerichtetes Stripe fiele sonst erst beim
+// Bezahlen mit einer Fehlermeldung auf.
 window.ONLINE_ZAHLUNG_AKTIV = false;
 
 function applyZahlungsarten() {
   var sel = document.getElementById('c-zahlung');
   if (!sel) return;
-  if (window.ONLINE_ZAHLUNG_AKTIV) { togglePaymentLogos(); return; }
-
-  Array.prototype.slice.call(sel.options).forEach(function(o) {
-    if (o.value !== 'bar') o.remove();
-  });
+  var stripe = sel.querySelector('option[value="stripe"]');
+  if (stripe) stripe.disabled = !window.ONLINE_ZAHLUNG_AKTIV;
+  if (window.ONLINE_ZAHLUNG_AKTIV) {
+    sel.style.display = '';
+    var h = document.getElementById('zahlung-hinweis');
+    if (h) h.style.display = 'none';
+    togglePaymentLogos();
+    return;
+  }
   sel.value = 'bar';
 
   // Ein Auswahlfeld mit einem einzigen Eintrag wirkt kaputt – stattdessen
@@ -1834,9 +2029,19 @@ function applyZahlungsarten() {
   var hint = document.getElementById('zahlung-hinweis');
   if (hint) hint.style.display = 'block';
 
-  togglePaymentLogos();   // blendet beide Logo-Leisten aus
+  togglePaymentLogos();   // blendet die Logo-Leiste aus
 }
-document.addEventListener('DOMContentLoaded', applyZahlungsarten);
+document.addEventListener('DOMContentLoaded', function() {
+  applyZahlungsarten();
+  if (!window.FLUEVATE_BACKEND) return;
+  fetch(window.FLUEVATE_BACKEND + '/api/config')
+    .then(function(r) { return r.json(); })
+    .then(function(c) {
+      window.ONLINE_ZAHLUNG_AKTIV = c.onlineZahlung === true;
+      applyZahlungsarten();
+    })
+    .catch(function() { /* bleibt bei Barzahlung */ });
+});
 
 function updateBestellBtn() {
   var agb  = document.getElementById('cb-agb');
@@ -1856,8 +2061,8 @@ function updateBestellBtn() {
 </script>
 
 <script>
-// Keine Lieferorte: Odi’s Bowl bietet nur Abholung an (Server lehnt Lieferung ab).
-const AREA_CONFIG = {};
+// Liefergebuehr nach Fahrstrecke statt nach Orten: LIEFERGEBIET (oben) schlaegt
+// Strasse + Hausnummer nach.
 const SERVICE_FEE = 0.99;
 
 document.getElementById('checkout-btn').onclick = function() {
@@ -1865,6 +2070,8 @@ document.getElementById('checkout-btn').onclick = function() {
         alert("Warenkorb ist leer!");
         return;
     }
+    const hindernis = lieferHindernis();
+    if (hindernis) { alert(hindernis); return; }
     openUpsellModal();
 };
 
@@ -1874,10 +2081,34 @@ function openCheckoutModal() {
 
     const modal = document.getElementById('checkoutModal');
     const modalTitle = document.getElementById('modal-title');
+    const lieferung = currentSelection === 'delivery';
 
     modal.style.display = 'flex';
-    modalTitle.innerText = "Kasse: Abholung";
+    modalTitle.innerText = lieferung ? "Kasse: Lieferung" : "Kasse: Abholung";
+    document.getElementById('address-fields').style.display = lieferung ? 'block' : 'none';
     updateSummary();
+}
+
+// Die eingegebene Lieferadresse, nachgeschlagen - oder null bei Abholung.
+function lieferAdresse() {
+    if (currentSelection !== 'delivery') return null;
+    if (!LIEFERGEBIET) return { status: 'nicht-geladen' };
+    return LIEFERGEBIET.finde(document.getElementById('c-strasse').value,
+                              document.getElementById('c-hausnummer').value);
+}
+
+function lieferAdressText(t) {
+    const tel = ' Ruf uns gern an: 0 2522 9373711.';
+    switch (t.status) {
+        case 'ok': return `📍 ${t.strasse} ${t.nr}, ${t.ort} · ${(t.meter / 1000).toFixed(1).replace('.', ',')} km Fahrstrecke · Liefergebühr ${euroText(t.gebuehr)}`;
+        case 'strasse-fehlt': return 'Bitte gib deine Straße ein.';
+        case 'nr-fehlt': return 'Bitte gib deine Hausnummer ein.';
+        case 'mehrdeutig': return 'Diese Straße gibt es in mehreren Orten – bitte wähle den Ort aus der Liste.';
+        case 'strasse-unbekannt': return 'Diese Straße liegt nicht in unserem Liefergebiet (bis 5 km Fahrstrecke).' + tel;
+        case 'nr-unbekannt': return 'Diese Hausnummer kennen wir nicht.' + tel;
+        case 'zu-weit': return `${t.strasse} ${t.nr} liegt ${(t.meter / 1000).toFixed(1).replace('.', ',')} km entfernt – wir liefern bis 5 km Fahrstrecke.` + tel;
+        default: return 'Das Liefergebiet konnte nicht geladen werden. Bitte lade die Seite neu.';
+    }
 }
 
 function closeCheckoutModal() {
@@ -1895,13 +2126,25 @@ function updateSummary() {
 
     let html = '';
 
-    // Nur Abholung: keine Liefergebühr, kein Mindestbestellwert, kein Rabatt
-    const gesamt = summeWaren + SERVICE_FEE;
+    // Lieferung: Gebuehr erst, wenn die Adresse im Liefergebiet liegt. Kein Rabatt.
+    const adresse = lieferAdresse();
+    const fee = adresse && adresse.status === 'ok' ? adresse.gebuehr : 0;
+    const info = document.getElementById('liefer-info');
+    if (info) {
+        const ok = adresse && adresse.status === 'ok';
+        const leer = adresse && (adresse.status === 'strasse-fehlt' || adresse.status === 'nr-fehlt');
+        info.textContent = adresse ? lieferAdressText(adresse) : '';
+        info.style.color = ok ? 'var(--odis-gruen)' : leer ? 'var(--odis-schrift-leise)' : 'var(--odis-rot)';
+    }
+    const gesamt = summeWaren + fee + SERVICE_FEE;
     html += row('Speisen', summeWaren.toFixed(2).replace('.', ',') + ' €', true);
+    if (adresse) html += row('Liefergebühr', fee ? euroText(fee) : 'nach Adresse', true);
     html += row('Servicegebühr', SERVICE_FEE.toFixed(2).replace('.', ',') + ' €', true);
     html += '<div style="border-top:1px solid var(--odis-rahmen);margin:6px 0;"></div>';
     html += `<div style="display:flex;justify-content:space-between;font-weight:bold;font-size:15px;color:var(--odis-akzent);">
         <span>Gesamt</span><span>${gesamt.toFixed(2).replace('.', ',')} €</span></div>`;
+    const hindernis = lieferHindernis();
+    if (hindernis) html += `<div style="color:var(--odis-rot);font-size:12px;font-weight:bold;margin-top:8px;">⚠️ ${hindernis}</div>`;
 
     summary.innerHTML = html;
 }
@@ -2000,11 +2243,27 @@ async function processOrder() {
         return;
     }
 
-    // Nur Abholung: keine Lieferadresse, keine Liefergebühr, kein Rabatt
-    const address = "Abholung";
-    const fee = 0;
+    // Lieferung: Adresse muss im Liefergebiet liegen, die Gebuehr rechnet der
+    // Server noch einmal selbst nach. Kein Rabatt.
+    let address = "Abholung";
+    let fee = 0;
+    let kunde = { street: '', house: '', city: '' };
+    if (currentSelection === 'delivery') {
+        const hindernis = lieferHindernis();
+        if (hindernis) { alert(hindernis); return; }
+        const t = lieferAdresse();
+        if (!t || t.status !== 'ok') {
+            alert(lieferAdressText(t || {}));
+            document.getElementById(t && t.status === 'nr-fehlt' ? 'c-hausnummer' : 'c-strasse').focus();
+            return;
+        }
+        fee = t.gebuehr;
+        address = `${t.strasse} ${t.nr}, ${t.ort}`;
+        kunde = { street: t.strasse, house: t.nr, city: t.ort };
+    }
+    const modus = currentSelection === 'delivery' ? 'lieferung' : 'abholung';
     const rabatt = 0;
-    const finalTotal = summeWaren + SERVICE_FEE;
+    const finalTotal = summeWaren + fee + SERVICE_FEE;
     const now = new Date();
     const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
     const timePart = Date.now().toString().slice(-4);
@@ -2049,7 +2308,7 @@ async function processOrder() {
                     deliveryFee: fee,
                     serviceFee:  SERVICE_FEE,
                     total:       finalTotal,
-                    mode:        'abholung',
+                    mode:        modus,
                     note:        notiz,
                     coupon:      null,
                     customer: {
@@ -2057,9 +2316,7 @@ async function processOrder() {
                         last:   nachname,
                         email:  email,
                         phone:  telefon,
-                        street: '',
-                        house:  '',
-                        city:   ''
+                        ...kunde
                     }
                 })
             });
@@ -2089,7 +2346,7 @@ async function processOrder() {
 
     // Barzahlung: ans Backend schicken + lokal speichern
     try {
-        const barMode = 'abholung';   // Odi’s Bowl liefert nicht
+        const barMode = modus;
         const barResp = await fetch(BACKEND_URL + '/api/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -2100,7 +2357,7 @@ async function processOrder() {
                 payment: 'bar',
                 note: notiz,
                 coupon: null,
-                customer: { first: vorname, last: nachname, email: email, phone: telefon, street: '', house: '', city: '' }
+                customer: { first: vorname, last: nachname, email: email, phone: telefon, ...kunde }
             })
         });
         if (!barResp.ok) {
@@ -3420,7 +3677,7 @@ LEGAL.datenschutz = {
 
 LEGAL.agb = {
   title: "AGB &amp; Widerrufsbelehrung",
-  text:  "<h3 style='color:var(--odis-akzent);margin:0 0 10px;overflow-wrap:anywhere'>Allgemeine Geschäftsbedingungen</h3><p>für den Online-Shop unter der URL</p><p><a style='color:var(--odis-akzent);word-break:break-word' href='https://odis-oelde.com/' target='_blank' rel='noopener noreferrer'>https://odis-oelde.com/</a></p><p>betrieben von</p><p>Ramazan Özalp / Odi’s Bowl<br>Bahnhofstr. 11<br>59302 Oelde<br>E-Mail:<br><a style='color:var(--odis-akzent);word-break:break-word' href='mailto:info@odis-oelde.de'>info@odis-oelde.de</a><br>Telefonnummer: 0 2522 9373711</p><p>- im Folgenden: Anbieter -</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>1. Geltungsbereich</h3><p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten nach ihrer Einbeziehung für alle Vertragsschlüsse über den Erwerb von Waren, Dienstleistungen oder sonstigen Gütern (nachfolgend „Waren“) im Online-Shop unter der o.g. URL in ihrer zum Zeitpunkt des Vertragsschlusses gültigen Fassung. Diese AGB gelten ausschließlich. Abweichende AGB des Kunden werden nicht Vertragsbestandteil, es sei denn, der Anbieter stimmt diesen ausdrücklich zu.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>2. Vertragsschluss</h3><p>2.1 Die Angebote im Online-Shop stellen eine unverbindliche Aufforderung des Anbieters an die Online-Shop-Besucher zur Abgabe eines Angebots zum Erwerb der im Shop angebotenen Waren dar.</p><p>2.2 Die Bestellung der Ware(n) erfolgt über das Online-Bestellformular des Anbieters. Nach der Auswahl der gewünschten Ware(n), der Eingabe aller abgefragten Pflichtinformationen und dem Durchlaufen aller anderen verpflichtenden Schritte im Bestellprozess, können die ausgewählten Waren durch das Betätigen des Bestell-Buttons am Ende der Checkout-Seite bestellt werden (Bestellung). Durch die Bestellung gibt der Kunde ein verbindliches Vertragsangebot zum Erwerb der ausgewählten Ware(n) ab. Der Vertragsschluss erfolgt, indem der Anbieter das Angebot des Kunden annimmt. Die Annahme erfolgt, indem der Anbieter den Vertragsschluss in Schrift- oder Textform (z. B. per E-Mail) bestätigt (Auftragsbestätigung) und diese Auftragsbestätigung dem Kunden zugeht oder indem er dem Kunden die bestellte Ware bei Abholung übergibt oder indem er den Kunden zur Zahlung auffordert (z. B. Rechnung oder Kreditkartenzahlung im Bestellprozess) und die Zahlungsaufforderung dem Kunden zugeht; maßgeblich für den Zeitpunkt des Vertragsschlusses ist dabei der Zeitpunkt, in dem eine der im ersten Halbsatz genannten Alternativen erstmalig eintritt.</p><p>2.3 Vor verbindlicher Abgabe der Bestellung über das Online-Bestellformular des Anbieters kann der Kunde seine Eingaben überprüfen und jederzeit über die üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehenden Eingabefunktionen korrigieren. Darüber hinaus werden alle Eingaben vor der verbindlichen Abgabe der Bestellung noch einmal in einem Bestätigungsfenster angezeigt und können auch dort mittels der üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehende Eingabefunktionen korrigiert werden.</p><p>2.4 Der Anbieter wird den Vertragstext nach dem Vertragsschluss speichern und dem Kunden in Textform (z. B. per E-Mail) übermitteln. Eine darüberhinausgehende Zugänglichmachung des Vertragstexts durch den Anbieter erfolgt nicht. Sofern der Einkauf über ein Kundenkonto im Online-Shop erfolgt ist, kann der Kunde seine Bestellungen und die damit verbundenen Bestelldaten dort einsehen.</p><p>2.5 Für den Vertragsschluss stehen folgende Sprachen zur Verfügung: Deutsch</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>3. Widerrufsrecht für Verbraucher</h3><p>Verbrauchern steht bei außerhalb von Geschäftsräumen geschlossenen Verträgen und bei Fernabsatzverträgen grundsätzlich ein Widerrufsrecht zu. Verbraucher ist jede natürliche Person, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder ihrer gewerblichen noch ihrer selbstständigen beruflichen Tätigkeit zugerechnet werden können. Details sind der Widerrufsbelehrung zu entnehmen, die jedem Verbraucher spätestens unmittelbar vor Vertragsschluss zur Verfügung gestellt wird.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>4. Zahlung, Verzug</h3><p>4.1 Es gelten die zum Zeitpunkt der Bestellung im Online-Shop aufgeführten Preise. Alle Preise gelten inklusive der gesetzlichen Mehrwertsteuer; hinzu kommt die Servicegebühr nach Ziffer 12.1. Über die zur Verfügung stehenden Zahlungsmöglichkeiten wird der Kunde im Online-Shop des Anbieters informiert.</p><p>4.2 Die Zahlung erfolgt ausschließlich in bar bei Abholung der Ware im Restaurant. Eine Zahlung per Karte, Online-Zahlungsdienst oder auf andere Weise wird nicht angeboten.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>5. Eigentumsvorbehalt</h3><p>Die gekaufte Ware bleibt bis zur vollständigen Bezahlung des Kaufpreises Eigentum des Anbieters.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>6. Abholung und Selbstbelieferungsvorbehalt</h3><p>6.1 Eine Lieferung findet nicht statt. Die bestellte Ware wird im Restaurant des Anbieters zur Abholung bereitgestellt (siehe Ziffer 12.2).</p><p>6.2 Wenn der Anbieter die bestellte Ware nicht bereitstellen kann, weil er ohne eigenes Verschulden selbst nicht beliefert wurde, obwohl er rechtzeitig mit einem zuverlässigen Lieferanten ein kongruentes Deckungsgeschäft abgeschlossen hat, wird der Anbieter von seiner Leistungspflicht frei und kann vom Vertrag zurücktreten. Der Anbieter ist verpflichtet, den Kunden unverzüglich über die Unmöglichkeit der Leistungserfüllung in Kenntnis zu setzen. Bereits erbrachte Gegenleistungen des Vertragspartners werden diesem unverzüglich erstattet. Zwingendes Verbraucherrecht bleibt vom vorliegenden Absatz unberührt.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>7. Gewährleistung</h3><p>Es gelten die Vorschriften der gesetzlichen Mängelgewährleistung.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>8. Haftung und Freistellung</h3><p>8.1 Der Anbieter haftet unbeschränkt:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit, die auf einer vorsätzlichen oder fahrlässigen Pflichtverletzung des Anbieters oder einer vorsätzlichen oder fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>für Schäden, die auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung des Anbieters oder auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>aufgrund eines Garantieversprechens, soweit diesbezüglich keine andere Regelung getroffen wurde;</li><li>aufgrund zwingender Haftung (z. B. nach dem Produkthaftungsgesetz)</li></ul><p>8.2 Wenn der Anbieter fahrlässig eine wesentliche Vertragspflicht verletzt, ist dessen Haftung auf den vertragstypischen, vorhersehbaren Schaden beschränkt, sofern nicht gemäß vorstehendem Absatz unbeschränkt gehaftet wird. Wesentliche Vertragspflichten sind Pflichten, die der Vertrag dem Anbieter nach seinem Inhalt zur Erreichung des Vertragszwecks auferlegt, deren Erfüllung die ordnungsgemäße Durchführung des Vertrags überhaupt erst ermöglicht und auf deren Einhaltung der Kunde regelmäßig vertrauen darf.</p><p>8.3 Im Übrigen ist eine Haftung des Anbieters sowie die Haftung seiner Erfüllungsgehilfen und gesetzlichen Vertreter ausgeschlossen.</p><p>8.4 Der Kunde stellt den Anbieter von jeglichen Ansprüchen Dritter – einschließlich der Kosten für die Rechtsverteidigung in ihrer gesetzlichen Höhe – frei, die gegen den Anbieter aufgrund von rechts- oder vertragswidrigen Handlungen des Kunden geltend gemacht werden.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>9. Datenschutz</h3><p>Der Anbieter behandelt die personenbezogenen Daten seiner Kunden vertraulich und im Einklang mit den gesetzlichen Datenschutzvorschriften. Näheres entnehmen Sie der Datenschutzerklärung des Anbieters.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>10. Schlussbestimmungen</h3><p>10.1 Anwendbar ist das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts, soweit diese Rechtswahl nicht dazu führt, dass ein Verbraucher mit gewöhnlichem Aufenthalt in der EU hierdurch zwingenden gesetzlichen Bestimmungen des Rechts seines Aufenthaltsstaates entzogen wird.</p><p>10.2 Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist das Gericht am Sitz des Anbieters zuständig, sofern nicht für die Streitigkeit ein ausschließlicher Gerichtsstand begründet ist. Dies gilt auch, wenn der Kunde keinen Wohnsitz innerhalb der Europäischen Union hat. Der Sitz unseres Unternehmens ist der Überschrift dieser AGB zu entnehmen.</p><p>10.3 Soweit eine Bestimmung dieses Vertrages ungültig oder undurchsetzbar ist oder wird, bleiben die übrigen Bestimmungen dieses Vertrages hiervon unberührt.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>11. Informationen zur Online-Streitbeilegung / Verbraucherschlichtung</h3><p>Der Anbieter ist nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><p>Unsere E-Mail-Adresse entnehmen Sie der Überschrift dieser AGB.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>12. Ergänzende Bedingungen der Odi’s Bowl</h3><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.1 Preise und Servicegebühr</h4><p>Alle Preise inkl. MwSt. (7 % auf Speisen, 19 % auf Getränke). Für die Nutzung der Online-Bestellplattform wird je Bestellung über diese Website eine <strong>Servicegebühr von 0,99&nbsp;€</strong> erhoben (gem. § 312a BGB). Sie wird vor Abgabe der Bestellung im Warenkorb gesondert ausgewiesen.</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.2 Nur Abholung</h4><p>Bestellungen über diese Website werden ausschließlich zur Abholung angenommen, eine Lieferung findet nicht statt. Die bestellte Ware ist im Restaurant Odi’s Bowl, Bahnhofstr. 11, 59302 Oelde, abzuholen. Angegebene Abholzeiten sind Schätzwerte und nicht verbindlich.</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.3 Zahlung</h4><p>Die Zahlung erfolgt ausschließlich in bar bei Abholung (siehe Ziffer 4.2).</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.4 Kein Widerrufsrecht bei frisch zubereiteten Speisen</h4><p>Gemäß § 312g Abs. 2 Nr. 2 BGB besteht kein Widerrufsrecht, da alle Speisen frisch zubereitet werden.</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.5 Allergene</h4><p>Eine Kennzeichnung der Allergene und Zusatzstoffe je Gericht liegt online noch nicht vor. Auskunft erhalten Sie im Restaurant oder telefonisch unter 0 2522 9373711. Trotz größter Sorgfalt können Kreuzkontaminationen nicht ausgeschlossen werden.</p>"
+  text:  "<h3 style='color:var(--odis-akzent);margin:0 0 10px;overflow-wrap:anywhere'>Allgemeine Geschäftsbedingungen</h3><p>für den Online-Shop unter der URL</p><p><a style='color:var(--odis-akzent);word-break:break-word' href='https://odis-oelde.com/' target='_blank' rel='noopener noreferrer'>https://odis-oelde.com/</a></p><p>betrieben von</p><p>Ramazan Özalp / Odi’s Bowl<br>Bahnhofstr. 11<br>59302 Oelde<br>E-Mail:<br><a style='color:var(--odis-akzent);word-break:break-word' href='mailto:info@odis-oelde.de'>info@odis-oelde.de</a><br>Telefonnummer: 0 2522 9373711</p><p>- im Folgenden: Anbieter -</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>1. Geltungsbereich</h3><p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten nach ihrer Einbeziehung für alle Vertragsschlüsse über den Erwerb von Waren, Dienstleistungen oder sonstigen Gütern (nachfolgend „Waren“) im Online-Shop unter der o.g. URL in ihrer zum Zeitpunkt des Vertragsschlusses gültigen Fassung. Diese AGB gelten ausschließlich. Abweichende AGB des Kunden werden nicht Vertragsbestandteil, es sei denn, der Anbieter stimmt diesen ausdrücklich zu.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>2. Vertragsschluss</h3><p>2.1 Die Angebote im Online-Shop stellen eine unverbindliche Aufforderung des Anbieters an die Online-Shop-Besucher zur Abgabe eines Angebots zum Erwerb der im Shop angebotenen Waren dar.</p><p>2.2 Die Bestellung der Ware(n) erfolgt über das Online-Bestellformular des Anbieters. Nach der Auswahl der gewünschten Ware(n), der Eingabe aller abgefragten Pflichtinformationen und dem Durchlaufen aller anderen verpflichtenden Schritte im Bestellprozess, können die ausgewählten Waren durch das Betätigen des Bestell-Buttons am Ende der Checkout-Seite bestellt werden (Bestellung). Durch die Bestellung gibt der Kunde ein verbindliches Vertragsangebot zum Erwerb der ausgewählten Ware(n) ab. Der Vertragsschluss erfolgt, indem der Anbieter das Angebot des Kunden annimmt. Die Annahme erfolgt, indem der Anbieter den Vertragsschluss in Schrift- oder Textform (z. B. per E-Mail) bestätigt (Auftragsbestätigung) und diese Auftragsbestätigung dem Kunden zugeht oder indem er dem Kunden die bestellte Ware bei Abholung übergibt oder indem er den Kunden zur Zahlung auffordert (z. B. Rechnung oder Kreditkartenzahlung im Bestellprozess) und die Zahlungsaufforderung dem Kunden zugeht; maßgeblich für den Zeitpunkt des Vertragsschlusses ist dabei der Zeitpunkt, in dem eine der im ersten Halbsatz genannten Alternativen erstmalig eintritt.</p><p>2.3 Vor verbindlicher Abgabe der Bestellung über das Online-Bestellformular des Anbieters kann der Kunde seine Eingaben überprüfen und jederzeit über die üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehenden Eingabefunktionen korrigieren. Darüber hinaus werden alle Eingaben vor der verbindlichen Abgabe der Bestellung noch einmal in einem Bestätigungsfenster angezeigt und können auch dort mittels der üblichen Tastatur-, Maus-, Touch- oder sonstigen zur Verfügung stehende Eingabefunktionen korrigiert werden.</p><p>2.4 Der Anbieter wird den Vertragstext nach dem Vertragsschluss speichern und dem Kunden in Textform (z. B. per E-Mail) übermitteln. Eine darüberhinausgehende Zugänglichmachung des Vertragstexts durch den Anbieter erfolgt nicht. Sofern der Einkauf über ein Kundenkonto im Online-Shop erfolgt ist, kann der Kunde seine Bestellungen und die damit verbundenen Bestelldaten dort einsehen.</p><p>2.5 Für den Vertragsschluss stehen folgende Sprachen zur Verfügung: Deutsch</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>3. Widerrufsrecht für Verbraucher</h3><p>Verbrauchern steht bei außerhalb von Geschäftsräumen geschlossenen Verträgen und bei Fernabsatzverträgen grundsätzlich ein Widerrufsrecht zu. Verbraucher ist jede natürliche Person, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder ihrer gewerblichen noch ihrer selbstständigen beruflichen Tätigkeit zugerechnet werden können. Details sind der Widerrufsbelehrung zu entnehmen, die jedem Verbraucher spätestens unmittelbar vor Vertragsschluss zur Verfügung gestellt wird.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>4. Zahlung, Verzug</h3><p>4.1 Es gelten die zum Zeitpunkt der Bestellung im Online-Shop aufgeführten Preise. Alle Preise gelten inklusive der gesetzlichen Mehrwertsteuer; hinzu kommen die Servicegebühr nach Ziffer 12.1 und bei Lieferung die Liefergebühr nach Ziffer 12.2. Über die zur Verfügung stehenden Zahlungsmöglichkeiten wird der Kunde im Online-Shop des Anbieters informiert.</p><p>4.2 Die Zahlung erfolgt in bar bei Übergabe der Ware (Lieferung oder Abholung) oder, soweit im Bestellformular angeboten, online per Kredit- oder Debitkarte (einschließlich Apple Pay und Google Pay) über den Zahlungsdienst Stripe. Bei Online-Zahlung wird der Kaufpreis sofort nach Vertragsschluss fällig.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>5. Eigentumsvorbehalt</h3><p>Die gekaufte Ware bleibt bis zur vollständigen Bezahlung des Kaufpreises Eigentum des Anbieters.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>6. Lieferung, Abholung und Selbstbelieferungsvorbehalt</h3><p>6.1 Die Ware wird nach Wahl des Kunden an die angegebene Lieferadresse innerhalb des Liefergebiets geliefert oder im Restaurant des Anbieters zur Abholung bereitgestellt (siehe Ziffer 12.2). Die geltenden Liefer- und Abholzeiten sind dem Online-Shop zu entnehmen.</p><p>6.2 Wenn der Anbieter die bestellte Ware nicht bereitstellen kann, weil er ohne eigenes Verschulden selbst nicht beliefert wurde, obwohl er rechtzeitig mit einem zuverlässigen Lieferanten ein kongruentes Deckungsgeschäft abgeschlossen hat, wird der Anbieter von seiner Leistungspflicht frei und kann vom Vertrag zurücktreten. Der Anbieter ist verpflichtet, den Kunden unverzüglich über die Unmöglichkeit der Leistungserfüllung in Kenntnis zu setzen. Bereits erbrachte Gegenleistungen des Vertragspartners werden diesem unverzüglich erstattet. Zwingendes Verbraucherrecht bleibt vom vorliegenden Absatz unberührt.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>7. Gewährleistung</h3><p>Es gelten die Vorschriften der gesetzlichen Mängelgewährleistung.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>8. Haftung und Freistellung</h3><p>8.1 Der Anbieter haftet unbeschränkt:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit, die auf einer vorsätzlichen oder fahrlässigen Pflichtverletzung des Anbieters oder einer vorsätzlichen oder fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>für Schäden, die auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung des Anbieters oder auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung eines gesetzlichen Vertreters oder Erfüllungsgehilfen des Anbieters beruhen;</li><li>aufgrund eines Garantieversprechens, soweit diesbezüglich keine andere Regelung getroffen wurde;</li><li>aufgrund zwingender Haftung (z. B. nach dem Produkthaftungsgesetz)</li></ul><p>8.2 Wenn der Anbieter fahrlässig eine wesentliche Vertragspflicht verletzt, ist dessen Haftung auf den vertragstypischen, vorhersehbaren Schaden beschränkt, sofern nicht gemäß vorstehendem Absatz unbeschränkt gehaftet wird. Wesentliche Vertragspflichten sind Pflichten, die der Vertrag dem Anbieter nach seinem Inhalt zur Erreichung des Vertragszwecks auferlegt, deren Erfüllung die ordnungsgemäße Durchführung des Vertrags überhaupt erst ermöglicht und auf deren Einhaltung der Kunde regelmäßig vertrauen darf.</p><p>8.3 Im Übrigen ist eine Haftung des Anbieters sowie die Haftung seiner Erfüllungsgehilfen und gesetzlichen Vertreter ausgeschlossen.</p><p>8.4 Der Kunde stellt den Anbieter von jeglichen Ansprüchen Dritter – einschließlich der Kosten für die Rechtsverteidigung in ihrer gesetzlichen Höhe – frei, die gegen den Anbieter aufgrund von rechts- oder vertragswidrigen Handlungen des Kunden geltend gemacht werden.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>9. Datenschutz</h3><p>Der Anbieter behandelt die personenbezogenen Daten seiner Kunden vertraulich und im Einklang mit den gesetzlichen Datenschutzvorschriften. Näheres entnehmen Sie der Datenschutzerklärung des Anbieters.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>10. Schlussbestimmungen</h3><p>10.1 Anwendbar ist das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts, soweit diese Rechtswahl nicht dazu führt, dass ein Verbraucher mit gewöhnlichem Aufenthalt in der EU hierdurch zwingenden gesetzlichen Bestimmungen des Rechts seines Aufenthaltsstaates entzogen wird.</p><p>10.2 Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist das Gericht am Sitz des Anbieters zuständig, sofern nicht für die Streitigkeit ein ausschließlicher Gerichtsstand begründet ist. Dies gilt auch, wenn der Kunde keinen Wohnsitz innerhalb der Europäischen Union hat. Der Sitz unseres Unternehmens ist der Überschrift dieser AGB zu entnehmen.</p><p>10.3 Soweit eine Bestimmung dieses Vertrages ungültig oder undurchsetzbar ist oder wird, bleiben die übrigen Bestimmungen dieses Vertrages hiervon unberührt.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>11. Informationen zur Online-Streitbeilegung / Verbraucherschlichtung</h3><p>Der Anbieter ist nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><p>Unsere E-Mail-Adresse entnehmen Sie der Überschrift dieser AGB.</p><h3 style='color:var(--odis-akzent);margin:22px 0 10px;overflow-wrap:anywhere'>12. Ergänzende Bedingungen der Odi’s Bowl</h3><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.1 Preise und Servicegebühr</h4><p>Alle Preise inkl. MwSt. (7 % auf Speisen, 19 % auf Getränke). Für die Nutzung der Online-Bestellplattform wird je Bestellung über diese Website eine <strong>Servicegebühr von 0,99&nbsp;€</strong> erhoben (gem. § 312a BGB). Sie wird vor Abgabe der Bestellung im Warenkorb gesondert ausgewiesen.</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.2 Lieferung, Abholung und Mindestbestellwert</h4><p>Die Bestellung kann zur Lieferung oder zur Abholung im Restaurant Odi’s Bowl, Bahnhofstr. 11, 59302 Oelde, erfolgen. Geliefert wird bis 5&nbsp;km Fahrstrecke vom Restaurant; maßgeblich ist die beim Bestellen zur Lieferadresse angezeigte Entfernung. Für die Lieferung gilt ein Mindestbestellwert von <strong>30,00&nbsp;€</strong> Warenwert, Liefer- und Servicegebühr zählen nicht dazu. Die Liefergebühr entspricht den „Versandkosten“ in Ziffer 4.1 und beträgt:</p><ul style='margin:6px 0 8px 18px;line-height:1.85'><li>bis 2&nbsp;km: 3,00&nbsp;€</li><li>bis 3&nbsp;km: 4,00&nbsp;€</li><li>bis 5&nbsp;km: 5,00&nbsp;€</li></ul><p>Açaí-Bowls werden nur zur Abholung angeboten. Angegebene Liefer- und Abholzeiten sind Schätzwerte und nicht verbindlich.</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.3 Zahlungsarten</h4><p>Es gelten die im Bestellformular angebotenen Zahlungsarten: Barzahlung bei Übergabe sowie, soweit angeboten, Online-Zahlung per Karte (einschließlich Apple Pay und Google Pay) über den Zahlungsdienst Stripe (siehe Ziffer 4.2).</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.4 Kein Widerrufsrecht bei frisch zubereiteten Speisen</h4><p>Gemäß § 312g Abs. 2 Nr. 2 BGB besteht kein Widerrufsrecht, da alle Speisen frisch zubereitet werden.</p><h4 style='color:var(--odis-akzent);margin:16px 0 6px;font-size:.92rem;overflow-wrap:anywhere'>12.5 Allergene</h4><p>Eine Kennzeichnung der Allergene und Zusatzstoffe je Gericht liegt online noch nicht vor. Auskunft erhalten Sie im Restaurant oder telefonisch unter 0 2522 9373711. Trotz größter Sorgfalt können Kreuzkontaminationen nicht ausgeschlossen werden.</p>"
 };
 
 LEGAL.allergene = {
@@ -3793,6 +4050,34 @@ document.readyState === 'loading'
     'Açaí-Bowl': 'acai'
   };
 
+  // Getraenke: Flaschen aus Odi’s Getraenkekarte (22.10.2026), freigestellt.
+  // Wie auf der Karte steht eine Flasche fuer alle Sorten einer Marke - auch
+  // Coca-Cola Zero zeigt die rote Flasche. Schluessel ist der Namensanfang.
+  var GETRAENK_FLASCHE = [
+    ['Coca-Cola', 'cola'],
+    ['Proviant Bio Limonade', 'limonade'],
+    ['Proviant Bio Schorle', 'schorle'],
+    ["Richard's Sun", 'ice-tea'],
+    ['Gesaris', 'gesaris'],
+    ["Pott's", 'potts']
+  ];
+
+  function menueHinweis() {
+    var h2 = document.getElementById('getraenke');
+    if (!h2 || document.querySelector('.menue-hinweis')) return;
+    var box = document.createElement('div');
+    box.className = 'menue-hinweis';
+    box.setAttribute('role', 'button');
+    box.setAttribute('tabindex', '0');
+    box.innerHTML = '<div><small>Mit Getränk nach Wahl</small><strong>Mach’s zum Menü!</strong>'
+      + '<span>Bowl oder Wrap als Menü: nur +2,00 € – einfach beim Zusammenstellen auswählen.</span></div>'
+      + '<img src="img/menu/getraenke/gruppe.png" alt="" loading="lazy">';
+    box.onclick = function() { openBaukasten('B1'); };
+    box.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBaukasten('B1'); } };
+    var nach = h2.nextElementSibling && h2.nextElementSibling.classList.contains('category-note') ? h2.nextElementSibling : h2;
+    nach.parentNode.insertBefore(box, nach.nextSibling);
+  }
+
   function processContainer(container) {
     var els = Array.from(container.children);
     var currentGrid = null;
@@ -3904,10 +4189,21 @@ document.readyState === 'loading'
     var kartenName = h3 ? h3.textContent.trim() : '';
     var imgFile = GERICHT_FOTO_EINZELN[kartenName]
       || (GERICHT_FOTOS ? pickImage(el.dataset.itemNum, kartenName, cat) : null);
-    if (imgFile) {
+    var flasche = cat === 'getraenke' && GETRAENK_FLASCHE.filter(function(f) {
+      return kartenName.indexOf(f[0]) === 0;
+    })[0];
+    // Artikel, die nie geliefert werden (menu.json: nur_abholung), tragen ein Schild
+    var bk = el.dataset.bk && (window.BAUKASTEN || {})[el.dataset.bk];
+    if (bk && bk.nurAbholung) {
+      var schild = document.createElement('span');
+      schild.className = 'nur-abholung-schild';
+      schild.textContent = '🏠 Nur Abholung';
+      el.appendChild(schild);
+    }
+    if (imgFile || flasche) {
       var img = document.createElement('img');
-      img.className = 'card-img';
-      img.src = 'img/menu/' + imgFile + '.jpg';
+      img.className = flasche ? 'card-img card-img-flasche' : 'card-img';
+      img.src = flasche ? 'img/menu/getraenke/' + flasche[1] + '.png' : 'img/menu/' + imgFile + '.jpg';
       img.alt = h3 ? h3.textContent.trim() : '';
       img.loading = 'lazy';
       img.onerror = function() { this.remove(); };
@@ -3922,6 +4218,7 @@ document.readyState === 'loading'
     if (!outer) return;
     var inner = outer.querySelector('.menu-section');
     processContainer(inner || outer);
+    menueHinweis();
   }
 
   document.readyState === 'loading'

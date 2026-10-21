@@ -453,7 +453,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--odis-gru
           <div class="pos-cart-hd">🛒 Warenkorb</div>
           <div class="pos-cart-items" id="posCartItems"><div class="pos-cart-empty">Leer</div></div>
           <div class="pos-form">
-            <!-- Nur Abholung: Odi’s Bowl liefert nicht, keine Adresse und keine Lieferorte -->
+            <!-- Kasse im Laden: nur Abholung. Lieferungen kommen ueber die Webseite (Fahrstrecke, liefergebiet.js) -->
             <div class="pos-mode-btns">
               <div class="pos-mode-btn active" id="posModeA" onclick="setPOSMode('abholung')">🏃 Nur Abholung</div>
             </div>
@@ -841,7 +841,7 @@ if (!window.FLUEVATE_BACKEND) {
 // ausgeliefert, jeder koennte sie im Quelltext mitlesen. Geprueft wird
 // ausschliesslich serverseitig ueber POST /api/admin/login.
 const SERVICE_FEE     = 0.99;
-// Keine Lieferorte und keine Liefergebühren: Odi’s Bowl bietet nur Abholung an.
+// Kasse im Laden ohne Lieferung: Liefergebuehren rechnet nur die Webseite (liefergebiet.js).
 
 let token       = localStorage.getItem('odisbowlToken')
                || sessionStorage.getItem('odisbowlToken') || '';
@@ -1067,14 +1067,30 @@ const ITEM_DESC = {
 // KARTE:START – erzeugt aus Menue/menu.json von karte-einsetzen.js, nicht von Hand aendern
 const POS_MENU = {
   zusammenstellen: [
-    {num:'B1',name:'Bowl',price:11.90},
-    {num:'W1',name:'Wrap',price:7.90},
-    {num:'A1',name:'Açaí-Bowl',price:7.90},
+    {num:'B1',name:'Bowl',price:13.90},
+    {num:'W1',name:'Wrap',price:9.90},
+    {num:'A1',name:'Açaí-Bowl',price:8.90},
+  ],
+  getraenke: [
+    {num:'G1',name:'Coca-Cola Original',price:2.90},
+    {num:'G2',name:'Coca-Cola Zero',price:2.90},
+    {num:'G3',name:'Proviant Bio Limonade Orange',price:2.90},
+    {num:'G4',name:'Proviant Bio Limonade Rhabarber',price:2.90},
+    {num:'G5',name:'Proviant Bio Limonade Limette & Minze',price:2.90},
+    {num:'G6',name:'Proviant Bio Schorle Kirsche & Granatapfel',price:2.90},
+    {num:'G7',name:'Richard\'s Sun Ice Tea Peach',price:2.90},
+    {num:'G8',name:'Richard\'s Sun Ice Tea Lemon',price:2.90},
+    {num:'G9',name:'Richard\'s Sun Ice Tea Pomegranate',price:2.90},
+    {num:'G10',name:'Richard\'s Sun Ice Tea Blueberry',price:2.90},
+    {num:'G11',name:'Gesaris Mineralwasser Classic',price:2.90},
+    {num:'G12',name:'Gesaris Mineralwasser Still',price:2.90},
+    {num:'G13',name:'Gesaris Apfelschorle',price:2.90},
+    {num:'G14',name:'Pott\'s Cola Mix',price:2.90},
   ],
 };
 let posCategory = 'zusammenstellen';
-window.POS_TITEL = {"zusammenstellen":"Stell dir dein Essen zusammen"};
-window.BAUKASTEN = {"B1":{"name":"Bowl","preis":11.9,"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Basmati-Reis","Frischer Blattsalatmix","Mixed-Bowl (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 5 inklusive, jede weitere +1,00 €","min":0,"inklusive":5,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Teriyaki Tofu","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Creamie Chicken","Curry Chicken","Teriyaki Chicken","Crispy Chicken","Chicken Bites"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Cinnamon Plum","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"W1":{"name":"Wrap","preis":7.9,"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Frischer Blattsalatmix","Krautsalat","Mixed-Wrap (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 3 inklusive, jede weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Crispy Chicken","Chicken Stripes"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Cinnamon Plum","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"A1":{"name":"Açaí-Bowl","groessen":{"Classic":7.9,"Large":8.9},"farbe":"#6b2c74","schritte":[{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":1,"inklusive":1,"aufpreis":1,"optionen":["Choco","Haselnuss","Pistazie","White Chocolate"]},{"titel":"Layer","hinweis":"zwei inklusive, jeder weitere +1,00 €","min":2,"inklusive":2,"aufpreis":1,"optionen":["Granola","Granola Choco","Peanut Butter","Chia-Pudding","Smashed Mango","Lotus Crumbles","Oreo Crumbles"]},{"titel":"Toppings","hinweis":"drei inklusive, jedes weitere +1,00 €","min":3,"inklusive":3,"aufpreis":1,"optionen":["Banane","Blaubeere","Erdbeere","Kiwi","Erdnüsse","Kakaonibs","Kokoschips"]}]}};
+window.POS_TITEL = {"zusammenstellen":"Stell dir dein Essen zusammen","getraenke":"Erfrischendes"};
+window.BAUKASTEN = {"B1":{"name":"Bowl","preis":13.9,"menue":{"aufpreis":2,"getraenke":["Coca-Cola Original","Coca-Cola Zero","Proviant Bio Limonade Orange","Proviant Bio Limonade Rhabarber","Proviant Bio Limonade Limette & Minze","Proviant Bio Schorle Kirsche & Granatapfel","Richard's Sun Ice Tea Peach","Richard's Sun Ice Tea Lemon","Richard's Sun Ice Tea Pomegranate","Richard's Sun Ice Tea Blueberry","Gesaris Mineralwasser Classic","Gesaris Mineralwasser Still","Gesaris Apfelschorle","Pott's Cola Mix"]},"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Basmati-Reis","Frischer Blattsalatmix","Mixed-Bowl (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 5 inklusive, jede weitere +1,00 €","min":0,"inklusive":5,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Teriyaki Tofu","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Creamie Chicken","Curry Chicken","Teriyaki Chicken","Crispy Chicken","Chicken Bites"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"W1":{"name":"Wrap","preis":9.9,"menue":{"aufpreis":2,"getraenke":["Coca-Cola Original","Coca-Cola Zero","Proviant Bio Limonade Orange","Proviant Bio Limonade Rhabarber","Proviant Bio Limonade Limette & Minze","Proviant Bio Schorle Kirsche & Granatapfel","Richard's Sun Ice Tea Peach","Richard's Sun Ice Tea Lemon","Richard's Sun Ice Tea Pomegranate","Richard's Sun Ice Tea Blueberry","Gesaris Mineralwasser Classic","Gesaris Mineralwasser Still","Gesaris Apfelschorle","Pott's Cola Mix"]},"schritte":[{"titel":"Basic","min":1,"max":1,"optionen":["Frischer Blattsalatmix","Krautsalat","Mixed-Wrap (halb/halb)"]},{"titel":"Gemüse & Obst","hinweis":"bis zu 3 inklusive, jede weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Avocado-Hummus","Brokkoli","Bulgur","Champignons","Cherry-Tomaten","Cole Slaw Salat","Edamame","Edamame Spicy","Geb. Blumenkohl","Gurken","Hirtenkäse-Würfel","Jalapeños","Karottensalat","Kichererbsen","Kimchi","Mais","Mango-Würfel","Paprika","Rote Bete","Rotkohl","Süßkartoffeln","Tomatensalat","Wakame","Zwiebelsalat"]},{"titel":"Hot Special","min":1,"max":1,"gruppen":[{"titel":"Vegan","optionen":["Beef Bites","Peanuts Chicken"]},{"titel":"Fleisch","zuschlag":1.5,"optionen":["Crispy Chicken","Chicken Stripes"]}]},{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":0,"inklusive":1,"aufpreis":1,"optionen":["Avocado Sesam","Curry Mango","Erdnuss","Honig Senf","Hot Sriracha","Sriracha Mayo","Süß-Sauer","Roasted Sesam"]},{"titel":"Topping","hinweis":"drei inklusive, jedes weitere +1,00 €","min":0,"inklusive":3,"aufpreis":1,"optionen":["Erdnüsse","Röstzwiebeln","Sesam","Granatapfel"]}]},"A1":{"name":"Açaí-Bowl","groessen":{"Classic":8.9,"Large":9.9},"farbe":"#6b2c74","nurAbholung":true,"schritte":[{"titel":"Sauce","hinweis":"eine inklusive, jede weitere +1,00 €","min":1,"inklusive":1,"aufpreis":1,"optionen":["Choco","Haselnuss","Pistazie","White Chocolate"]},{"titel":"Layer","hinweis":"zwei inklusive, jeder weitere +1,00 €","min":2,"inklusive":2,"aufpreis":1,"optionen":["Granola","Granola Choco","Peanut Butter","Chia-Pudding","Smashed Mango","Lotus Crumbles","Oreo Crumbles"]},{"titel":"Toppings","hinweis":"drei inklusive, jedes weitere +1,00 €","min":3,"inklusive":3,"aufpreis":1,"optionen":["Banane","Blaubeere","Erdbeere","Kiwi","Erdnüsse","Kakaonibs","Kokoschips"]}]}};
 // KARTE:ENDE
 // Vorauswahl der Kasse aus _pos_start in menu.json; openPOS() setzt darauf zurueck.
 const POS_START = posCategory;
@@ -1745,7 +1761,8 @@ function openPOS() {
 }
 function closePOS() { document.getElementById('posModal').classList.remove('show'); }
 
-// Nur Abholung: Odi’s Bowl liefert nicht, der Server lehnt Lieferungen ab.
+// Kasse im Laden: nur Abholung. Eine Lieferung braucht eine Adresse im Liefergebiet,
+// die prueft der Server - an der Kasse ist dafuer kein Adressfeld vorgesehen.
 function setPOSMode() {
   posMode='abholung';
   document.getElementById('posModeA').classList.add('active');
