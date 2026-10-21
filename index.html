@@ -4053,17 +4053,25 @@ document.readyState === 'loading'
     'Açaí-Bowl': 'acai'
   };
 
-  // Getraenke: Flaschen aus Odi’s Getraenkekarte (22.10.2026), freigestellt.
-  // Wie auf der Karte steht eine Flasche fuer alle Sorten einer Marke - auch
-  // Coca-Cola Zero zeigt die rote Flasche. Schluessel ist der Namensanfang.
-  var GETRAENK_FLASCHE = [
-    ['Coca-Cola', 'cola'],
-    ['Proviant Bio Limonade', 'limonade'],
-    ['Proviant Bio Schorle', 'schorle'],
-    ["Richard's Sun", 'ice-tea'],
-    ['Gesaris', 'gesaris'],
-    ["Pott's", 'potts']
-  ];
+  // Getraenke: je Sorte eine eigene Flasche. Alle Flaschen einer Marke
+  // stammen aus demselben Bild aus Odi’s Getraenkekarte und sind nur auf die
+  // Sorte umgefaerbt (img/menu/getraenke/sorten.py). Schluessel ist der Name.
+  var GETRAENK_FLASCHE = {
+    'Coca-Cola Original': 'cola-original',
+    'Coca-Cola Zero': 'cola-zero',
+    'Proviant Bio Limonade Orange': 'limonade-orange',
+    'Proviant Bio Limonade Rhabarber': 'limonade-rhabarber',
+    'Proviant Bio Limonade Limette & Minze': 'limonade-limette-minze',
+    'Proviant Bio Schorle Kirsche & Granatapfel': 'schorle-kirsche-granatapfel',
+    "Richard's Sun Ice Tea Peach": 'ice-tea-peach',
+    "Richard's Sun Ice Tea Lemon": 'ice-tea-lemon',
+    "Richard's Sun Ice Tea Pomegranate": 'ice-tea-pomegranate',
+    "Richard's Sun Ice Tea Blueberry": 'ice-tea-blueberry',
+    'Gesaris Mineralwasser Classic': 'gesaris-classic',
+    'Gesaris Mineralwasser Still': 'gesaris-still',
+    'Gesaris Apfelschorle': 'gesaris-apfelschorle',
+    "Pott's Cola Mix": 'potts-cola-mix'
+  };
 
   function menueHinweis() {
     var h2 = document.getElementById('getraenke');
@@ -4192,9 +4200,7 @@ document.readyState === 'loading'
     var kartenName = h3 ? h3.textContent.trim() : '';
     var imgFile = GERICHT_FOTO_EINZELN[kartenName]
       || (GERICHT_FOTOS ? pickImage(el.dataset.itemNum, kartenName, cat) : null);
-    var flasche = cat === 'getraenke' && GETRAENK_FLASCHE.filter(function(f) {
-      return kartenName.indexOf(f[0]) === 0;
-    })[0];
+    var flasche = cat === 'getraenke' && GETRAENK_FLASCHE[kartenName];
     // Artikel, die nie geliefert werden (menu.json: nur_abholung), tragen ein Schild
     var bk = el.dataset.bk && (window.BAUKASTEN || {})[el.dataset.bk];
     if (bk && bk.nurAbholung) {
@@ -4206,7 +4212,7 @@ document.readyState === 'loading'
     if (imgFile || flasche) {
       var img = document.createElement('img');
       img.className = flasche ? 'card-img card-img-flasche' : 'card-img';
-      img.src = flasche ? 'img/menu/getraenke/' + flasche[1] + '.png' : 'img/menu/' + imgFile + '.jpg';
+      img.src = flasche ? 'img/menu/getraenke/sorten/' + flasche + '.png' : 'img/menu/' + imgFile + '.jpg';
       img.alt = h3 ? h3.textContent.trim() : '';
       img.loading = 'lazy';
       img.onerror = function() { this.remove(); };
