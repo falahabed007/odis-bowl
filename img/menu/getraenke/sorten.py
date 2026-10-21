@@ -3,6 +3,9 @@
 #
 #   python3 -I img/menu/getraenke/sorten.py
 #
+# Danach in index.html BILD_STAND hochzaehlen, sonst zeigen Browser bis zu
+# 10 Minuten die alten Flaschen.
+#
 # Vorlagen sind die freigestellten Flaschen aus Odi's Getraenkekarte
 # (cola.png, limonade.png, schorle.png, ice-tea.png, gesaris.png, potts.png).
 # Geaendert werden nur Farbton, Saettigung und Helligkeit ausgewaehlter
