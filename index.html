@@ -2014,6 +2014,9 @@ function applyZahlungsarten() {
   var stripe = sel.querySelector('option[value="stripe"]');
   if (stripe) stripe.disabled = !window.ONLINE_ZAHLUNG_AKTIV;
   if (window.ONLINE_ZAHLUNG_AKTIV) {
+    // Vorauswahl Online-Zahlung wie bei den anderen Kartenstandorten (Abed,
+    // 22.10.2026). Laeuft einmal nach /api/config, bevor jemand die Kasse oeffnet.
+    sel.value = 'stripe';
     sel.style.display = '';
     var h = document.getElementById('zahlung-hinweis');
     if (h) h.style.display = 'none';
