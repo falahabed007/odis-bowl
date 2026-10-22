@@ -27,7 +27,7 @@
   "rechtsform": "Einzelunternehmen",
   "steuernummer": "",
   "handy": "",
-  "oeffnungszeiten": "Mo-Sa 11:30-21:00, So 14:00-21:00",
+  "oeffnungszeiten": "Mo-Sa 11:30-21:00, So 13:00-21:00",
   "oeffnungszeiten_tage": {
     "mo": [["11:30", "21:00"]],
     "di": [["11:30", "21:00"]],
@@ -35,7 +35,7 @@
     "do": [["11:30", "21:00"]],
     "fr": [["11:30", "21:00"]],
     "sa": [["11:30", "21:00"]],
-    "so": [["14:00", "21:00"]]
+    "so": [["13:00", "21:00"]]
   },
   "lieferorte": "FEHLT_LIEFERORTE",
   "servicegebuehr": 0.99,

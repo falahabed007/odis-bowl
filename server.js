@@ -1445,9 +1445,9 @@ function calcAutoMode() {
 
   // Öffnungszeiten Odi’s Bowl (stammdaten.json, Abed 20.10.2026), kein Ruhetag.
   // Dieselben Zeiten nennt der Kopfbereich der Bestellseite (index.html).
-  // Sonntag: 14:00–21:00
+  // Sonntag: 13:00–21:00
   if (wd === 0) {
-    return (mins >= 14*60 && mins < 21*60) ? 'online' : 'geschlossen';
+    return (mins >= 13*60 && mins < 21*60) ? 'online' : 'geschlossen';
   }
 
   // Montag bis Samstag: 11:30–21:00
