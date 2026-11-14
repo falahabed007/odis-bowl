@@ -1362,7 +1362,7 @@ async function sendConfirmationEmail(order, mins) {
         <div style="background:#f7f3ee;padding:14px;text-align:center;font-size:11px;color:#999">Odi’s Bowl · Bahnhofstr. 11 · 59302 Oelde · Tel: 0 2522 9373711</div>
       </div>`
     });
-    console.log(`📧 Bestätigung → ${order.customer.email}`);
+    console.log(`📧 Bestätigung → Bestellung #${order.orderNum}`);
   } catch(e) { console.error('Mail Fehler:', e); }
 }
 
