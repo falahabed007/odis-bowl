@@ -19,7 +19,7 @@
                               .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
   // Ausverkauft: auf der Webseite setzt der Statusabgleich window.AUSVERKAUFT,
-  // im Dashboard fuehrt die Kasse soldOutList.
+  // im frueheren Web-Dashboard fuehrte die Kasse soldOutList.
   function ausverkauft() {
     if (Array.isArray(window.AUSVERKAUFT)) return window.AUSVERKAUFT;
     try { if (Array.isArray(soldOutList)) return soldOutList; } catch (e) {}
