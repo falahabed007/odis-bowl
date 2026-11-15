@@ -582,109 +582,6 @@
       border: 2px solid var(--odis-akzent);
       display: none;
     }
-    .account-reward-dot {
-      position: absolute;
-      top: 0; right: 0;
-      width: 14px; height: 14px;
-      background: var(--odis-akzent);
-      border-radius: 50%;
-      border: 2px solid var(--odis-akzent);
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--odis-auf-akzent);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-    }
-
-    /* ── Stempelkarte Popup ── */
-    #stamp-popup {
-      display: none;
-      position: absolute;
-      top: calc(100% + 10px);
-      right: 0;
-      width: 270px;
-      background: var(--odis-flaeche);
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-      padding: 20px;
-      z-index: 9999;
-      font-family: Arial, sans-serif;
-    }
-    #stamp-popup.open { display: block; }
-    .stamp-popup-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--odis-akzent);
-      margin-bottom: 4px;
-    }
-    .stamp-popup-sub {
-      font-size: 12px;
-      color: var(--odis-schrift-leise);
-      margin-bottom: 14px;
-    }
-    .stamp-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-      justify-content: center;
-    }
-    .stamp-icon {
-      width: 58px; height: 58px;
-      border-radius: 50%;
-      border: 2.5px solid var(--odis-rahmen);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      background: var(--odis-flaeche);
-      transition: all 0.2s;
-      flex-direction: column;
-    }
-    .stamp-icon.filled {
-      border-color: var(--odis-akzent);
-      background: var(--odis-akzent);
-      font-size: 24px;
-    }
-    .stamp-icon.reward {
-      border-color: var(--odis-akzent);
-      background: linear-gradient(135deg, var(--odis-akzent), var(--odis-akzent));
-      font-size: 22px;
-    }
-    .stamp-redeem-btn {
-      width: 100%;
-      padding: 11px;
-      background: var(--odis-akzent);
-      color: var(--odis-auf-akzent);
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 8px;
-      display: none;
-    }
-    .stamp-redeem-btn:hover { background: var(--odis-akzent-2); }
-    .stamp-goto-account {
-      display: block;
-      text-align: center;
-      font-size: 12px;
-      color: var(--odis-akzent);
-      text-decoration: none;
-      padding: 6px 0;
-    }
-    .stamp-goto-account:hover { text-decoration: underline; }
-    .stamp-login-hint {
-      font-size: 13px;
-      color: var(--odis-schrift-leise);
-      text-align: center;
-      margin-bottom: 12px;
-    }
-    #stamp-popup-wrap {
-      position: relative;
-      flex-shrink: 0;
-    }
 
     .odisbowl-header-inner {
         max-width: 1100px;
@@ -980,16 +877,10 @@
       <button class="search-clear-btn" onclick="clearSearch()" title="Suche leeren"><i class="fas fa-times"></i></button>
     </div>
     <button class="search-btn" id="searchToggleBtn" onclick="toggleSearch()" title="Suchen"><i class="fas fa-search"></i></button>
-    <div id="stamp-popup-wrap">
-      <button class="odisbowl-account-btn" id="accountHeaderBtn" onclick="toggleStampPopup(event)" title="Mein Konto">
-        <i class="fas fa-user" id="accountBtnIcon"></i>
-        <span class="account-logged-dot" id="accountLoggedDot"></span>
-        <span class="account-reward-dot" id="accountRewardDot"></span>
-      </button>
-      <div id="stamp-popup">
-        <!-- Inhalt wird per JS befüllt -->
-      </div>
-    </div>
+    <a class="odisbowl-account-btn" id="accountHeaderBtn" href="account.html" title="Mein Konto">
+      <i class="fas fa-user" id="accountBtnIcon"></i>
+      <span class="account-logged-dot" id="accountLoggedDot"></span>
+    </a>
     <!-- Aktion Banner -->
     <div id="promotionBanner" style="position: fixed; right: 15px; top: 60px; z-index: 9999; background: linear-gradient(135deg,var(--odis-akzent),var(--odis-akzent)); color: var(--odis-auf-akzent); padding: 11px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; text-align: center; max-width: 165px; line-height: 1.6; display: none; box-shadow: 0 4px 16px rgba(139,29,29,0.45);">
       <div style="font-size: 10px; opacity: 0.85; margin-bottom: 3px;">🗓 01.08 – 31.08.2026</div>
@@ -1640,16 +1531,14 @@ function showPromotionBanner() {
 function addFreePizzaIfNeeded() {
   // Warenwert ohne Gratis-Artikel
   const summe = warenkorb.reduce((a, b) => a + (b.isFree ? 0 : (b.preis || 0)), 0);
-  // Aktions-Gratisgabe = ein Gratis-Artikel, der NICHT die Stempel-Prämie ist
-  const idxPromo = warenkorb.findIndex(item => item.isFree && !item.stampReward);
-  // Stempel-Belohnung im Warenkorb? → Aktion NICHT zusätzlich gewähren (kein Stapeln)
-  const hasStampReward = warenkorb.some(item => item.stampReward);
-  const eligible = isPromotionActive() && summe >= 20 && !hasStampReward;
+  // Aktions-Gratisgabe = ein Gratis-Artikel
+  const idxPromo = warenkorb.findIndex(item => item.isFree);
+  const eligible = isPromotionActive() && summe >= 20;
 
   if (eligible && idxPromo === -1) {
     warenkorb.push({ id: Date.now(), name: 'Pizza Margherita 22 cm (GRATIS)', preis: 0, basePreis: 0, isFree: true });
   } else if (!eligible && idxPromo !== -1) {
-    // nicht (mehr) berechtigt (unter 20€, keine Aktion, oder Stempel-Prämie aktiv) → Gratisgabe entfernen
+    // nicht (mehr) berechtigt (unter 20€ oder keine Aktion) → Gratisgabe entfernen
     warenkorb.splice(idxPromo, 1);
   }
 }
@@ -1808,36 +1697,6 @@ function toggleMobileMenu() {
 
 
 <!-- DANKE MODAL -->
-<!-- ── Stempelkarte Werbe-Popup ── -->
-<div id="stampPromoModal" onclick="if(event.target===this)closeStampPromo()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99998;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
-  <div style="background:var(--odis-flaeche);border-radius:20px;max-width:380px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);position:relative;">
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,var(--odis-akzent),var(--odis-akzent));padding:28px 24px 20px;text-align:center;color:var(--odis-auf-akzent);">
-      <button onclick="closeStampPromo()" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.2);border:none;color:var(--odis-schrift);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;line-height:1;">✕</button>
-      <div style="font-size:52px;margin-bottom:8px;">🍕</div>
-      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Gratis-Pizza sichern!</div>
-      <div style="font-size:13px;opacity:.9;">Melde dich an und sammle Stempel</div>
-    </div>
-    <!-- Body -->
-    <div style="padding:22px 24px;">
-      <!-- Stempel-Vorschau -->
-      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:18px;">
-        <div style="width:56px;height:56px;border-radius:50%;background:var(--odis-akzent);display:flex;align-items:center;justify-content:center;font-size:22px;">🍕</div>
-        <div style="width:56px;height:56px;border-radius:50%;background:var(--odis-akzent);display:flex;align-items:center;justify-content:center;font-size:22px;">🍕</div>
-        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--odis-akzent),var(--odis-akzent));display:flex;align-items:center;justify-content:center;font-size:22px;">🎁</div>
-      </div>
-      <div style="text-align:center;font-size:13px;color:var(--odis-schrift-leise);margin-bottom:18px;line-height:1.6;">
-        Bei jeder Bestellung einen Stempel sammeln.<br>
-        <strong style="color:var(--odis-akzent);">Nach 3 Bestellungen: Gratis-Margherita (groß)!</strong>
-      </div>
-      <a href="account.html" style="display:block;background:var(--odis-akzent);color:var(--odis-auf-akzent);text-align:center;padding:13px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;margin-bottom:10px;">
-        Jetzt kostenlos anmelden →
-      </a>
-      <button onclick="closeStampPromo()" style="width:100%;background:transparent;border:none;color:var(--odis-schrift-leise);font-size:13px;cursor:pointer;padding:6px;">Nein danke</button>
-    </div>
-  </div>
-</div>
-
 <div id="dankeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999999; justify-content:center; align-items:center; padding:20px; box-sizing:border-box;">
     <div style="background:var(--odis-flaeche); border-radius:20px; padding:35px 30px; max-width:400px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
         <div id="dankeIcon" style="font-size:64px; margin-bottom:10px;">⏳</div>
@@ -4692,204 +4551,14 @@ body.modal-open {
 })();
 </script>
 
-<!-- Stempelkarte Promo -->
 <script>
-  // ── Stempelkarte abgeschaltet (Odi’s Bowl) ─────────────
-  // Auf true setzen, um sie wieder zu aktivieren. Die Backend-Endpunkte
-  // /api/account/stamps und /api/account/redeem-stamp bleiben bestehen.
-  window.STEMPELKARTE_AKTIV = false;
-(function() {
-  function closeStampPromo() {
-    var m = document.getElementById('stampPromoModal');
-    if (m) m.style.display = 'none';
-    sessionStorage.setItem('stampPromoDismissed', '1');
-  }
-  window.closeStampPromo = closeStampPromo;
-
-  // Nur zeigen wenn: nicht eingeloggt, noch nicht weggeklickt diese Session
-  window.addEventListener('load', function() {
-    if (!window.STEMPELKARTE_AKTIV) return;
-    if (sessionStorage.getItem('stampPromoDismissed')) return;
-    if (localStorage.getItem('customerToken')) return; // eingeloggt → nicht zeigen
-    setTimeout(function() {
-      var m = document.getElementById('stampPromoModal');
-      if (m) m.style.display = 'flex';
-    }, 4000); // nach 4 Sekunden
-  });
-})();
-</script>
-
-<!-- Stempelkarte -->
-<script>
-(function() {
-  var _stampData = null;
-  var _isLoggedIn = false;
-  var _customerName = '';
-
-  function getToken() { return localStorage.getItem('customerToken'); }
-
-  async function loadStampData() {
-    if (!window.STEMPELKARTE_AKTIV) return;
-    var token = getToken();
-    if (!token) { renderPopupGuest(); return; }
-    try {
-      var res = await fetch(BACKEND_URL + '/api/account/stamps', { headers: { 'Authorization': 'Bearer ' + token } });
-      if (!res.ok) { renderPopupGuest(); return; }
-      _stampData = await res.json();
-      _isLoggedIn = true;
-      updateHeaderBtn();
-      renderPopupLoggedIn();
-    } catch { renderPopupGuest(); }
-  }
-
-  function updateHeaderBtn() {
-    var dot = document.getElementById('accountLoggedDot');
-    var rdot = document.getElementById('accountRewardDot');
-    if (!dot || !rdot) return;
-    if (_isLoggedIn) {
-      dot.style.display = 'block';
-      if (_stampData && _stampData.rewardsAvailable > 0) {
-        rdot.style.display = 'flex';
-        rdot.textContent = _stampData.rewardsAvailable;
-        dot.style.display = 'none'; // reward-dot übernimmt
-      } else {
-        rdot.style.display = 'none';
-      }
-    } else {
-      dot.style.display = 'none';
-      rdot.style.display = 'none';
-    }
-  }
-
-  function renderPopupGuest() {
-    var p = document.getElementById('stamp-popup');
-    if (!p) return;
-    p.innerHTML = `
-      <div class="stamp-popup-title">🍕 Stempelkarte</div>
-      <div class="stamp-popup-sub">Sammle Stempel bei jeder Bestellung</div>
-      <div class="stamp-login-hint">Melde dich an, um deine<br>Stempel zu sammeln!</div>
-      <div class="stamp-row">
-        <div class="stamp-icon">🍕</div>
-        <div class="stamp-icon">🍕</div>
-        <div class="stamp-icon">🎁</div>
-      </div>
-      <div style="font-size:11px;color:var(--odis-auf-akzent);text-align:center;margin-bottom:12px;">3 Bestellungen = 1 Gratis-Margherita</div>
-      <a href="account.html" class="stamp-redeem-btn" style="display:block;text-align:center;text-decoration:none;padding:11px;background:var(--odis-akzent);color:var(--odis-auf-akzent);border-radius:8px;font-size:14px;font-weight:700;">Anmelden / Registrieren</a>
-    `;
-  }
-
-  function renderPopupLoggedIn() {
-    var p = document.getElementById('stamp-popup');
-    if (!p || !_stampData) return;
-    var stamps = _stampData.stamps || 0;
-    var avail  = _stampData.rewardsAvailable || 0;
-
-    var iconsHtml = '';
-    for (var i = 0; i < 3; i++) {
-      if (i < stamps) iconsHtml += '<div class="stamp-icon filled">🍕</div>';
-      else if (avail > 0 && i === 0) iconsHtml += '<div class="stamp-icon reward">🎁</div>';
-      else iconsHtml += '<div class="stamp-icon">🍕</div>';
-    }
-
-    var progressText = avail > 0
-      ? '<span style="color:var(--odis-akzent);font-weight:700;">Gratis-Pizza verfügbar! 🎉</span>'
-      : (stamps + ' von 3 Stempeln');
-
-    p.innerHTML = `
-      <div class="stamp-popup-title">🍕 Deine Stempelkarte</div>
-      <div class="stamp-popup-sub">${progressText}</div>
-      <div class="stamp-row">${iconsHtml}</div>
-      <div style="font-size:11px;color:var(--odis-schrift-leise);text-align:center;margin-bottom:12px;">Jede Bestellung = 1 Stempel · 3 Stempel = 1 Gratis-Margherita (groß)</div>
-      <button class="stamp-redeem-btn" id="stampRedeemBtn" style="${avail > 0 ? 'display:block' : 'display:none'}" onclick="redeemStamp()">
-        🎁 Gratis-Pizza einlösen
-      </button>
-      <a href="account.html" class="stamp-goto-account">Mein Konto ansehen →</a>
-    `;
-  }
-
-  window.toggleStampPopup = function(e) {
-    if (!window.STEMPELKARTE_AKTIV) {
-      if (e) e.preventDefault();
-      window.location.href = 'account.html';
-      return;
-    }
-    e.stopPropagation();
-    var p = document.getElementById('stamp-popup');
-    if (!p) return;
-    var isOpen = p.classList.contains('open');
-    closeStampPopup();
-    if (!isOpen) {
-      p.classList.add('open');
-      loadStampData();
-    }
-  };
-
-  window.closeStampPopup = function() {
-    var p = document.getElementById('stamp-popup');
-    if (p) p.classList.remove('open');
-  };
-
-  window.redeemStamp = async function() {
-    var token = getToken();
-    if (!token) return;
-    var btn = document.getElementById('stampRedeemBtn');
-    if (btn) { btn.disabled = true; btn.textContent = '…'; }
-    try {
-      var res = await fetch(BACKEND_URL + '/api/account/redeem-stamp', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      if (!res.ok) {
-        var d = await res.json();
-        alert(d.message || 'Fehler beim Einlösen');
-        if (btn) { btn.disabled = false; btn.textContent = '🎁 Gratis-Pizza einlösen'; }
-        return;
-      }
-      // Gratis Margherita (groß) in den Warenkorb – gleiches Schema wie normale Artikel
-      var pizzaItem = { id: Date.now(), name: 'Pizza Margherita (groß) 🎁', preis: 0, basePreis: 0, qty: 1, isFree: true, stampReward: true, note: 'Gratis-Prämie (Stempelkarte)' };
-      if (typeof warenkorb !== 'undefined' && Array.isArray(warenkorb)) {
-        warenkorb.push(pizzaItem);
-        // Stempel-Prämie und Aktion nicht stapeln: ggf. Aktions-Gratisgabe entfernen
-        if (typeof addFreePizzaIfNeeded === 'function') addFreePizzaIfNeeded();
-        if (typeof renderWarenkorb === 'function') renderWarenkorb();
-      }
-      closeStampPopup();
-      // kurzes Feedback-Banner
-      var banner = document.createElement('div');
-      banner.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--odis-akzent);color:var(--odis-auf-akzent);padding:12px 22px;border-radius:10px;font-weight:700;font-size:14px;z-index:99999;box-shadow:0 4px 16px rgba(0,0,0,0.25);';
-      banner.textContent = '🎉 Gratis-Margherita wurde zum Warenkorb hinzugefügt!';
-      document.body.appendChild(banner);
-      setTimeout(function() { banner.remove(); }, 3500);
-      // Stamp-Daten neu laden
-      _stampData = null;
-      await loadStampData();
-    } catch {
-      alert('Verbindungsfehler');
-      if (btn) { btn.disabled = false; btn.textContent = '🎁 Gratis-Pizza einlösen'; }
-    }
-  };
-
-  // Popup schließen wenn außerhalb geklickt
-  document.addEventListener('click', function(e) {
-    var wrap = document.getElementById('stamp-popup-wrap');
-    if (wrap && !wrap.contains(e.target)) closeStampPopup();
-  });
-
-  // Initial: nur Header-Button aktualisieren (kein API-Call bis Popup geöffnet)
+  // Kleiner Punkt am Konto-Knopf, wenn ein Kunde angemeldet ist
   document.addEventListener('DOMContentLoaded', function() {
-    var token = getToken();
-    if (token) {
-      fetch(BACKEND_URL + '/api/account/stamps', { headers: { 'Authorization': 'Bearer ' + token } })
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .then(function(data) {
-          if (!data) return;
-          _stampData = data;
-          _isLoggedIn = true;
-          updateHeaderBtn();
-        }).catch(function(){});
-    }
+    try {
+      var dot = document.getElementById('accountLoggedDot');
+      if (dot && localStorage.getItem('customerToken')) dot.style.display = 'block';
+    } catch (e) {}
   });
-})();
 </script>
 
 </body>
