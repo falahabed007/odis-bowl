@@ -406,39 +406,6 @@ app.post('/api/account/reorder/:orderId', customerAuth, async (req, res) => {
   }
 });
 
-app.get('/api/account/stamps', customerAuth, async (req, res) => {
-  try {
-    const [validOrders, user] = await Promise.all([
-      Order.countDocuments({ userId: req.user.id, status: { $nin: ['cancelled', 'awaiting_payment'] } }),
-      User.findById(req.user.id).select('stampsRedeemed')
-    ]);
-    const redeemed       = user?.stampsRedeemed || 0;
-    const totalRewards   = Math.floor(validOrders / 3);
-    const rewardsAvail   = Math.max(0, totalRewards - redeemed);
-    const currentStamps  = validOrders % 3;
-    res.json({ stamps: currentStamps, rewardsAvailable: rewardsAvail, totalOrders: validOrders });
-  } catch {
-    res.status(500).json({ message: 'Stempelkarte konnte nicht geladen werden' });
-  }
-});
-
-app.post('/api/account/redeem-stamp', customerAuth, async (req, res) => {
-  try {
-    const [validOrders, user] = await Promise.all([
-      Order.countDocuments({ userId: req.user.id, status: { $nin: ['cancelled', 'awaiting_payment'] } }),
-      User.findById(req.user.id).select('stampsRedeemed')
-    ]);
-    const redeemed     = user?.stampsRedeemed || 0;
-    const totalRewards = Math.floor(validOrders / 3);
-    const rewardsAvail = Math.max(0, totalRewards - redeemed);
-    if (rewardsAvail <= 0) return res.status(400).json({ message: 'Keine Gratis-Pizza verfügbar' });
-    await User.findByIdAndUpdate(req.user.id, { $inc: { stampsRedeemed: 1 } });
-    res.json({ success: true });
-  } catch {
-    res.status(500).json({ message: 'Einlösen fehlgeschlagen' });
-  }
-});
-
 // ═══════════════════════════════════════════════════════════════
 // PUBLIC ROUTES
 // ═══════════════════════════════════════════════════════════════
