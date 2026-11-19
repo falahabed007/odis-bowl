@@ -1785,6 +1785,8 @@ function toggleMobileMenu() {
         <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">Zahlungsmethode:</div>
         <select id="c-zahlung" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid var(--odis-rahmen); border-radius:8px; background: var(--odis-flaeche); cursor:pointer;" onchange="togglePaymentLogos()">
             <option value="stripe">💳 Online bezahlen (Stripe)</option>
+            <!-- PayPal steht hier bewusst nicht fest drin: paypalEintragSetzen() fügt den
+                 Eintrag nur ein, wenn der Server in /api/config paypal: true meldet. -->
             <option value="bar">💵 Barzahlung bei Übergabe</option>
         </select>
 
@@ -1860,18 +1862,38 @@ function togglePaymentLogos() {
   if (ppLogo) ppLogo.style.display = zahlung.value === 'paypal' ? 'flex' : 'none';
 }
 
-// ── Online-Zahlung (Odi’s Bowl: Stripe, kein PayPal) ───────────
+// ── Online-Zahlung (Odi’s Bowl: Stripe; PayPal nur wenn eingerichtet) ──
 // Der Server meldet in /api/config, ob Stripe fertig eingerichtet ist
 // (Schluessel, Webhook-Geheimnis und Connect-Konto in Coolify). Bis dahin gibt
 // es nur Barzahlung - ein halb eingerichtetes Stripe fiele sonst erst beim
 // Bezahlen mit einer Fehlermeldung auf.
 window.ONLINE_ZAHLUNG_AKTIV = false;
+// PayPal (direkt auf das PayPal-Konto des Ladens) steht nur in der Auswahl, wenn
+// /api/config paypal: true meldet. Sonst gibt es den Eintrag gar nicht, auch nicht
+// ausgegraut - und die Seite sieht aus wie bisher.
+window.PAYPAL_AKTIV = false;
+
+function paypalEintragSetzen(sel) {
+  var pp = sel.querySelector('option[value="paypal"]');
+  if (window.PAYPAL_AKTIV && !pp) {
+    pp = document.createElement('option');
+    pp.value = 'paypal';
+    pp.textContent = '💙 Online bezahlen (PayPal)';
+    sel.insertBefore(pp, sel.querySelector('option[value="bar"]'));
+  } else if (!window.PAYPAL_AKTIV && pp) {
+    pp.remove();
+  }
+}
 
 function applyZahlungsarten() {
   var sel = document.getElementById('c-zahlung');
   if (!sel) return;
   var stripe = sel.querySelector('option[value="stripe"]');
   if (stripe) stripe.disabled = !window.ONLINE_ZAHLUNG_AKTIV;
+  // Nur bei sichtbarer Auswahl mit PayPal und ohne Stripe: Stripe-Eintrag verstecken
+  // statt ausgegraut zu zeigen. Ohne PayPal bleibt alles wie bisher.
+  if (stripe) stripe.hidden = window.PAYPAL_AKTIV && !window.ONLINE_ZAHLUNG_AKTIV;
+  paypalEintragSetzen(sel);
   if (window.ONLINE_ZAHLUNG_AKTIV) {
     // Vorauswahl Online-Zahlung wie bei den anderen Kartenstandorten (Abed,
     // 22.10.2026). Laeuft einmal nach /api/config, bevor jemand die Kasse oeffnet.
@@ -1883,6 +1905,15 @@ function applyZahlungsarten() {
     return;
   }
   sel.value = 'bar';
+
+  // Nur PayPal und bar: Auswahl zeigen, Vorauswahl bar
+  if (window.PAYPAL_AKTIV) {
+    sel.style.display = '';
+    var h2 = document.getElementById('zahlung-hinweis');
+    if (h2) h2.style.display = 'none';
+    togglePaymentLogos();
+    return;
+  }
 
   // Ein Auswahlfeld mit einem einzigen Eintrag wirkt kaputt – stattdessen
   // die feste Zeile zeigen. Das <select> bleibt im DOM, damit processOrder
@@ -1900,6 +1931,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(function(r) { return r.json(); })
     .then(function(c) {
       window.ONLINE_ZAHLUNG_AKTIV = c.onlineZahlung === true;
+      window.PAYPAL_AKTIV = !!c && c.paypal === true;   // fehlt das Feld (alter Server): kein PayPal
       applyZahlungsarten();
     })
     .catch(function() { /* bleibt bei Barzahlung */ });
@@ -2187,6 +2219,12 @@ async function processOrder() {
             if (data.url) {
                 window.location.href = data.url;
             } else {
+                // Der Server meldet, dass PayPal gerade nicht geht: Eintrag heraus,
+                // Auswahl zurück, statt den Gast erneut scheitern zu lassen.
+                if (data.paypal === false) {
+                    window.PAYPAL_AKTIV = false;
+                    applyZahlungsarten();
+                }
                 alert('Fehler beim Erstellen der Zahlung: ' + (data.error || data.message || 'Unbekannter Fehler'));
                 if (btn) { btn.disabled = false; btn.textContent = '✅ Kostenpflichtig bestellen'; }
             }
@@ -2454,14 +2492,24 @@ window.addEventListener('load', async () => {
 
         // PayPal-Zahlung serverseitig einziehen/bestätigen
         if (isPaypal && paypalToken) {
+            let antwort = null;
             try {
-                await fetch(`${BACKEND_URL}/api/paypal-capture`, {
+                const r = await fetch(`${BACKEND_URL}/api/paypal-capture`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ paypalOrderId: paypalToken })
                 });
+                antwort = await r.json().catch(() => null);
             } catch(e) {
                 console.warn('paypal-capture fehlgeschlagen:', e.message);
+            }
+            // Abgelehnt oder abgelaufen: nichts abgebucht, keine Bestellung - Hinweis
+            // statt Wartebildschirm. Sonst wie bei Stripe: der Status wird abgefragt.
+            if (antwort && antwort.ok === false && (antwort.abgelehnt || antwort.abgelaufen)) {
+                document.getElementById('dankeModal').style.display = 'none';
+                resetOrderButton();
+                showStripeCancelBanner(antwort.message || 'Die PayPal-Zahlung wurde nicht abgeschlossen, es wurde nichts abgebucht.', 12000);
+                return;
             }
         }
 
@@ -2476,7 +2524,8 @@ window.addEventListener('load', async () => {
     if (params.get('payment') === 'cancelled') {
         window.history.replaceState({}, document.title, window.location.pathname);
         resetOrderButton();
-        showStripeCancelBanner();
+        if (params.get('paypal') === '1') showStripeCancelBanner('PayPal-Zahlung abgebrochen – es wurde nichts abgebucht. Du kannst erneut bestellen oder eine andere Zahlungsart wählen.', 10000);
+        else showStripeCancelBanner();
         return;
     }
 
@@ -2500,7 +2549,8 @@ function resetOrderButton() {
     }
 }
 
-function showStripeCancelBanner() {
+// text/dauer: eigener Hinweis (PayPal); ohne Angabe wie bisher bei Stripe
+function showStripeCancelBanner(text, dauer) {
     const banner = document.createElement('div');
     banner.id = 'stripe-cancel-banner';
     banner.style.cssText = [
@@ -2510,10 +2560,15 @@ function showStripeCancelBanner() {
         'box-shadow:0 4px 16px rgba(0,0,0,0.12)', 'z-index:99999',
         'max-width:90vw', 'text-align:center', 'cursor:pointer'
     ].join(';');
-    banner.innerHTML = '⚠️ Zahlung abgebrochen – du kannst deine Bestellung anpassen oder eine andere Zahlungsart wählen. <strong>✕</strong>';
+    if (text) {
+        banner.textContent = '⚠️ ' + text + ' ';
+        const x = document.createElement('strong'); x.textContent = '✕'; banner.appendChild(x);
+    } else {
+        banner.innerHTML = '⚠️ Zahlung abgebrochen – du kannst deine Bestellung anpassen oder eine andere Zahlungsart wählen. <strong>✕</strong>';
+    }
     banner.onclick = () => banner.remove();
     document.body.appendChild(banner);
-    setTimeout(() => { if (banner.parentNode) banner.remove(); }, 7000);
+    setTimeout(() => { if (banner.parentNode) banner.remove(); }, dauer || 7000);
 }
 </script>
 

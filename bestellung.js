@@ -24,7 +24,7 @@ const WEB_ZAHLARTEN = ['bar'];
 const GESPERRTE_FELDER = [
   '_id', '__v', 'id', 'createdAt', 'updatedAt',
   'orderNum', 'status', 'paymentStatus', 'source', 'statusToken', 'userId',
-  'prepTime', 'cancelReason', 'nachgeholt',
+  'prepTime', 'cancelReason', 'nachgeholt', 'zahlungAbgelaufen',
   'stripeSessionId', 'stripePaymentIntentId', 'paypalOrderId', 'paypalCaptureId',
   // rechnet die Route selbst
   'total', 'discount', 'coupon',
