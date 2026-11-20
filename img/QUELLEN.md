@@ -13,3 +13,5 @@ Seit dem 20.11.2026 hat Oelde dieselbe Gestaltung wie Odi's Bowl Ahaus. Ladenlog
 | menu/getraenke/sorten/*.png | aus den Flaschen oben je Sorte umgefärbt mit `menu/getraenke/sorten.py` (22.10.2026); Farben nachempfunden, nicht vom Hersteller | wie oben | wie oben |
 
 Bowl- und Açaí-Karte zeigen seit dem 20.11.2026 Fotos des Ladens. Das Wrap-Foto ist weiter ein Stockbild, kein Gericht von Odi's. Sobald der Wirt ein eigenes Foto liefert, ersetzen - Gäste sollen sehen, was sie bekommen.
+
+hero-acai.jpg (Bühnenbild bis 20.11.2026, von Abed geliefert) ist nicht mehr eingebunden. Die Datei bleibt vorerst liegen, damit Browser mit zwischengespeicherter alter Seite kein fehlendes Bild zeigen; sie kann später gelöscht werden.
