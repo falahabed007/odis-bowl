@@ -2,6 +2,8 @@
 // Druckt automatisch bei jeder neuen Bestellung
 
 const fetch = require('node-fetch');
+const Zeiten = require('./oeffnungszeiten');
+const { gastNotiz } = require('./vorbestellung');
 
 async function printOrder(order) {
   if (!process.env.PRINTNODE_API_KEY || !process.env.PRINTNODE_PRINTER_ID) {
@@ -52,10 +54,13 @@ function buildReceipt(order) {
 
   const SEPARATOR = '--------------------------------' + LF;
 
+  // Der Server laeuft in UTC - ohne timeZone stuende die Bestellzeit falsch auf dem Bon
   const time = new Date(order.createdAt).toLocaleString('de-DE', {
+    timeZone: 'Europe/Berlin',
     day: '2-digit', month: '2-digit', year: 'numeric',
     hour: '2-digit', minute: '2-digit'
   });
+  const vorbestellung = Boolean(order.vorbestellung && order.wunschzeit);
 
   let receipt = RESET;
 
@@ -74,6 +79,17 @@ function buildReceipt(order) {
   // Art
   const modeText = order.mode === 'lieferung' ? '*** LIEFERUNG ***' : '*** ABHOLUNG ***';
   receipt += BOLD_ON + CENTER + modeText + LF + BOLD_OFF;
+
+  // Vorbestellung: gross und vor allem anderen, sonst wird sie sofort gekocht.
+  // Doppelte Groesse = 16 Zeichen je Zeile.
+  if (vorbestellung) {
+    const [tag, uhr] = Zeiten.zeitText(new Date(order.wunschzeit)).split(', ');
+    receipt += SEPARATOR;
+    receipt += DOUBLE_ON + BOLD_ON + 'VORBESTELLUNG' + LF + DOUBLE_OFF;
+    receipt += (order.mode === 'lieferung' ? 'Lieferung' : 'Abholung') + ' am ' + tag + LF;
+    receipt += DOUBLE_ON + 'um ' + uhr + LF + DOUBLE_OFF + BOLD_OFF;
+    receipt += SEPARATOR;
+  }
   receipt += LEFT;
 
   // Kundeninfos
@@ -120,16 +136,17 @@ function buildReceipt(order) {
   receipt += `Zahlung: ${payText}` + LF;
   receipt += `Bezahlt: ${order.paymentStatus === 'paid' ? 'JA' : 'NEIN – bitte kassieren!'}` + LF;
 
-  // Anmerkung
-  if (order.note) {
+  // Anmerkung (bei Vorbestellung ohne die Zeile "VORBESTELLUNG: …", die steht oben)
+  const notiz = gastNotiz(order);
+  if (notiz) {
     receipt += SEPARATOR;
     receipt += BOLD_ON + 'ANMERKUNG:' + BOLD_OFF + LF;
-    receipt += order.note + LF;
+    receipt += notiz + LF;
   }
 
   receipt += SEPARATOR;
   receipt += CENTER + 'Vielen Dank!' + LF;
-  receipt += '~35 Min Lieferzeit' + LF;
+  if (!vorbestellung) receipt += '~35 Min Lieferzeit' + LF;   // Vorbestellung: Zeit steht oben
   receipt += LF + LF + LF;
   receipt += CUT;
 
@@ -142,4 +159,4 @@ function padLine(label, value) {
   return label + ' '.repeat(Math.max(1, spaces)) + value;
 }
 
-module.exports = { printOrder };
+module.exports = { printOrder, buildReceipt };

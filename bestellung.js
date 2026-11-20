@@ -28,6 +28,9 @@ const GESPERRTE_FELDER = [
   'stripeSessionId', 'stripePaymentIntentId', 'paypalOrderId', 'paypalCaptureId',
   // rechnet die Route selbst
   'total', 'discount', 'coupon',
+  // Vorbestellung: setzt nur der Server nach der Pruefung (vorbestellung.js),
+  // auch die erste Zeile von note
+  'wunschzeit', 'vorbestellung',
 ];
 
 /**

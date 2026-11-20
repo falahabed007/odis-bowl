@@ -11,6 +11,8 @@ const crypto     = require('crypto');
 const fs         = require('fs');
 const { webBestellungAusRequest } = require('./bestellung');
 const { kasseAnmerkung } = require('./kasse');
+const Zeiten     = require('./oeffnungszeiten');
+const Vorbestellung = require('./vorbestellung');
 require('dotenv').config();
 
 const app  = express();
@@ -187,6 +189,11 @@ const orderSchema = new mongoose.Schema({
   total:       Number,
   note:        String,
   coupon:      String,
+  // Vorbestellung (wie Ahaus 19.11., Oelde 20.11.2026): gewünschter Abhol- bzw.
+  // Lieferzeitpunkt. Setzt nur der Server nach der Prüfung (vorbestellung.js). Die
+  // Kassen-App kennt die Felder nicht; sie sieht die Vorbestellung an der ersten Zeile von note.
+  wunschzeit:    Date,
+  vorbestellung: { type: Boolean, default: false },
   userId:      { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   // Zugriffsschluessel fuer die Statusabfrage des Kunden. Bewusst nicht die _id:
   // deren Zufallsteil ist pro Serverprozess konstant und damit ratbar.
@@ -400,7 +407,8 @@ app.post('/api/account/reorder/:orderId', customerAuth, async (req, res) => {
     res.json({
       items: original.items,
       mode: original.mode,
-      note: original.note || ''
+      // ohne die Zeile "VORBESTELLUNG: …" – die neue Bestellung bekommt ihre eigene Zeit
+      note: Vorbestellung.gastNotiz(original)
     });
   } catch {
     res.status(500).json({ message: 'Re-Order fehlgeschlagen' });
@@ -472,12 +480,33 @@ app.get('/api/config', (req, res) => res.json({
 }));
 
 // ── Restaurant Status (öffentlich) ───────────────────────────────
+// mode/isOpen wie bisher (gespeicherter Wert). Neu: bestellbar und vorbestellung -
+// die Seite zeigt den Geschlossen-Banner nur, wenn auch keine Vorbestellung geht.
+// Eine Seite ohne Vorbestellung liest nur mode/isOpen und verhaelt sich wie bisher.
 app.get('/api/status', async (req, res) => {
+  const z = await bestellZustandLesen(new Date());
   try {
     const s = await Settings.findById('restaurant');
     const mode = s ? (s.mode || (s.isOpen ? 'online' : 'geschlossen')) : 'online';
-    res.json({ mode, isOpen: mode === 'online' });
-  } catch(e) { res.json({ mode: 'online', isOpen: true }); }
+    res.json({ mode, isOpen: mode === 'online', bestellbar: z.bestellbar, vorbestellung: z.vorbestellung, manuell: z.manuell });
+  } catch(e) { res.json({ mode: 'online', isOpen: true, bestellbar: z.bestellbar, vorbestellung: z.vorbestellung, manuell: z.manuell }); }
+});
+
+// ── Wählbare Zeiten für Vorbestellungen (öffentlich) ─────────────
+// Liefert Zustand und Zeiten fertig gerechnet (Europe/Berlin), damit die Seite
+// keine eigene Zeitzonen-Rechnung braucht. ?mode=abholung|lieferung
+app.get('/api/zeiten', async (req, res) => {
+  const art = req.query.mode === undefined ? 'abholung' : req.query.mode;
+  if (!Vorbestellung.ARTEN.includes(art)) return res.status(400).json({ message: Vorbestellung.TEXT.keineArt });
+  try {
+    const jetzt = new Date();
+    const zustand = await bestellZustandLesen(jetzt);
+    res.set('Cache-Control', 'no-store');
+    res.json(Vorbestellung.zeitenAntwort({ zustand, jetzt, art }));
+  } catch (e) {
+    console.error('Zeiten:', e.message);
+    res.status(500).json({ message: 'Die Uhrzeiten konnten nicht geladen werden.' });
+  }
 });
 
 // ── Restaurant Status (Admin) ─────────────────────────────────────
@@ -582,6 +611,29 @@ function stripeBereit() {
     && process.env.STRIPE_CONNECT_ACCOUNT);
 }
 
+// ── Vorbestellung: darf jetzt bzw. zur Wunschzeit bestellt werden? ──
+// Zustand aus Settings('restaurant'). Fehlt der Eintrag oder ist die Datenbank
+// gestört, gilt der aus der Uhrzeit berechnete Modus (vorbestellung.js). Wirft nie.
+async function bestellZustandLesen(jetzt) {
+  let settings = null;
+  if (mongoose.connection.readyState === 1) {
+    try { settings = await Settings.findById('restaurant').lean(); }
+    catch (e) { console.warn('Settings nicht lesbar, Modus nach Uhrzeit:', e.message); }
+  }
+  return Vorbestellung.bestellZustand({ settings, jetzt });
+}
+
+// Die eine Prüfung für Barzahlung und Online-Zahlung. Lehnt mit 400 ab
+// (zeiten: true = die Seite lädt die Uhrzeiten neu) und gibt sonst
+// { wunschzeit, vorbestellung, note } zurück - die setzt nur der Server.
+// Ohne wunschzeit (alte Seite): bei offenem Laden wie bisher, bei geschlossenem 400.
+async function bestellzeitPruefen(req, res) {
+  const jetzt = new Date();
+  const r = Vorbestellung.pruefeBestellzeit({ body: req.body, zustand: await bestellZustandLesen(jetzt), jetzt });
+  if (r.fehler) { res.status(400).json({ message: r.fehler, zeiten: r.zeit }); return null; }
+  return r;
+}
+
 // ── Neue Web-Bestellung (pending) ────────────────────────────────
 // Nur Barzahlung von der Bestellseite. Den früheren POS-Weg (source 'pos':
 // sofort bestätigt, Betrag aus dem Request, Mails und Druck) gibt es nicht
@@ -592,6 +644,8 @@ app.post('/api/orders', async (req, res) => {
     // Erst danach: lieferungAbgelehnt setzt deliveryFee und Adresse in req.body.
     const auswahl = webBestellungAusRequest(req.body);
     if (auswahl.fehler) return res.status(400).json({ message: auswahl.fehler });
+    const zeit = await bestellzeitPruefen(req, res);   // Laden zu → nur mit gültiger Wunschzeit
+    if (!zeit) return;
 
     // userId aus Kunden-JWT extrahieren falls vorhanden (Gastbestellung bleibt möglich)
     let userId = null;
@@ -614,6 +668,7 @@ app.post('/api/orders', async (req, res) => {
 
     const order    = new Order({
       ...auswahl.felder, orderNum, userId,
+      wunschzeit: zeit.wunschzeit, vorbestellung: zeit.vorbestellung, note: zeit.note,
       discount: rabatt,
       total:    gesamt,
       coupon:   rabatt > 0 ? RABATT_CODE : null,
@@ -629,7 +684,7 @@ app.post('/api/orders', async (req, res) => {
 app.get('/api/orders/status/:token', async (req, res) => {
   try {
     const o = await Order.findOne({ statusToken: req.params.token })
-      .select('status paymentStatus prepTime orderNum mode cancelReason');
+      .select('status paymentStatus prepTime orderNum mode cancelReason wunschzeit vorbestellung');
     // Der Marker unterscheidet diese 404 von der eines Backends, das die Route
     // noch gar nicht kennt -- etwa im Fenster zwischen Seiten- und Backend-Deploy.
     if (!o) return res.status(404).json({ message: 'Nicht gefunden', unbekannterSchluessel: true });
@@ -639,7 +694,11 @@ app.get('/api/orders/status/:token', async (req, res) => {
       estimatedMinutes: o.prepTime || null,
       orderNum:         o.orderNum,
       mode:             o.mode,
-      cancelReason:     o.cancelReason || ''
+      cancelReason:     o.cancelReason || '',
+      vorbestellung:    Boolean(o.vorbestellung && o.wunschzeit),
+      wunschzeit:       o.wunschzeit || null,
+      // fertig formatiert (Europe/Berlin), z. B. "Fr. 20.11., 12:30 Uhr"
+      wunschzeitText:   o.vorbestellung && o.wunschzeit ? Zeiten.zeitText(o.wunschzeit) : ''
     });
   } catch (e) {
     console.error('Statusabfrage:', e.message);
@@ -654,7 +713,10 @@ app.post('/api/create-stripe-checkout', async (req, res) => {
       return res.status(503).json({ message: 'Online-Zahlung ist noch nicht eingerichtet. Bitte wähle Barzahlung.' });
     }
     if (lieferungAbgelehnt(req, res)) return;   // Liefergebiet, Mindestwert, Açaí nur Abholung
-    const { items, subtotal, deliveryFee, serviceFee, customer, mode, note } = req.body;
+    const zeit = await bestellzeitPruefen(req, res);   // Laden zu → nur mit gültiger Wunschzeit
+    if (!zeit) return;
+    const { items, subtotal, deliveryFee, serviceFee, customer, mode } = req.body;
+    const { note, wunschzeit, vorbestellung } = zeit;
     const orderNum = await getNextOrderNum();
 
     // Rabatt serverseitig ermitteln – der Client-Betrag wird nicht übernommen.
@@ -722,7 +784,7 @@ app.post('/api/create-stripe-checkout', async (req, res) => {
 
     const order = new Order({
       items, subtotal, deliveryFee, serviceFee, total,
-      customer, mode, note, orderNum,
+      customer, mode, note, orderNum, wunschzeit, vorbestellung,
       discount: rabatt,
       coupon: rabatt > 0 ? RABATT_CODE : null,
       payment: 'stripe', paymentStatus: 'pending',
@@ -730,7 +792,9 @@ app.post('/api/create-stripe-checkout', async (req, res) => {
       statusToken
     });
     await order.save();
-    res.json({ url: session.url, orderNum });
+    // statusToken: Die Seite merkt ihn sich, um einen gespeicherten Warenkorb nach
+    // bezahlter Bestellung zu leeren, auch wenn der Gast nicht zurückkommt.
+    res.json({ url: session.url, orderNum, statusToken });
   } catch(e) { console.error(e); res.status(500).json({ message: 'Stripe Fehler: '+e.message }); }
 });
 
@@ -801,7 +865,10 @@ app.post('/api/verify-payment', async (req, res) => {
 app.post('/api/create-paypal-order', async (req, res) => {
   try {
     if (lieferungAbgelehnt(req, res)) return;   // Liefergebiet, Mindestwert, Açaí nur Abholung
-    const { items, subtotal, deliveryFee, serviceFee, customer, mode, note } = req.body;
+    const zeit = await bestellzeitPruefen(req, res);   // die Seite bietet PayPal nicht an, die Route ist aber offen
+    if (!zeit) return;
+    const { items, subtotal, deliveryFee, serviceFee, customer, mode } = req.body;
+    const { note, wunschzeit, vorbestellung } = zeit;
     const orderNum = await getNextOrderNum();
 
     // Rabatt serverseitig ermitteln – der Client-Betrag wird nicht übernommen.
@@ -837,7 +904,7 @@ app.post('/api/create-paypal-order', async (req, res) => {
 
     const order = new Order({
       items, subtotal, deliveryFee, serviceFee, total,
-      customer, mode, note, orderNum,
+      customer, mode, note, orderNum, wunschzeit, vorbestellung,
       discount: rabatt,
       coupon: rabatt > 0 ? RABATT_CODE : null,
       payment: 'paypal', paymentStatus: 'pending',
@@ -1287,9 +1354,15 @@ app.get('/api/admin/finance', auth, async (req, res) => {
 
 const cleanName = n => n.replace(/[A-Z0-9](,[A-Z0-9])+$/, '').trimEnd();
 
+// Vorbestellung: Tag und Uhrzeit statt "in ca. X Minuten" (vorbestellung.js)
+const istVorbestellung = order => Boolean(order && order.vorbestellung && order.wunschzeit);
+
 async function sendConfirmationEmail(order, mins) {
   if (!process.env.RESEND_API_KEY || !order.customer?.email) return;
   const m    = mins || order.prepTime || (order.mode==='lieferung'?45:20);
+  const vor  = istVorbestellung(order);
+  const wann = vor ? Zeiten.zeitText(order.wunschzeit) : '';
+  const notiz = Vorbestellung.gastNotiz(order);
   const addr = order.mode==='lieferung'
     ? `${order.customer.street} ${order.customer.house}, ${order.customer.city}`
     : 'Bahnhofstr. 11, 59302 Oelde';
@@ -1301,19 +1374,25 @@ async function sendConfirmationEmail(order, mins) {
     await getResend()?.emails.send({
       from: process.env.EMAIL_FROM || 'bestellungen@odis-oelde.com',
       to:   order.customer.email,
-      subject: `✅ Bestellung #${order.orderNum} bestätigt – Odi’s Bowl`,
+      subject: vor
+        ? `✅ Vorbestellung #${order.orderNum} bestätigt – ${order.mode==='lieferung'?'Lieferung':'Abholung'} ${wann}`
+        : `✅ Bestellung #${order.orderNum} bestätigt – Odi’s Bowl`,
       html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto">
         <div style="background:#0a1e47;color:#fff;padding:22px;text-align:center">
           <h1 style="margin:0;font-size:22px">🍕 Odi’s Bowl</h1>
           <p style="margin:4px 0 0;opacity:.8;font-size:13px">Bahnhofstr. 11 · 59302 Oelde</p>
         </div>
         <div style="padding:26px 22px">
-          <h2 style="color:#0a1e47;margin:0 0 14px">Bestellung #${order.orderNum} bestätigt ✅</h2>
-          <p>Hallo <strong>${order.customer.first}</strong>, deine Bestellung ist in der Küche!</p>
+          <h2 style="color:#0a1e47;margin:0 0 14px">${vor?'Vorbestellung':'Bestellung'} #${order.orderNum} bestätigt ✅</h2>
+          <p>Hallo <strong>${order.customer.first}</strong>, ${vor
+            ? `wir haben deine Vorbestellung angenommen und machen sie zur gewünschten Zeit fertig.`
+            : 'deine Bestellung ist in der Küche!'}</p>
           <div style="background:#fff8f0;border-left:4px solid #d4a76a;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0">
             <p style="margin:0 0 4px;font-weight:bold">${order.mode==='lieferung'?'🛵 Lieferung':'🏃 Abholung'}</p>
             <p style="margin:0;font-size:13px;color:#666">${addr}</p>
-            <p style="margin:4px 0 0;font-size:15px;font-weight:bold;color:#0a1e47">⏱ Voraussichtlich ~${m} Minuten</p>
+            <p style="margin:4px 0 0;font-size:15px;font-weight:bold;color:#0a1e47">${vor
+              ? `📅 ${order.mode==='lieferung'?'Lieferung':'Abholung'} am ${wann.replace(', ', ' um ')}`
+              : `⏱ Voraussichtlich ~${m} Minuten`}</p>
           </div>
           <table style="width:100%;border-collapse:collapse;font-size:13px;margin:14px 0">
             <thead><tr style="border-bottom:2px solid #eee"><th align="left" style="padding:4px 8px">Menge</th><th align="left" style="padding:4px 8px">Artikel</th><th align="right" style="padding:4px 8px">Preis</th></tr></thead>
@@ -1330,7 +1409,7 @@ async function sendConfirmationEmail(order, mins) {
             Zahlung: ${order.payment==='stripe'?'💳 Online (Stripe)':order.payment==='paypal'?'💙 PayPal':order.payment==='karte'?'💳 EC-Karte':'💵 Barzahlung'} ·
             ${order.paymentStatus==='paid'?'✅ Bereits bezahlt':'💵 Bitte bereithalten'}
           </p>
-          ${order.note?`<p style="background:#fff3ea;padding:10px;border-radius:6px;font-size:13px">📝 Anmerkung: ${order.note}</p>`:''}
+          ${notiz?`<p style="background:#fff3ea;padding:10px;border-radius:6px;font-size:13px">📝 Anmerkung: ${notiz}</p>`:''}
         </div>
         <div style="background:#f7f3ee;padding:14px;text-align:center;font-size:11px;color:#999">Odi’s Bowl · Bahnhofstr. 11 · 59302 Oelde · Tel: 0 2522 9373711</div>
       </div>`
@@ -1341,6 +1420,10 @@ async function sendConfirmationEmail(order, mins) {
 
 async function sendRestaurantEmail(order) {
   if (!process.env.RESTAURANT_EMAIL) return;
+  const vor   = istVorbestellung(order);
+  const art   = order.mode==='lieferung'?'Lieferung':'Abholung';
+  const wann  = vor ? Zeiten.zeitText(order.wunschzeit) : '';
+  const notiz = Vorbestellung.gastNotiz(order);
   const items = (order.items||[]).map(i=>{
     const base = `${i.qty}× ${cleanName(i.name)}${i.note?' ('+i.note+')':''}`;
     const extras = (i.extraDetails||[]).map(e=>`   ↳ ${e.name}${e.price>0?' (+'+e.price.toFixed(2)+'€)':''}`).join('\n');
@@ -1350,10 +1433,14 @@ async function sendRestaurantEmail(order) {
     await getResend()?.emails.send({
       from: process.env.EMAIL_FROM||'bestellungen@odis-oelde.com',
       to:   process.env.RESTAURANT_EMAIL,
-      subject: `🔔 Bestellung #${order.orderNum} – ${order.mode==='lieferung'?'Lieferung':'Abholung'}`,
+      subject: vor
+        ? `🔔 VORBESTELLUNG #${order.orderNum} – ${art} ${wann}`
+        : `🔔 Bestellung #${order.orderNum} – ${art}`,
       html: `<pre style="font-family:monospace;font-size:13px">BESTELLUNG #${order.orderNum} · ${order.source==='pos'?'POS':'ONLINE'}
 ═══════════════════════════════
-Art:    ${order.mode==='lieferung'?'🛵 LIEFERUNG':'🏃 ABHOLUNG'}
+${vor?`📅 VORBESTELLUNG: ${art} am ${wann.replace(', ', ' um ')}
+═══════════════════════════════
+`:''}Art:    ${order.mode==='lieferung'?'🛵 LIEFERUNG':'🏃 ABHOLUNG'}
 Kunde:  ${order.customer?.first} ${order.customer?.last}
 Tel:    ${order.customer?.phone||'–'}
 ${order.mode==='lieferung'?`Adresse: ${order.customer?.street} ${order.customer?.house}, ${order.customer?.city}`:''}
@@ -1367,7 +1454,7 @@ Servicegebühr: ${(order.serviceFee||0.99).toFixed(2)} €
 GESAMT:        ${(order.total||0).toFixed(2)} €
 
 Zahlung: ${order.payment==='stripe'?'KREDITKARTE':order.payment==='paypal'?'PAYPAL':order.payment==='karte'?'EC-KARTE':'BAR'} – ${order.paymentStatus==='paid'?'✅ BEZAHLT':'❌ NOCH OFFEN'}
-${order.note?`Anmerkung: ${order.note}`:''}</pre>`
+${notiz?`Anmerkung: ${notiz}`:''}</pre>`
     });
   } catch(e) { console.error('Restaurant Mail:', e); }
 }
@@ -1413,30 +1500,10 @@ async function triggerPrint(order) {
 // AUTO-STATUS (Cron – jede Minute, Öffnungszeiten Deutschland)
 // ═══════════════════════════════════════════════════════════════
 
+// Öffnungszeiten Odi’s Bowl Oelde stehen an einer Stelle: oeffnungszeiten.js
+// (Mo–Sa 11:30–21, So 13–21 Uhr, Europe/Berlin, kein Ruhetag).
 function calcAutoMode() {
-  // Deutsche Zeit berechnen
-  const deTime = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
-  const parts  = deTime.match(/(\d+)\.(\d+)\.(\d+),\s*(\d+):(\d+)/);
-  if (!parts) return 'geschlossen';
-  const day  = parseInt(parts[1]);
-  const mon  = parseInt(parts[2]);
-  const year = parseInt(parts[3]);
-  const h    = parseInt(parts[4]);
-  const m    = parseInt(parts[5]);
-  const mins = h * 60 + m;
-
-  // Wochentag berechnen (0=So, 1=Mo, ..., 6=Sa)
-  const wd = new Date(year, mon - 1, day).getDay();
-
-  // Öffnungszeiten Odi’s Bowl (stammdaten.json, Abed 20.10.2026), kein Ruhetag.
-  // Dieselben Zeiten nennt der Kopfbereich der Bestellseite (index.html).
-  // Sonntag: 13:00–21:00
-  if (wd === 0) {
-    return (mins >= 13*60 && mins < 21*60) ? 'online' : 'geschlossen';
-  }
-
-  // Montag bis Samstag: 11:30–21:00
-  return (mins >= 11*60+30 && mins < 21*60) ? 'online' : 'geschlossen';
+  return Zeiten.modusAusUhrzeit(new Date());
 }
 
 cron.schedule('* * * * *', async () => {
