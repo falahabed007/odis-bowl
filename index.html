@@ -1492,6 +1492,36 @@ body:has(#legalOv[style*="display: block"]) .mobile-cart-btn { display: none !im
     background: rgba(192, 53, 43, .07); border: 1px solid rgba(192, 53, 43, .32);
 }
 
+/* Vorbestellung: Block „Wann?“ in der Kasse (19.11.2026) */
+#checkoutModal .wann { margin: 4px 0 14px; padding: 0; border: 0; min-width: 0; }
+#checkoutModal .wann[hidden], #checkoutModal .wann [hidden] { display: none !important; }
+#checkoutModal .wann legend {
+    padding: 0; margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--o-gruen);
+}
+.wann-zu {
+    margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; font-size: 13px; line-height: 1.5; color: var(--odis-schrift);
+    background: rgba(238, 138, 52, .1); border: 1px solid rgba(238, 138, 52, .45);
+}
+.wann-zu strong { display: block; color: var(--o-orange-text); font-weight: 700; }
+.wann-zu.gesperrt { color: #a52a21; background: rgba(192, 53, 43, .07); border-color: rgba(192, 53, 43, .32); }
+.wann .liefer-umschalter { margin-bottom: 10px; border-radius: 14px; }
+.wann .liefer-umschalter button { min-height: 44px; padding: 6px 10px; line-height: 1.2; border-radius: 10px; }
+.wann-felder { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 10px; }
+#checkoutModal .wann-felder select { width: 100%; padding: 12px 10px; min-height: 46px; cursor: pointer; }
+#checkoutModal .wann-felder select:disabled { opacity: .55; cursor: not-allowed; }
+#checkoutModal .wann.fehlt select:invalid, #checkoutModal .wann.fehlt select.leer { border-color: var(--odis-rot) !important; }
+.wann-meldung { margin-top: 8px; font-size: 12.5px; line-height: 1.45; color: var(--odis-schrift-leise); }
+.wann-meldung:empty { display: none; }
+.wann-meldung.fehler {
+    padding: 9px 12px; border-radius: 10px; font-weight: 600; color: #a52a21;
+    background: rgba(192, 53, 43, .07); border: 1px solid rgba(192, 53, 43, .32);
+}
+.wann-meldung button {
+    background: none; border: 0; padding: 0; margin-left: 4px; font: inherit; color: var(--odis-schrift);
+    text-decoration: underline; text-decoration-color: var(--o-gruen); cursor: pointer;
+}
+#final-summary .wann-zeile { color: var(--odis-schrift); font-weight: 600; }
+
 /* Açaí: online bestellbar, aber nur zur Abholung – Schild oben links auf dem Foto
    (Aussehen wie die Schilder der Kette, Text bleibt "Nur Abholung") */
 .product-item[data-bk] .nur-abholung-schild {
@@ -2032,6 +2062,7 @@ function artikelQtyChangeMobile(index, delta) {
 function toggleMobileCart() {}
 
 function renderWarenkorb() {
+    korbMerken();   // jeder Stand des Warenkorbs wird gemerkt (siehe WARENKORB MERKEN)
     const itemsContainer = document.getElementById('cart-items');
     const checkoutBtn = document.getElementById('checkout-btn');
     if (typeof zeigeAuswahl === 'function') zeigeAuswahl();   // Lieferhinweis (Açaí, Mindestwert)
@@ -2170,6 +2201,8 @@ function zeigeAuswahl() {
 function selectOption(option) {
     currentSelection = option === 'delivery' ? 'delivery' : 'pickup';
     zeigeAuswahl();
+    // Abholung und Lieferung haben verschiedene Zeiten (45 statt 30 Minuten Vorlauf)
+    if (typeof wannLaden === 'function' && wannKasseOffen()) wannLaden();
 }
 document.addEventListener('DOMContentLoaded', zeigeAuswahl);
 </script>
@@ -2177,6 +2210,78 @@ document.addEventListener('DOMContentLoaded', zeigeAuswahl);
 
 <script>
 let warenkorb = [];
+
+// ═══ WARENKORB MERKEN (wie Ahaus 19.11., Oelde: Abed, 20.11.2026) ═══
+// Der Warenkorb bleibt im Browser des Gastes gespeichert (localStorage), bis die
+// Bestellung ausgelöst ist - auch über einen Neustart des Browsers. Verworfen wird
+// er nach 7 Tagen und sobald sich die Karte geändert hat (KARTEN_STAND), damit nie
+// zu alten Preisen bestellt wird. Gespeichert wird in renderWarenkorb().
+const KORB_SPEICHER = 'odisbowl_warenkorb';
+const KORB_MAX_ALTER = 7 * 24 * 60 * 60 * 1000;
+// Fingerabdruck der Karte, hier beim Einlesen der Seite genommen: Die Karten sind
+// an dieser Stelle noch so, wie karte-einsetzen.js sie geschrieben hat.
+const KARTEN_STAND = (function () {
+  let t = JSON.stringify(window.BAUKASTEN || {});
+  document.querySelectorAll('.product-item').forEach(el => { t += '|' + el.textContent.replace(/\s+/g, ' ').trim(); });
+  let h = 0;
+  for (let i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) | 0;
+  return String(h);
+})();
+let korbNichtMerken = false;   // nach ausgelöster Bestellung, bis der Abschluss geschlossen ist
+
+function korbLesen() {
+  try { return JSON.parse(localStorage.getItem(KORB_SPEICHER) || 'null'); } catch (e) { return null; }
+}
+function korbMerken() {
+  if (korbNichtMerken) return;
+  try {
+    const artikel = warenkorb.filter(i => !i.isFree);
+    if (!artikel.length) { localStorage.removeItem(KORB_SPEICHER); return; }
+    const alt = korbLesen();
+    localStorage.setItem(KORB_SPEICHER, JSON.stringify({
+      ts: Date.now(), stand: KARTEN_STAND, artikel,
+      zahlung: alt && alt.zahlung ? alt.zahlung : undefined
+    }));
+  } catch (e) { /* Speicher gesperrt oder voll: dann eben ohne */ }
+}
+// Bestellung ist raus: gespeicherten Korb sofort löschen. Der Korb im Fenster bleibt,
+// bis der Abschluss geschlossen wird (eine abgelehnte Bestellung lässt sich so wiederholen).
+function korbVergessen() {
+  korbNichtMerken = true;
+  try { localStorage.removeItem(KORB_SPEICHER); } catch (e) {}
+}
+// Vor der Weiterleitung zur Online-Zahlung: Schlüssel der Bestellung dazulegen. Kommt
+// der Gast nach der Zahlung nicht auf die Seite zurück, erkennt der nächste Besuch
+// daran, dass schon bezahlt ist, und leert den Korb.
+function korbZahlungMerken(schluessel) {
+  try {
+    const g = korbLesen();
+    if (!g || !schluessel) return;
+    g.zahlung = { t: schluessel, ts: Date.now() };
+    localStorage.setItem(KORB_SPEICHER, JSON.stringify(g));
+  } catch (e) {}
+}
+(function korbLaden() {
+  const g = korbLesen();
+  if (!g) return;
+  const gueltig = Array.isArray(g.artikel) && g.stand === KARTEN_STAND
+    && typeof g.ts === 'number' && Date.now() - g.ts < KORB_MAX_ALTER;
+  if (!gueltig) { try { localStorage.removeItem(KORB_SPEICHER); } catch (e) {} return; }
+  warenkorb = g.artikel.filter(i => i && typeof i.name === 'string' && typeof i.preis === 'number' && !i.isFree);
+  document.addEventListener('DOMContentLoaded', () => { if (warenkorb.length) renderWarenkorb(); });
+  if (g.zahlung && g.zahlung.t) {
+    // Wurde die angefangene Online-Zahlung inzwischen bezahlt? Dann ist das keine offene Auswahl mehr.
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch(BACKEND_URL + '/api/orders/status/' + encodeURIComponent(g.zahlung.t))
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && d.paymentStatus === 'paid') { warenkorb = []; renderWarenkorb(); }
+          else { const a = korbLesen(); if (a) { delete a.zahlung; localStorage.setItem(KORB_SPEICHER, JSON.stringify(a)); } }
+        })
+        .catch(() => {});
+    });
+  }
+})();
 
 // ═══ AKTION: kleine Pizza Margherita GRATIS ab 20 € ═══
 function isPromotionActive() {
@@ -2450,6 +2555,23 @@ function toggleMobileMenu() {
             <div id="liefer-info" class="liefer-info" aria-live="polite"></div>
         </fieldset>
 
+        <!-- Vorbestellung: Zeiten und Zustand kommen von /api/zeiten (Europe/Berlin, vom Server gerechnet) -->
+        <fieldset id="wann-block" class="wann" hidden>
+            <legend>Wann?</legend>
+            <div id="wann-zu" class="wann-zu" hidden></div>
+            <div id="wann-wahl" class="liefer-umschalter" role="group" aria-label="Zeitpunkt">
+                <button type="button" id="wann-sofort" aria-pressed="true" onclick="wannWaehlen('sofort')">So schnell wie möglich</button>
+                <button type="button" id="wann-vor" aria-pressed="false" onclick="wannWaehlen('vor')">Vorbestellen</button>
+            </div>
+            <div id="wann-felder" class="wann-felder" hidden>
+                <label class="liefer-feld"><span>Tag</span>
+                    <select id="wann-tag" onchange="wannTagGewechselt()"></select></label>
+                <label class="liefer-feld"><span>Uhrzeit</span>
+                    <select id="wann-zeit" onchange="wannZeitGewechselt()"></select></label>
+            </div>
+            <div id="wann-meldung" class="wann-meldung" aria-live="polite"></div>
+        </fieldset>
+
         <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">Zahlungsmethode:</div>
         <select id="c-zahlung" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid var(--odis-rahmen); border-radius:8px; background: var(--odis-flaeche); cursor:pointer;" onchange="togglePaymentLogos()">
             <option value="stripe">Online bezahlen (Stripe)</option>
@@ -2591,6 +2713,193 @@ function updateBestellBtn() {
 </script>
 
 <script>
+// ── Vorbestellung: „Wann?“ in der Kasse (wie Ahaus 19.11., Oelde 20.11.2026) ─
+// Firmen bestellen oft schon um 7 Uhr. Ist der Laden nur wegen der Uhrzeit zu,
+// bleibt die Seite offen; erst hier steht, dass gerade geschlossen ist, und Tag
+// und Uhrzeit werden Pflicht. Zustand und wählbare Zeiten rechnet der Server
+// (/api/zeiten, Europe/Berlin) - die Seite rechnet keine Zeitzonen. Der Server
+// prüft die Wunschzeit beim Absenden ohnehin selbst noch einmal.
+const WANN = { art: null, daten: null, laedt: false, ladeFehler: false, wahl: 'sofort', meldung: '', anfrage: 0 };
+
+function wannArt() { return currentSelection === 'delivery' ? 'lieferung' : 'abholung'; }
+function wannKasseOffen() {
+    const m = document.getElementById('checkoutModal');
+    return Boolean(m) && m.style.display === 'flex';
+}
+
+async function wannLaden() {
+    const art = wannArt();
+    const nr = ++WANN.anfrage;
+    WANN.art = art;
+    WANN.laedt = true;
+    WANN.ladeFehler = false;
+    wannZeichnen();
+    let daten = null;
+    try {
+        const r = await fetch(window.FLUEVATE_BACKEND + '/api/zeiten?mode=' + art, { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        daten = await r.json();
+    } catch (e) {
+        daten = null;
+    }
+    if (nr !== WANN.anfrage) return;   // inzwischen neu angefragt (Wechsel Abholung/Lieferung)
+    WANN.laedt = false;
+    WANN.daten = daten;
+    WANN.ladeFehler = !daten;
+    wannZeichnen();
+}
+
+// Ist der Laden laut /api/status gerade zu? (null = unbekannt)
+function wannLadenZu() {
+    const s = window.ODIS_STATUS;
+    if (!s) return null;
+    return s.mode !== 'online';
+}
+
+function wannTag() {
+    const d = WANN.daten;
+    const wert = document.getElementById('wann-tag').value;
+    return d && d.tage ? d.tage.find(t => t.datum === wert) || null : null;
+}
+
+function wannZeitenFuellen(alteZeit) {
+    const sel = document.getElementById('wann-zeit');
+    const tag = wannTag();
+    sel.innerHTML = '';
+    const leer = new Option('– wählen –', '');   // kurz: am Handy ist das Feld schmal
+    sel.add(leer);
+    (tag ? tag.slots : []).forEach(s => sel.add(new Option(s.label + ' Uhr', s.wert)));
+    sel.value = alteZeit && tag && tag.slots.some(s => s.wert === alteZeit) ? alteZeit : '';
+    sel.classList.toggle('leer', !sel.value);
+}
+
+function wannZeichnen() {
+    const block = document.getElementById('wann-block');
+    if (!block) return;
+    const zu = document.getElementById('wann-zu');
+    const wahl = document.getElementById('wann-wahl');
+    const felder = document.getElementById('wann-felder');
+    const meldung = document.getElementById('wann-meldung');
+    const tagSel = document.getElementById('wann-tag');
+    const d = WANN.daten;
+
+    zu.hidden = true; zu.className = 'wann-zu';
+    wahl.hidden = true; felder.hidden = true;
+    meldung.className = 'wann-meldung'; meldung.textContent = '';
+
+    if (WANN.laedt && !d) {
+        block.hidden = false;
+        meldung.textContent = 'Uhrzeiten werden geladen …';
+    } else if (!d) {
+        // Zeiten nicht ladbar. Ist der Laden offen (oder unbekannt, z. B. ein
+        // Backend ohne /api/zeiten), geht es wie früher ohne Zeitwahl weiter.
+        if (wannLadenZu()) {
+            block.hidden = false;
+            meldung.className = 'wann-meldung fehler';
+            meldung.innerHTML = 'Die Uhrzeiten für deine Vorbestellung konnten nicht geladen werden.'
+                + '<button type="button" onclick="wannLaden()">Erneut versuchen</button>';
+        } else {
+            block.hidden = true;
+        }
+    } else if (!d.bestellbar) {
+        block.hidden = false;
+        zu.hidden = false;
+        zu.className = 'wann-zu gesperrt';
+        zu.textContent = d.hinweis || 'Online-Bestellungen sind gerade nicht möglich.';
+    } else {
+        block.hidden = false;
+        const tage = Array.isArray(d.tage) ? d.tage.filter(t => t.slots && t.slots.length) : [];
+        d.tage = tage;
+        const vor = !d.sofort || WANN.wahl === 'vor';
+        if (!d.sofort) {
+            zu.hidden = false;
+            zu.innerHTML = '<strong>Wir haben gerade geschlossen.</strong>Du kannst jetzt vorbestellen – wähle Tag und Uhrzeit.';
+        } else {
+            wahl.hidden = false;
+            document.getElementById('wann-sofort').setAttribute('aria-pressed', String(!vor));
+            document.getElementById('wann-vor').setAttribute('aria-pressed', String(vor));
+            document.getElementById('wann-vor').disabled = !tage.length;
+        }
+        if (vor) {
+            felder.hidden = false;
+            const alterTag = tagSel.value;
+            const alteZeit = document.getElementById('wann-zeit').value;
+            tagSel.innerHTML = '';
+            tage.forEach(t => tagSel.add(new Option(t.label, t.datum)));
+            tagSel.value = tage.some(t => t.datum === alterTag) ? alterTag : (tage[0] ? tage[0].datum : '');
+            tagSel.disabled = !tage.length;
+            wannZeitenFuellen(alteZeit);
+            if (!tage.length) meldung.textContent = 'Gerade ist keine Vorbestellung möglich. Ruf uns gern an: 0 2522 9373711.';
+        }
+    }
+    if (WANN.meldung && !block.hidden) {
+        meldung.className = 'wann-meldung fehler';
+        meldung.textContent = WANN.meldung;
+    }
+    block.classList.toggle('fehlt', Boolean(WANN.meldung));
+    if (typeof updateSummary === 'function') updateSummary();
+}
+
+function wannWaehlen(wahl) {
+    WANN.wahl = wahl === 'vor' ? 'vor' : 'sofort';
+    WANN.meldung = '';
+    wannZeichnen();
+}
+function wannTagGewechselt() {
+    WANN.meldung = '';
+    wannZeitenFuellen('');
+    wannZeichnen();
+}
+function wannZeitGewechselt() {
+    WANN.meldung = '';
+    wannZeichnen();
+}
+
+// Was der Gast gewählt hat - oder warum noch nicht abgesendet werden kann.
+// { ok, wunschzeit (ISO oder null), text } bzw. { ok: false, meldung }
+function wannAuswahl() {
+    const d = WANN.daten;
+    if (WANN.laedt) return { ok: false, meldung: 'Die Uhrzeiten werden noch geladen – einen Moment bitte.' };
+    if (!d) {
+        if (wannLadenZu()) return { ok: false, meldung: 'Die Uhrzeiten konnten nicht geladen werden. Bitte versuche es noch einmal.' };
+        return { ok: true, wunschzeit: null, text: 'So schnell wie möglich' };
+    }
+    if (!d.bestellbar) return { ok: false, meldung: d.hinweis || 'Online-Bestellungen sind gerade nicht möglich.' };
+    if (d.sofort && WANN.wahl !== 'vor') return { ok: true, wunschzeit: null, text: 'So schnell wie möglich' };
+    const tag = wannTag();
+    const wert = document.getElementById('wann-zeit').value;
+    const slot = tag && tag.slots.find(s => s.wert === wert);
+    if (!slot) {
+        return { ok: false, meldung: d.sofort
+            ? 'Bitte wähle Tag und Uhrzeit für deine Vorbestellung.'
+            : 'Wir haben gerade geschlossen. Bitte wähle Tag und Uhrzeit für deine Vorbestellung.' };
+    }
+    return { ok: true, wunschzeit: slot.wert, jetztOffen: d.jetztOffen === true,
+             text: tag.label.replace(/^(Heute|Morgen), /, '') + ', ' + slot.label + ' Uhr',
+             kurz: tag.label + ', ' + slot.label + ' Uhr' };
+}
+
+// Zeile für die Zusammenfassung vor dem Absenden
+function wannZusammenfassung() {
+    const block = document.getElementById('wann-block');
+    if (!block || block.hidden || !WANN.daten || !WANN.daten.bestellbar) return null;
+    const a = wannAuswahl();
+    return a.ok ? (a.kurz || a.text) : 'Bitte Tag und Uhrzeit wählen';
+}
+
+// Meldung direkt am Feld, Block ins Bild holen
+function wannFehlerZeigen(text) {
+    WANN.meldung = text;
+    wannZeichnen();
+    const block = document.getElementById('wann-block');
+    if (!block || block.hidden) { alert(text); return; }
+    block.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    const zeit = document.getElementById('wann-zeit');
+    if (zeit && !document.getElementById('wann-felder').hidden) zeit.focus({ preventScroll: true });
+}
+</script>
+
+<script>
 // Liefergebuehr nach Fahrstrecke statt nach Orten: LIEFERGEBIET (oben) schlaegt
 // Strasse + Hausnummer nach.
 const SERVICE_FEE = 0.99;
@@ -2616,7 +2925,9 @@ function openCheckoutModal() {
     modal.style.display = 'flex';
     modalTitle.innerText = lieferung ? "Kasse: Lieferung" : "Kasse: Abholung";
     document.getElementById('address-fields').style.display = lieferung ? 'block' : 'none';
+    WANN.meldung = '';
     updateSummary();
+    wannLaden();   // Zustand und Zeiten bei jedem Öffnen frisch vom Server
 }
 
 // Die eingegebene Lieferadresse, nachgeschlagen - oder null bei Abholung.
@@ -2655,6 +2966,13 @@ function updateSummary() {
             <span>${label}</span><span>${val}</span></div>`;
 
     let html = '';
+
+    // Vorbestellung: die gewählte Zeit steht vor dem Absenden in der Zusammenfassung
+    const wann = typeof wannZusammenfassung === 'function' ? wannZusammenfassung() : null;
+    if (wann) {
+        html += `<div class="wann-zeile" style="display:flex;justify-content:space-between;gap:10px;padding:3px 0 7px;font-size:13px;">
+            <span>${currentSelection === 'delivery' ? 'Lieferung' : 'Abholung'}</span><span style="text-align:right;">${wann}</span></div>`;
+    }
 
     // Lieferung: Gebuehr erst, wenn die Adresse im Liefergebiet liegt. Kein Rabatt.
     const adresse = lieferAdresse();
@@ -2802,6 +3120,10 @@ async function processOrder() {
         address = `${t.strasse} ${t.nr}, ${t.ort}`;
         kunde = { street: t.strasse, house: t.nr, city: t.ort };
     }
+    // Vorbestellung: Laden zu → Tag und Uhrzeit sind Pflicht (Meldung am Feld)
+    const wann = wannAuswahl();
+    if (!wann.ok) { wannFehlerZeigen(wann.meldung); return; }
+    const wunschzeit = wann.wunschzeit ? { wunschzeit: wann.wunschzeit } : {};
     const modus = currentSelection === 'delivery' ? 'lieferung' : 'abholung';
     const rabatt = 0;
     const finalTotal = summeWaren + fee + SERVICE_FEE;
@@ -2851,6 +3173,7 @@ async function processOrder() {
                     total:       finalTotal,
                     mode:        modus,
                     note:        notiz,
+                    ...wunschzeit,
                     coupon:      null,
                     customer: {
                         first:  vorname,
@@ -2864,10 +3187,15 @@ async function processOrder() {
 
             const data = await response.json();
             if (data.url) {
+                korbZahlungMerken(data.statusToken);
                 window.location.href = data.url;
             } else {
-                alert('Fehler beim Erstellen der Zahlung: ' + (data.error || data.message || 'Unbekannter Fehler'));
                 if (btn) { btn.disabled = false; btn.textContent = '✅ Kostenpflichtig bestellen'; }
+                // Zeit abgelehnt (Laden inzwischen zu, Uhrzeit nicht mehr frei): Meldung am
+                // Feld; sonst wie bisher. Bei 400 die Zeiten neu laden.
+                if (data.zeiten === true && data.message) wannFehlerZeigen(data.message);
+                else alert('Fehler beim Erstellen der Zahlung: ' + (data.error || data.message || 'Unbekannter Fehler'));
+                if (response.status === 400) wannLaden();
             }
         } catch(err) {
             alert('Verbindung zum Zahlungsserver fehlgeschlagen. Bitte versuche es erneut.');
@@ -2897,13 +3225,30 @@ async function processOrder() {
                 mode: barMode,
                 payment: 'bar',
                 note: notiz,
+                ...wunschzeit,
                 coupon: null,
                 customer: { first: vorname, last: nachname, email: email, phone: telefon, ...kunde }
             })
         });
         if (!barResp.ok) {
             // Keine Bestellung angelegt -- dann auch keinen Wartebildschirm zeigen.
-            console.error('Backend Fehler:', barResp.status, await barResp.text());
+            const fehlerText = await barResp.text();
+            console.error('Backend Fehler:', barResp.status, fehlerText);
+            // 400 = der Server lehnt die Bestellung begruendet ab (Laden zu, Uhrzeit,
+            // Adresse ausserhalb, Mindestbestellwert, Açaí): diese Begruendung zeigen
+            // statt "Verbindung".
+            if (barResp.status === 400) {
+                let antwort = {};
+                try { antwort = JSON.parse(fehlerText) || {}; } catch(e) {}
+                const meldung = antwort.message || '';
+                if (meldung) {
+                    resetOrderButton();
+                    // Zeit abgelehnt: Meldung am Feld. Die Zeiten in jedem Fall neu laden.
+                    if (antwort.zeiten === true) wannFehlerZeigen(meldung); else alert(meldung);
+                    wannLaden();
+                    return;
+                }
+            }
             throw new Error('HTTP ' + barResp.status);
         }
         const barData = await barResp.json();
@@ -2912,7 +3257,9 @@ async function processOrder() {
         closeCheckoutModal();
         // Ab hier wartet der Kunde auf die Annahme durch das Restaurant.
         starteWarten({ t: barToken, mode: barMode, email: email, num: orderId,
-                       betrag: finalTotal.toFixed(2).replace('.', ',') + ' €', name: vorname });
+                       betrag: finalTotal.toFixed(2).replace('.', ',') + ' €', name: vorname,
+                       vorbestellung: Boolean(wann.wunschzeit), wannText: wann.wunschzeit ? wann.text : '',
+                       jetztOffen: wann.jetztOffen === true });
         return;
     } catch(e) {
         // Die Bestellung liess sich nicht absenden -- das muss der Kunde erfahren,
@@ -2960,12 +3307,25 @@ function zeigeWarten() {
         : '<br>✅ Deine Zahlung ist eingegangen.';
     const anrede = warteDaten && warteDaten.name
         ? 'Vielen Dank, <strong>' + warteDaten.name + '</strong>! ' : '';
+    // Vorbestellung: kein Spinner - bis zur Bestätigung kann es Stunden dauern
+    if (warteDaten && warteDaten.vorbestellung) {
+        const fuer = warteDaten.wannText ? ' für <strong>' + warteDaten.wannText + '</strong>' : '';
+        zeigeBestellZustand('🕒', 'Vorbestellung eingegangen!',
+            anrede + 'Deine Vorbestellung' + fuer + ' ist eingegangen. '
+            + (warteDaten.jetztOffen
+                ? 'Der Laden bestätigt sie in Kürze – du bekommst eine E-Mail.'
+                : 'Der Laden bestätigt sie, sobald er geöffnet hat – du bekommst eine E-Mail.')
+            + hinweis,
+            '', 'Alles klar, danke! 👍');
+        return;
+    }
     zeigeBestellZustand('⏳', 'Bestellung eingegangen!',
         anrede + 'Deine Bestellung wurde übermittelt.' + hinweis,
         'Warte auf Bestätigung vom Restaurant…', '');
 }
 
 function starteWarten(daten) {
+    korbVergessen();   // Bestellung ist ausgelöst: gespeicherten Warenkorb löschen
     warteDaten = daten;
     warteStart = Date.now();
     document.getElementById('dankeOrderId').textContent = daten && daten.num ? '#' + String(daten.num).replace(/^#/, '') : '–';
@@ -2974,7 +3334,8 @@ function starteWarten(daten) {
     if (!daten || !daten.t) {
         // Ohne Zugriffsschluessel ist keine Statusabfrage moeglich -- dann direkt
         // den ehrlichen Hinweis zeigen statt eines Spinners, der nie endet.
-        zeigeKeineRueckmeldung();
+        // (Eine Vorbestellung zeigt ohnehin keinen Spinner.)
+        if (!daten || !daten.vorbestellung) zeigeKeineRueckmeldung();
         return;
     }
     try { localStorage.setItem(WARTE_SPEICHER, JSON.stringify(Object.assign({ ts: warteStart }, daten))); } catch(e) {}
@@ -2991,7 +3352,12 @@ function stoppeWarten() {
 
 async function warteTick() {
     if (!warteDaten || !warteDaten.t) return;
-    if (Date.now() - warteStart > WARTE_TIMEOUT) { stoppeWarten(); zeigeKeineRueckmeldung(); return; }
+    if (Date.now() - warteStart > WARTE_TIMEOUT) {
+        stoppeWarten();
+        // Vorbestellung: der Text "bestätigt, sobald geöffnet" bleibt stehen
+        if (!warteDaten.vorbestellung) zeigeKeineRueckmeldung();
+        return;
+    }
     let res;
     try {
         res = await fetch(BACKEND_URL + '/api/orders/status/' + encodeURIComponent(warteDaten.t));
@@ -3011,6 +3377,11 @@ async function warteTick() {
     if (!res.ok) return;                // 5xx: spaeter noch einmal versuchen
     let d;
     try { d = await res.json(); } catch(e) { return; }
+    // Vorbestellung: auch nach der Rueckkehr von Stripe weiss die Seite das nur vom Server
+    if (d.vorbestellung === true) {
+        warteDaten.vorbestellung = true;
+        if (d.wunschzeitText) warteDaten.wannText = d.wunschzeitText;
+    }
 
     if (d.status === 'awaiting_payment') {
         zeigeBestellZustand('💳', 'Zahlung wird geprüft…',
@@ -3034,6 +3405,14 @@ async function warteTick() {
             : '🏃 Deine Bestellung ist in ca. <strong>' + min + ' Minuten</strong> abholbereit.';
         const mail = warteDaten.email
             ? '<br><br>📧 Eine Bestätigung wurde an <strong>' + warteDaten.email + '</strong> gesendet.' : '';
+        if (warteDaten.vorbestellung) {
+            const wann = warteDaten.wannText ? ' für <strong>' + warteDaten.wannText + '</strong>' : '';
+            zeigeBestellZustand('✅', 'Vorbestellung bestätigt!',
+                'Deine Vorbestellung' + wann + ' wurde von <strong>Odi’s Bowl</strong> bestätigt.'
+                + (art === 'lieferung' ? ' Wir liefern zur gewünschten Zeit.' : ' Sie ist zur gewünschten Zeit abholbereit.') + mail,
+                '', 'Super, danke! 🎉');
+            return;
+        }
         zeigeBestellZustand('✅', 'Bestellung bestätigt!',
             'Deine Bestellung wurde von <strong>Odi’s Bowl</strong> bestätigt!<br><br>' + zeit + mail,
             '', 'Super, danke! 🎉');
@@ -3069,6 +3448,7 @@ function dankeSchliessen() {
     stoppeWarten();
     document.getElementById('dankeModal').style.display = 'none';
     warenkorb = [];
+    korbNichtMerken = false;
     renderWarenkorb();
 }
 
@@ -3155,6 +3535,7 @@ window.addEventListener('load', async () => {
     if (params.get('payment') === 'cancelled') {
         window.history.replaceState({}, document.title, window.location.pathname);
         resetOrderButton();
+        // Der Warenkorb ist noch da (gespeichert vor der Weiterleitung, korbLaden)
         showStripeCancelBanner();
         return;
     }
@@ -5021,6 +5402,12 @@ body.modal-open {
     ].join(';');
     banner.innerHTML = mode === 'neutral'
       ? '<span class="odis-zu-punkt" aria-hidden="true"></span><span>Wir arbeiten gerade an unserem Online-Bestellsystem – schau bald wieder vorbei!</span>'
+      : mode === 'vorbestellung'
+      // Nur wegen der Uhrzeit zu: Hinweis oben, aber nichts gesperrt (wie Ahaus; Oelde 20.11.2026)
+      ? '<span class="odis-zu-punkt" aria-hidden="true"></span><span>Wir haben gerade geschlossen – du kannst trotzdem alles auswählen und vorbestellen.<a href="#info">Öffnungszeiten</a></span>'
+      : mode === 'manuell'
+      // Laden hat an der Kasse von Hand geschlossen (z. B. Urlaub): auch keine Vorbestellung
+      ? '<span class="odis-zu-punkt" aria-hidden="true"></span><span>Online-Bestellungen sind gerade nicht möglich.</span>'
       : '<span class="odis-zu-punkt" aria-hidden="true"></span><span>Das Restaurant ist aktuell geschlossen – Bestellungen sind nicht möglich.<a href="#info">Öffnungszeiten</a></span>';
     document.body.prepend(banner);
     document.body.style.paddingTop = '52px';
@@ -5057,6 +5444,8 @@ body.modal-open {
   function showBlockedToast(mode) {
     const msg = mode === 'neutral'
       ? 'Online-Bestellung aktuell nicht verfügbar – wir arbeiten daran!'
+      : mode === 'manuell'
+      ? 'Online-Bestellungen sind gerade nicht möglich.'
       : 'Bestellung nicht möglich – das Restaurant ist gerade geschlossen.';
     let t = document.getElementById('odisbowl-closed-toast');
     if (t) { clearTimeout(t._timer); t.remove(); }
@@ -5141,18 +5530,28 @@ body.modal-open {
       const statusRes  = await fetch(BACKEND_URL + '/api/status');
       const statusData = await statusRes.json();
       const mode       = statusData.mode || (statusData.isOpen ? 'online' : 'geschlossen');
+      window.ODIS_STATUS = statusData;
 
-      if (mode === 'geschlossen') {
-        showClosedBanner('geschlossen');
-        blockPopups('geschlossen');
+      // Vorbestellung (19.11.2026): Ist der Laden nur wegen der Uhrzeit zu, meldet der
+      // Server bestellbar: true - dann steht oben der Hinweis "geschlossen, du kannst
+      // vorbestellen", gesperrt wird nichts; in der Kasse folgt die Zeitwahl.
+      // Ein Server ohne dieses Feld: Verhalten wie bisher.
+      const neu = typeof statusData.bestellbar === 'boolean';
+      if (neu && statusData.bestellbar && mode !== 'online') {
+        showClosedBanner('vorbestellung');
+      } else if (neu ? statusData.bestellbar : mode === 'online') {
+        hideClosedBanner();
       } else if (mode === 'neutral') {
         showClosedBanner('neutral');
         blockPopups('neutral');
       } else {
-        hideClosedBanner();
+        const art = neu && statusData.manuell ? 'manuell' : 'geschlossen';
+        showClosedBanner(art);
+        blockPopups(art);
       }
     } catch(e) {
       // Backend nicht erreichbar → sicher auf geschlossen setzen
+      window.ODIS_STATUS = null;
       showClosedBanner('geschlossen');
       blockPopups('geschlossen');
       console.warn('Status-Check fehlgeschlagen:', e);
