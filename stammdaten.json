@@ -13,7 +13,7 @@
   "telefon_href": "+4925229373711",
   "domain": "odis-oelde.com",
   "render_dienst": "odis-bowl",
-  "farbe": "#0a1e47",
+  "farbe": "#2c6223",
   "css_praefix": "odis",
   "_whatsapp_rabatt": "Odi's hat keine WhatsApp-Bestellung und keinen Rabattcode. FEHLT_ ist Absicht: klon-pruefen.sh meldet die Stellen, bis WhatsApp-Abschnitte und Rabattfeld entfernt sind.",
   "whatsapp": "FEHLT_WHATSAPP",
@@ -47,17 +47,18 @@
   "kassengeraet": true,
   "kuechengeraet": false,
   "palette": {
+    "_quelle": "Hell, Farben aus dem neuen Ladenlogo gemessen (Abed 19.11.2026): Dunkelgrün ODI'S #2c6223, Hellgrün Blatt #8eba43, Orange BOWL #ee8a34, Rotorange Band #dd5426. akzent_2 ist die dunklere Rotorange-Stufe für Preise und kleine Schrift (5:1 auf Weiß). Für Oelde übernommen am 20.11.2026 (gleiche Gestaltung wie der zweite Standort), vorher Dunkelblau/Pink.",
     "dunkel": false,
-    "grund": "#fbf1f4",
-    "flaeche": "#ffffff",
-    "flaeche_2": "#fbe6ed",
-    "rahmen": "#f1dbe2",
-    "schrift": "#0a1e47",
-    "schrift_leise": "#4b5675",
-    "akzent": "#0a1e47",
-    "akzent_2": "#a54376",
+    "grund": "#ffffff",
+    "flaeche": "#f6f7f1",
+    "flaeche_2": "#eceee4",
+    "rahmen": "#dde1d3",
+    "schrift": "#1c2419",
+    "schrift_leise": "#59634f",
+    "akzent": "#2c6223",
+    "akzent_2": "#c2461b",
     "auf_akzent": "#ffffff",
-    "rot": "#c62828",
-    "gruen": "#2e7d32"
+    "rot": "#c0352b",
+    "gruen": "#2a6f2e"
   }
 }
