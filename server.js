@@ -554,8 +554,8 @@ function berechneRabatt() {
 }
 
 // ── Lieferung nach Fahrstrecke ───────────────────────────────────
-// Bis 2 km 3 €, bis 3 km 4 €, bis 5 km 5 €, Mindestbestellwert 30 € (Abed,
-// 22.10.2026). Die Strecke je Adresse steht in liefergebiet.json; dieselbe
+// Bis 2 km 3 €, bis 3 km 4 €, bis 5 km 5 € (Abed, 22.10.2026),
+// Mindestbestellwert 25 € (seit 27.11.2026, vorher 30 €). Die Strecke je Adresse steht in liefergebiet.json; dieselbe
 // Nachschlagefunktion nutzt die Bestellseite. Der Server rechnet die Gebuehr
 // trotzdem selbst - was der Client als deliveryFee schickt, zaehlt nicht.
 // Açaí gibt es nur zur Abholung.

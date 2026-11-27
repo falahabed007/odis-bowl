@@ -18,7 +18,7 @@ from collections import defaultdict
 LADEN = (51.8267587, 8.1430233)          # Bahnhofstr. 11, 59302 Oelde
 UMKREIS_M = 6500
 ZONEN = [{'bis_km': 2, 'gebuehr': 3.0}, {'bis_km': 3, 'gebuehr': 4.0}, {'bis_km': 5, 'gebuehr': 5.0}]
-MINDESTWERT = 30.0
+MINDESTWERT = 25.0
 UA = {'User-Agent': 'FlueVate-OdisBowl-Liefergebiet/1.0 (+https://odis-oelde.com)'}
 ZIEL = __file__.rsplit('/', 1)[0] + '/../liefergebiet.json'
 
